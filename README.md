@@ -9,7 +9,7 @@ Personal study materials for the CompTIA Cybersecurity Analyst (CySA+) CS0-004 V
 Custom Anki deck covering the CS0-004 V4 exam objectives. Cards are built from two parallel workflows:
 
 - **Textbook cards** — broad concept coverage from CompTIA CertMaster Perform courseware (definitions, framework structures, tool identification, log interpretation, indicator recognition)
-- **Quiz cards** — verbatim-stem question cards from CertMaster lesson reviews, module reviews, and practice exam attempts
+- **Quiz cards** — quiz questions with custom card notes from Claude Opus 4.7
 
 All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds for AnkiMobile.
 
