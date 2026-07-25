@@ -29,4 +29,4 @@ Web-based practice trainers hosted via GitHub Pages, following the pattern from 
 
 ## Disclaimer
 
-These are personal study materials created for my own exam prep. Content is derived from the CompTIA CS0-004 V4 exam objectives and CertMaster Perform courseware, reworded and restructured for spaced repetition. Not affiliated with or endorsed by CompTIA. No exam questions are reproduced verbatim.
+These are personal study materials created for my own exam prep. Content is derived from the CompTIA CS0-004 V4 exam objectives and CertMaster Perform courseware, reworded and restructured for spaced repetition. Not affiliated with or endorsed by CompTIA.
