@@ -15,9 +15,9 @@ All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds
 
 **Tag hierarchy:** All cards prefixed with `CySA004`, then module-hierarchical (textbook cards) or domain-hierarchical (quiz cards).
 
-### Interactive HTML Trainers *(coming soon)*
+### Interactive HTML Trainers *(1st one is now live)*
 
-Web-based practice trainers hosted via GitHub Pages, following the pattern from my [Data+ repo](https://github.com/UGL13RTH4NU/D492-Data-Analytics---Applications-CompTIA-Data-002).
+Web-based practice trainers hosted via GitHub Pages [SOC Roles & Lifecycle]([https://github.com/UGL13RTH4NU/D492-Data-Analytics---Applications-CompTIA-Data-002](https://ugl13rth4nu.github.io/CySA-004/M1_Roles_and_SOC_Lifecycle_Trainer.html)).
 
 ## Usage
 
