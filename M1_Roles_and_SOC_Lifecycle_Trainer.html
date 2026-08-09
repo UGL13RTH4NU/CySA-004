@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CySA+ CS0-004 · Module 1 — Roles & SOC Incident Lifecycle Trainer</title>
+<style>
+:root{
+  --accent:#1F6FB2;
+  --accent2:#2E8B57;
+  --warn:#C0392B;
+  --purple:#8e44ad;
+  --bg:#f4f7fb;
+  --panel:#ffffff;
+  --border:#dbe3ee;
+  --text:#0b1b2b;
+  --muted:#4b5e73;
+  --chip:#eef3f8;
+  --dash:#cfd9e3;
+  --good:#155724;
+  --goodbg:rgba(46,139,87,.14);
+  --goodbd:rgba(46,139,87,.45);
+  --bad:#7a1d1d;
+  --badbg:rgba(192,57,43,.12);
+  --badbd:rgba(192,57,43,.45);
+  --neutral:rgba(31,111,178,.08);
+  --shadow:0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+.dark{
+  --bg:#0c1015;
+  --panel:#121a23;
+  --border:#223042;
+  --text:#e8edf3;
+  --muted:#9ab0c6;
+  --chip:#172233;
+  --dash:#2a374b;
+  --good:#69db7c;
+  --goodbg:rgba(105,219,124,.12);
+  --goodbd:rgba(105,219,124,.35);
+  --bad:#ff8787;
+  --badbg:rgba(255,135,135,.10);
+  --badbd:rgba(255,135,135,.35);
+  --neutral:rgba(120,180,240,.08);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.45}
+header{display:flex;gap:12px;align-items:center;padding:14px 16px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5;box-shadow:var(--shadow);flex-wrap:wrap}
+h1{margin:0;font-size:clamp(1rem,2.4vw,1.3rem);color:var(--accent)}
+h1 .sub{color:var(--muted);font-weight:500;font-size:.82em;margin-left:8px}
+main{max-width:1320px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:1024px){main{grid-template-columns:1fr 400px}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 10px 0;font-size:1.05rem;color:var(--accent)}
+.card h3{margin:14px 0 6px 0;font-size:.95rem;color:var(--accent2)}
+button{cursor:pointer;font:inherit;background:var(--chip);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 12px;transition:transform .05s ease}
+button:hover{background:var(--dash)}
+button:active{transform:translateY(1px)}
+.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.primary:hover{background:#155a99}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--border);padding:3px 9px;border-radius:999px;font-size:.82rem;color:var(--muted)}
+.spacer{flex:1}
+.quiz-picker{display:flex;gap:10px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px;flex-wrap:wrap}
+.quiz-picker label{font-weight:600;color:var(--muted);font-size:.9rem}
+.quiz-picker select{font:inherit;background:var(--chip);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 10px;min-width:220px}
+.quiz-picker .desc{font-size:.85rem;color:var(--muted);flex:1;min-width:200px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{padding:6px 12px;border-radius:8px;background:var(--chip);border:1px solid var(--border);cursor:pointer;font-size:.88rem}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.quiz-block{display:none}
+.quiz-block.active{display:block}
+.mode{display:none}
+.mode.active{display:block}
+.scenario{background:var(--chip);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px}
+.scenario .lead{font-size:.82rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.dropzones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}
+.dropzone{min-height:74px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);transition:background .15s ease,border-color .15s ease}
+.dropzone.over{background:var(--neutral);border-color:var(--accent)}
+.dropzone .z-title{font-weight:600;color:var(--accent);margin-bottom:6px;font-size:.9rem;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.dropzone .z-title .z-hint{font-weight:400;color:var(--muted);font-size:.78rem;text-transform:none}
+.chipbank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:var(--chip);border:1px dashed var(--dash);border-radius:10px;min-height:60px;margin-top:12px}
+.chipbank .bank-label{width:100%;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.chip{padding:7px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--border);cursor:grab;user-select:none;font-size:.88rem;transition:transform .05s ease;max-width:100%}
+.chip.def-chip{border-radius:10px;padding:8px 12px;line-height:1.35}
+.chip:active{cursor:grabbing;transform:scale(.97)}
+.chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}
+.chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.explain{margin-top:12px;padding:12px;border-radius:10px;background:var(--neutral);border:1px solid var(--border);font-size:.92rem;display:none}
+.explain.show{display:block}
+.explain b{color:var(--accent)}
+.explain .row{margin:6px 0}
+.mcq-opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
+@media(min-width:600px){.mcq-opts{grid-template-columns:1fr 1fr}}
+.mcq-opts .opt{padding:12px;border-radius:8px;background:var(--panel);border:1px solid var(--border);cursor:pointer}
+.mcq-opts .opt.sel{background:var(--neutral);border-color:var(--accent)}
+.mcq-opts .opt.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}
+.mcq-opts .opt.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.order-grid{display:grid;grid-template-columns:60px 1fr;gap:8px;margin-top:12px}
+.order-grid .pos-label{font-weight:700;font-size:1.1rem;color:var(--accent);display:flex;align-items:center;justify-content:center;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:8px}
+.multi-grid{display:grid;grid-template-columns:60px 1fr 1.5fr;gap:8px;margin-top:12px}
+.multi-grid .pos-label{font-weight:700;font-size:1.1rem;color:var(--accent);display:flex;align-items:center;justify-content:center;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:8px}
+.multi-grid .col-header{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center;padding-bottom:4px}
+.slot{min-height:52px;border:2px dashed var(--dash);border-radius:8px;padding:6px;background:var(--panel);transition:background .15s ease,border-color .15s ease;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.slot.over{background:var(--neutral);border-color:var(--accent)}
+.slot.slot-def{min-height:64px}
+aside .card details{margin-bottom:10px}
+aside .card summary{cursor:pointer;font-weight:600;color:var(--accent);padding:4px 0}
+aside .card .ref-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:6px}
+aside .card .ref-table th,aside .card .ref-table td{border:1px solid var(--border);padding:6px;text-align:left;vertical-align:top}
+aside .card .ref-table th{background:var(--chip)}
+aside .card ul{margin:6px 0 6px 18px;padding:0}
+aside .card li{margin-bottom:4px;font-size:.9rem;line-height:1.4}
+.hint{font-size:.85rem;color:var(--muted);margin-top:6px}
+kbd{display:inline-block;padding:1px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;background:var(--chip);border:1px solid var(--border);border-radius:4px}
+.role-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;background:var(--neutral);border:1px solid var(--border);color:var(--muted);margin-right:4px}
+.callout{background:var(--neutral);border-left:3px solid var(--accent);border-radius:6px;padding:8px 10px;font-size:.85rem;margin-top:6px}
+.callout b{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>CySA+ CS0-004 · Module 1 Trainer <span class="sub">Roles &amp; SOC Incident Lifecycle</span></h1>
+  <span class="spacer"></span>
+  <span class="pill">Score: <span id="score">0 / 0</span></span>
+  <button id="darkBtn" title="Toggle dark mode">🌙 Dark</button>
+  <button id="resetBtn" title="Reset score">Reset</button>
+</header>
+
+<main>
+  <section>
+    <div class="card">
+
+      <div class="quiz-picker">
+        <label for="quizSelect">Quiz:</label>
+        <select id="quizSelect">
+          <option value="roles" selected>SOC Job Roles</option>
+          <option value="lifecycle">SOC Incident Lifecycle (6 Steps)</option>
+        </select>
+        <div class="desc" id="quizDesc">Match each role to what it actually does — and don't confuse Cybersecurity Analyst with SOC Analyst.</div>
+      </div>
+
+      <!-- ============ ROLES QUIZ ============ -->
+      <div class="quiz-block active" id="quiz-roles">
+        <div class="tabs" id="roles-tabs">
+          <div class="tab active" data-mode="roles-match">Match: Role → Definition</div>
+          <div class="tab" data-mode="roles-mcq">Which Role? (MCQ)</div>
+        </div>
+
+        <!-- ROLES: DRAG-AND-DROP MATCH -->
+        <div class="mode active" id="mode-roles-match">
+          <h2>Drag each definition onto the correct role.</h2>
+          <p class="hint">Click a placed chip to send it back to the bank. Green = correct, red = wrong; move it and re-check.</p>
+          <div class="dropzones" id="roles-zones"></div>
+          <div class="chipbank" id="roles-bank"><div class="bank-label">Definitions</div></div>
+          <div class="controls">
+            <button class="primary" id="roles-check">Check</button>
+            <button id="roles-reshuffle">Shuffle Chips</button>
+          </div>
+          <div class="explain" id="roles-explain"></div>
+        </div>
+
+        <!-- ROLES: MCQ -->
+        <div class="mode" id="mode-roles-mcq">
+          <h2>Which role fits the scenario?</h2>
+          <div class="scenario" id="rolesmcq-text"></div>
+          <div class="mcq-opts" id="rolesmcq-opts"></div>
+          <div class="controls">
+            <button class="primary" id="rolesmcq-check">Check</button>
+            <button id="rolesmcq-new">New Question</button>
+          </div>
+          <div class="explain" id="rolesmcq-explain"></div>
+        </div>
+      </div>
+
+      <!-- ============ LIFECYCLE QUIZ ============ -->
+      <div class="quiz-block" id="quiz-lifecycle">
+        <div class="tabs" id="lc-tabs">
+          <div class="tab active" data-mode="lc-order">Put Steps in Order (1–6)</div>
+          <div class="tab" data-mode="lc-match">Match Step → Definition</div>
+          <div class="tab" data-mode="lc-multi">Order + Definitions (Combined)</div>
+          <div class="tab" data-mode="lc-mcq">Which Step? (MCQ)</div>
+        </div>
+
+        <!-- LIFECYCLE: ORDER -->
+        <div class="mode active" id="mode-lc-order">
+          <h2>Drag the 6 step names into their correct positions.</h2>
+          <p class="hint">Click a placed chip to return it to the bank. Check re-evaluates whatever's placed.</p>
+          <div class="order-grid" id="order-grid"></div>
+          <div class="chipbank" id="order-bank"><div class="bank-label">Step names</div></div>
+          <div class="controls">
+            <button class="primary" id="order-check">Check</button>
+            <button id="order-reshuffle">Shuffle Chips</button>
+          </div>
+          <div class="explain" id="order-explain"></div>
+        </div>
+
+        <!-- LIFECYCLE: MATCH -->
+        <div class="mode" id="mode-lc-match">
+          <h2>Drag each definition onto the correct step.</h2>
+          <p class="hint">Order doesn't matter here — this drill is about associating definitions with step names.</p>
+          <div class="dropzones" id="lcmatch-zones"></div>
+          <div class="chipbank" id="lcmatch-bank"><div class="bank-label">Definitions</div></div>
+          <div class="controls">
+            <button class="primary" id="lcmatch-check">Check</button>
+            <button id="lcmatch-reshuffle">Shuffle Chips</button>
+          </div>
+          <div class="explain" id="lcmatch-explain"></div>
+        </div>
+
+        <!-- LIFECYCLE: MULTI-GRADING -->
+        <div class="mode" id="mode-lc-multi">
+          <h2>Combined drill — drop each step name AND its definition into the right position row.</h2>
+          <p class="hint">Two chip banks: names and definitions. Each row has two slots. Chips only accept their kind. Click a placed chip to send it back.</p>
+          <div class="multi-grid" id="multi-grid"></div>
+          <div class="chipbank" id="multi-name-bank"><div class="bank-label">Step names</div></div>
+          <div class="chipbank" id="multi-def-bank"><div class="bank-label">Definitions</div></div>
+          <div class="controls">
+            <button class="primary" id="multi-check">Check</button>
+            <button id="multi-reshuffle">Shuffle Chips</button>
+          </div>
+          <div class="explain" id="multi-explain"></div>
+        </div>
+
+        <!-- LIFECYCLE: MCQ -->
+        <div class="mode" id="mode-lc-mcq">
+          <h2>Which step of the SOC incident lifecycle is described?</h2>
+          <div class="scenario" id="lcmcq-text"></div>
+          <div class="mcq-opts" id="lcmcq-opts"></div>
+          <div class="controls">
+            <button class="primary" id="lcmcq-check">Check</button>
+            <button id="lcmcq-new">New Question</button>
+          </div>
+          <div class="explain" id="lcmcq-explain"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SIDEBAR / CHEAT SHEET -->
+  <aside>
+    <div class="card">
+      <h2>Cheat Sheet</h2>
+
+      <details open id="ref-roles">
+        <summary>Job roles in the SOC (verbatim)</summary>
+        <table class="ref-table">
+          <tr><th>Role</th><th>Definition</th></tr>
+          <tr><td><b>Cybersecurity Analyst</b></td><td>Detects threats and implements changes to protect the organization.</td></tr>
+          <tr><td><b>SOC Analyst</b></td><td>Responds to cyber incidents <b>first</b>.</td></tr>
+          <tr><td><b>Cybersecurity Engineer</b></td><td>Builds and maintains a system that is safe against cyberattacks.</td></tr>
+          <tr><td><b>Incident Response Analyst</b></td><td>Minimizes the overall effects of a security breach that has occurred.</td></tr>
+          <tr><td><b>Vulnerability Analyst</b></td><td>Detects weaknesses and takes measures to correct and strengthen security.</td></tr>
+          <tr><td><b>Threat Intelligence Analyst</b></td><td>Analyzes the level of a threat to help inform cybersecurity business decisions.</td></tr>
+          <tr><td><b>Threat Hunter</b></td><td>Proactively finds and stops cybersecurity threats before they compromise an organization.</td></tr>
+          <tr><td><b>Penetration Tester</b></td><td>Simulates real-world cyber attacks to identify vulnerabilities.</td></tr>
+        </table>
+        <div class="callout" style="margin-top:8px"><b>Easy trap:</b> Cybersecurity <em>Analyst</em> vs. <em>SOC</em> Analyst. Cyber Analyst = detect + harden. SOC Analyst = <em>first responder</em> to alerts.</div>
+        <div class="callout" style="margin-top:6px"><b>Another trap:</b> Threat <em>Intelligence</em> Analyst analyzes threat level to inform business decisions. Threat <em>Hunter</em> proactively looks for threats already inside the environment.</div>
+      </details>
+
+      <details open id="ref-lifecycle">
+        <summary>SOC incident lifecycle — 6 steps (verbatim)</summary>
+        <table class="ref-table">
+          <tr><th>#</th><th>Step</th><th>What happens</th></tr>
+          <tr><td>1</td><td><b>Detection</b></td><td>Logs and network data collected into a central repository (e.g., SIEM). Data analyzed for suspicious activity and anomalous behavior.</td></tr>
+          <tr><td>2</td><td><b>Triage</b></td><td>Potential threats are validated, classified, and prioritized.</td></tr>
+          <tr><td>3</td><td><b>Investigation</b></td><td>SOC gathers evidence, builds a timeline, and decides on a response action or escalation.</td></tr>
+          <tr><td>4</td><td><b>Response</b></td><td>Based on the previous steps, appropriate steps are taken to isolate affected systems.</td></tr>
+          <tr><td>5</td><td><b>Eradication and Recovery</b></td><td>The threat is removed and vulnerabilities are remediated.</td></tr>
+          <tr><td>6</td><td><b>Post-Incident Improvement</b></td><td>Threat and response are evaluated; processes and systems are updated to prevent similar threats and improve future responses.</td></tr>
+        </table>
+      </details>
+
+      <details>
+        <summary>Blue team &amp; its tools</summary>
+        <p style="margin:6px 0;font-size:.9rem">Team members responsible for detecting, identifying, and responding to threats = <b>blue team</b>.</p>
+        <ul>
+          <li><b>SIEM</b> — Security Information and Event Management</li>
+          <li><b>EDR</b> — Endpoint Detection and Response</li>
+          <li><b>XDR</b> — Extended Detection and Response</li>
+          <li><b>IDS</b> — Intrusion Detection System</li>
+          <li><b>NDR</b> — Network Detection and Response</li>
+          <li><b>Vulnerability scanners</b></li>
+        </ul>
+        <p style="margin:6px 0;font-size:.85rem;color:var(--muted)">Used to <b>triage alerts, hunt for threats, contain incidents, and communicate risk and remediation</b> to stakeholders.</p>
+      </details>
+
+      <details>
+        <summary>SOC lifecycle vs. IR lifecycle — watch out</summary>
+        <p style="margin:6px 0;font-size:.9rem">CertMaster Module 1 gives a <b>6-step SOC workflow</b>. Later modules (and NIST SP 800-61) describe a related but distinct <b>incident response lifecycle</b> — different granularity, different phase names.</p>
+        <div class="callout"><b>Exam guidance:</b> Read the question stem carefully. If it says "SOC workflow" or references Module 1, use the 6-step model (Detection → Triage → Investigation → Response → Eradication and Recovery → Post-Incident Improvement). If it says "incident response lifecycle" and references NIST 800-61, use that framework.</div>
+      </details>
+
+      <details>
+        <summary>Memory hooks</summary>
+        <ul>
+          <li><b>D-T-I-R-E-P</b> — Detect → Triage → Investigate → Respond → Eradicate/Recover → Post-Incident. ("<em>Detectives Type Interesting Reports Every Payday</em>")</li>
+          <li><b>Triage ≠ Detection.</b> Detection just surfaces potential activity; Triage is where a human validates, classifies, and prioritizes.</li>
+          <li><b>Investigation informs Response.</b> You don't isolate systems until Investigation has built the picture.</li>
+          <li><b>Response ≠ Eradication.</b> Response = <em>contain / isolate</em>. Eradication = <em>remove threat + patch vuln</em>.</li>
+          <li><b>Post-Incident Improvement</b> is the "lessons learned" phase — updates playbooks and controls.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>SOC-analyst perspective</summary>
+        <ul>
+          <li>Detection fires an alert → you (SOC Analyst) triage it. Most alerts are noise; your job is to decide which few are worth escalating.</li>
+          <li>Escalation from Investigation typically hands off to the <b>Incident Response Analyst</b> for containment/response, and to <b>Vulnerability Analyst</b> for remediation once eradicated.</li>
+          <li><b>Threat Hunter</b> works largely outside the alert-driven lifecycle — they build hypotheses and hunt in the same telemetry the SOC uses reactively.</li>
+        </ul>
+      </details>
+    </div>
+  </aside>
+</main>
+
+<script>
+/* ---------- STATE + UTILS ---------- */
+const state = { score:0, total:0 };
+const $ = (s,root=document)=>root.querySelector(s);
+const $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
+const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+const shuffle = arr => arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+function updateScore(){ $('#score').textContent = state.score + ' / ' + state.total; }
+function markResult(ok){ state.total++; if(ok) state.score++; updateScore(); }
+
+/* ---------- DARK MODE ---------- */
+$('#darkBtn').addEventListener('click',()=>{
+  document.body.classList.toggle('dark');
+  $('#darkBtn').textContent = document.body.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
+});
+$('#resetBtn').addEventListener('click',()=>{ state.score=0; state.total=0; updateScore(); });
+
+/* ---------- QUIZ SWITCHING ---------- */
+const QUIZ_DESC = {
+  roles: 'Match each role to what it actually does — and don\'t confuse Cybersecurity Analyst with SOC Analyst.',
+  lifecycle: 'Learn the 6-step SOC workflow: Detection → Triage → Investigation → Response → Eradication/Recovery → Post-Incident Improvement.'
+};
+$('#quizSelect').addEventListener('change',e=>{
+  const v = e.target.value;
+  $$('.quiz-block').forEach(b => b.classList.toggle('active', b.id === 'quiz-'+v));
+  $('#quizDesc').textContent = QUIZ_DESC[v] || '';
+  if(v==='roles'){ $('#ref-roles').open = true; $('#ref-lifecycle').open = false; }
+  else { $('#ref-roles').open = false; $('#ref-lifecycle').open = true; }
+});
+
+/* ---------- SUB-TAB SWITCHING (per quiz) ---------- */
+function bindTabs(tabsId, quizBlockId){
+  $$('#'+tabsId+' .tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      $$('#'+tabsId+' .tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const mode = t.dataset.mode;
+      $$('#'+quizBlockId+' .mode').forEach(m=>m.classList.toggle('active', m.id === 'mode-'+mode));
+    });
+  });
+}
+bindTabs('roles-tabs','quiz-roles');
+bindTabs('lc-tabs','quiz-lifecycle');
+
+/* ==================================================
+   DATA
+   ================================================== */
+
+const ROLES = [
+  { key:'cyber-analyst', name:'Cybersecurity Analyst',
+    def:'Detects threats and implements changes to protect the organization.' },
+  { key:'soc-analyst', name:'SOC Analyst',
+    def:'Responds to cyber incidents first.' },
+  { key:'cyber-engineer', name:'Cybersecurity Engineer',
+    def:'Builds and maintains a system that is safe against cyberattacks.' },
+  { key:'ir-analyst', name:'Incident Response Analyst',
+    def:'Minimizes the overall effects of a security breach that has occurred.' },
+  { key:'vuln-analyst', name:'Vulnerability Analyst',
+    def:'Detects weaknesses and takes measures to correct and strengthen security.' },
+  { key:'ti-analyst', name:'Threat Intelligence Analyst',
+    def:'Analyzes the level of a threat to help inform cybersecurity business decisions.' },
+  { key:'threat-hunter', name:'Threat Hunter',
+    def:'Proactively finds and stops cybersecurity threats before they compromise an organization.' },
+  { key:'pentester', name:'Penetration Tester',
+    def:'Simulates real-world cyber attacks to identify vulnerabilities.' },
+];
+
+const ROLES_MCQ = [
+  { q:'A new SIEM alert fires at 3 AM indicating suspicious PowerShell activity on a production host. Whose role is it to be the first line of response on this alert?',
+    correct:'soc-analyst',
+    why:'The <b>SOC Analyst</b> is defined by CertMaster as the person who <em>responds to cyber incidents first</em>. This is the classic Tier-1 SOC role — first eyes on the alert, first triage, first decision on escalation.',
+    options:['cyber-analyst','soc-analyst','ir-analyst','threat-hunter'] },
+  { q:'Leadership wants someone to build hypotheses about undetected adversaries already inside the environment and search telemetry for evidence of them — not driven by SIEM alerts. Which role?',
+    correct:'threat-hunter',
+    why:'<b>Threat Hunter</b> — "proactively finds and stops cybersecurity threats <em>before they compromise</em> an organization." The key word is <em>proactively</em>. Contrast with SOC Analyst (reactive to alerts) and Threat Intelligence Analyst (analyzes external threat data).',
+    options:['soc-analyst','threat-hunter','ti-analyst','ir-analyst'] },
+  { q:'A newly reported ransomware family is targeting your industry vertical. Management wants a written assessment of how much of a threat it poses to your company so they can decide on budget for new controls. Which role produces this?',
+    correct:'ti-analyst',
+    why:'<b>Threat Intelligence Analyst</b> — "analyzes the level of a threat to help inform cybersecurity <em>business decisions</em>." The tell is that management is asking for an assessment to guide a decision, not for someone to actively hunt or respond.',
+    options:['ti-analyst','threat-hunter','cyber-analyst','vuln-analyst'] },
+  { q:'The board approved a red-team engagement to prove that adversaries could reach the crown-jewel database. The engagement will simulate real-world attack techniques from initial access through exfiltration. Which role runs this?',
+    correct:'pentester',
+    why:'<b>Penetration Tester</b> — "simulates real-world cyber attacks to identify vulnerabilities." Red-team-style engagements that mimic adversary TTPs are pentester work.',
+    options:['pentester','threat-hunter','vuln-analyst','cyber-engineer'] },
+  { q:'A confirmed ransomware infection is spreading laterally. Executive leadership needs someone to take ownership of minimizing the overall damage as this incident plays out. Which role?',
+    correct:'ir-analyst',
+    why:'<b>Incident Response Analyst</b> — "minimizes the overall effects of a security breach that has occurred." Notice the past-tense framing ("has occurred") — this is post-compromise work.',
+    options:['soc-analyst','ir-analyst','cyber-analyst','threat-hunter'] },
+  { q:'The organization is standing up a new segmented network for a sensitive workload. Someone needs to design and build the underlying security architecture (segmentation, hardening, defense-in-depth). Which role?',
+    correct:'cyber-engineer',
+    why:'<b>Cybersecurity Engineer</b> — "builds and maintains a system that is safe against cyberattacks." Engineers build; analysts detect/respond. When the task is architecture/construction, it\'s the engineer.',
+    options:['cyber-engineer','cyber-analyst','pentester','vuln-analyst'] },
+  { q:'A monthly credentialed scan report shows dozens of CVEs across the estate. Someone needs to detect these weaknesses, prioritize them by risk, and drive the remediation process. Which role?',
+    correct:'vuln-analyst',
+    why:'<b>Vulnerability Analyst</b> — "detects weaknesses and takes measures to correct and strengthen security." Scanner-driven, CVE-focused, remediation-owning work is squarely vuln analyst territory.',
+    options:['vuln-analyst','pentester','cyber-engineer','cyber-analyst'] },
+  { q:'The team needs someone whose primary job is to spot emerging threats to the organization and then implement changes to the environment to protect against them. Which role fits the CertMaster definition best?',
+    correct:'cyber-analyst',
+    why:'<b>Cybersecurity Analyst</b> — "detects threats and implements changes to protect the organization." Broader than SOC Analyst (which is specifically first-response to incidents). Cyber Analyst is the detect-and-harden role.',
+    options:['cyber-analyst','soc-analyst','cyber-engineer','threat-hunter'] },
+  { q:'You\'re assembling a blue team. Which of these is NOT typically listed as a blue-team tool in Module 1?',
+    correct:'blue-none',
+    why:'<b>All of SIEM, EDR, XDR, IDS, NDR, and vulnerability scanners</b> are listed as blue-team tools in Module 1. The blue team uses them to triage alerts, hunt for threats, contain incidents, and communicate risk. There is no odd-one-out among those.',
+    options:['blue-siem','blue-edr','blue-ndr','blue-none'],
+    optionLabels: {
+      'blue-siem':'SIEM',
+      'blue-edr':'EDR',
+      'blue-ndr':'NDR',
+      'blue-none':'None — all of these are blue-team tools'
+    } },
+  { q:'The clearest way to distinguish a SOC Analyst from a Cybersecurity Analyst per CertMaster is:',
+    correct:'distinguish-first',
+    why:'CertMaster defines the SOC Analyst as the one who <b>responds to cyber incidents first</b>, while the Cybersecurity Analyst <b>detects threats and implements changes to protect</b>. The SOC Analyst is defined by <em>being first in the response chain</em>; the Cyber Analyst is defined by broader detect-and-harden work.',
+    options:['distinguish-first','distinguish-pay','distinguish-tools','distinguish-shift'],
+    optionLabels: {
+      'distinguish-first':'SOC Analyst responds to incidents first; Cyber Analyst detects and implements protections.',
+      'distinguish-pay':'SOC Analyst is a senior role; Cyber Analyst is entry-level.',
+      'distinguish-tools':'SOC Analyst uses only SIEM; Cyber Analyst uses only vuln scanners.',
+      'distinguish-shift':'SOC Analyst works nights; Cyber Analyst works days.'
+    } },
+];
+
+const LIFECYCLE = [
+  { pos:1, name:'Detection',
+    def:'Logs and network data are collected into a central repository (such as a SIEM). This data is analyzed to look for suspicious activity and anomalous behavior.' },
+  { pos:2, name:'Triage',
+    def:'Potential threats are validated, classified, and then prioritized.' },
+  { pos:3, name:'Investigation',
+    def:'The SOC gathers evidence, builds a timeline, and decides on a response action or escalation.' },
+  { pos:4, name:'Response',
+    def:'Based on the previous steps, the SOC takes appropriate steps to isolate affected systems.' },
+  { pos:5, name:'Eradication and Recovery',
+    def:'The threat is removed and vulnerabilities are remediated.' },
+  { pos:6, name:'Post-Incident Improvement',
+    def:'The threat and response are evaluated and processes and systems are updated to prevent similar threats and improve future responses.' },
+];
+
+const LC_MCQ = [
+  { q:'Your SIEM is ingesting Windows Event Logs and firewall data. A correlation rule fires on a burst of failed logons followed by a successful one. Which phase does this fire occur in?',
+    correct:1,
+    why:'<b>Detection.</b> Logs and network data are collected into a central repository (the SIEM) and analyzed for suspicious activity. The alert firing IS the output of Detection. Triage comes next — a human then validates, classifies, and prioritizes it.' },
+  { q:'A junior analyst is looking at a queue of 40 SIEM alerts from overnight, deciding which are real, which are noise, and which need immediate attention. Which phase?',
+    correct:2,
+    why:'<b>Triage.</b> Potential threats are <em>validated, classified, and prioritized</em>. That is exactly the "which are real, which are noise, which need immediate attention" work.' },
+  { q:'A confirmed real incident is escalated. Two analysts are pulling process trees, network flows, and authentication logs to build a timeline of what the attacker did and decide whether to escalate further. Which phase?',
+    correct:3,
+    why:'<b>Investigation.</b> The SOC <em>gathers evidence, builds a timeline, and decides on a response action or escalation</em>. Evidence collection + timeline construction is the giveaway.' },
+  { q:'The Investigation is complete. The team now moves to disconnect the affected endpoints from the network to prevent further spread. Which phase is that action?',
+    correct:4,
+    why:'<b>Response.</b> Based on the previous steps, the SOC <em>takes appropriate steps to isolate affected systems</em>. Isolation/containment is the defining Response action in the CertMaster 6-step model.' },
+  { q:'Malware has been removed from the compromised hosts, the initial-access vulnerability has been patched, and normal operations are restored. Which phase?',
+    correct:5,
+    why:'<b>Eradication and Recovery.</b> The threat is <em>removed</em> and <em>vulnerabilities are remediated</em>. Both halves — removing the threat AND fixing the underlying vuln — sit in this single combined phase in the 6-step SOC model.' },
+  { q:'Two weeks after the incident closed, the team holds a review meeting to update playbooks and detection rules so the same TTP would be caught faster next time. Which phase?',
+    correct:6,
+    why:'<b>Post-Incident Improvement.</b> The threat and response are <em>evaluated</em> and <em>processes and systems are updated</em> to improve future responses. This is the "lessons learned" phase.' },
+  { q:'A tempting trap: which step immediately follows Detection?',
+    correct:2,
+    why:'<b>Triage.</b> Detection just surfaces potential activity. Before you Investigate, you must first Triage — <em>validate, classify, prioritize</em> — to decide whether a signal is worth deep investigation at all. Getting this order wrong is a classic exam-question mistake.' },
+  { q:'A common confusion: your team has just contained an active attack by isolating the affected hosts. What phase comes next in the SOC 6-step model?',
+    correct:5,
+    why:'<b>Eradication and Recovery.</b> Response = <em>isolate</em>. Eradication and Recovery = <em>remove threat + fix vulns</em>. The 6-step model bundles eradication and recovery into a single combined phase (unlike NIST 800-61, which splits them).' },
+  { q:'The SOC has just built the timeline and confirmed the incident is real and material. The team lead decides to escalate rather than continue in-SOC. Where does that decision belong?',
+    correct:3,
+    why:'<b>Investigation.</b> Note the phrasing in the 6-step model: Investigation <em>decides on a response action <b>or escalation</b></em>. The escalation decision itself is part of Investigation, not a separate phase.' },
+  { q:'Which of these best describes the boundary between Response and Eradication and Recovery?',
+    correct:'boundary',
+    why:'<b>Response contains/isolates; Eradication and Recovery removes the threat and remediates the underlying vulnerability.</b> Response is about stopping the bleeding <em>right now</em>. Eradication and Recovery is about actually cleaning up and closing the door the attacker used.',
+    labels:{
+      'boundary':'Response = contain/isolate; Eradication and Recovery = remove threat + remediate vuln.',
+      'wrong1':'Response = remove threat; Eradication and Recovery = write the report.',
+      'wrong2':'Response and Eradication and Recovery are the same phase.',
+      'wrong3':'Response happens after Eradication and Recovery.'
+    },
+    options:['boundary','wrong1','wrong2','wrong3'] },
+];
+
+/* ==================================================
+   ROLES — MATCH (DRAG-DROP)
+   ================================================== */
+function buildRolesMatch(){
+  const zonesEl = $('#roles-zones');
+  const bankEl = $('#roles-bank');
+  zonesEl.innerHTML = '';
+  // preserve bank-label; clear other chips
+  $$('#roles-bank .chip').forEach(c=>c.remove());
+
+  ROLES.forEach(role=>{
+    const z = document.createElement('div');
+    z.className = 'dropzone';
+    z.dataset.zone = role.key;
+    z.innerHTML = `<div class="z-title">${role.name}<span class="z-hint">drop definition here</span></div>`;
+    bindZone(z, 'roles');
+    zonesEl.appendChild(z);
+  });
+
+  const defs = shuffle([...ROLES]);
+  defs.forEach(role=>{
+    const chip = mkChip({ text: role.def, zone: role.key, mode: 'roles', kind: 'def', extraClass: 'def-chip' });
+    bankEl.appendChild(chip);
+  });
+
+  $('#roles-explain').classList.remove('show');
+}
+$('#roles-check').addEventListener('click',()=>{
+  let right=0, placed=0, total=ROLES.length;
+  $$('#quiz-roles #roles-zones .dropzone').forEach(z=>{
+    const key = z.dataset.zone;
+    z.querySelectorAll('.chip').forEach(chip=>{
+      placed++;
+      const ok = chip.dataset.zone === key;
+      chip.classList.toggle('correct', ok);
+      chip.classList.toggle('wrong', !ok);
+      if(ok) right++;
+    });
+  });
+  const exp = $('#roles-explain');
+  exp.classList.add('show');
+  const perfect = right===total && placed===total;
+  exp.innerHTML = `<b>${right} of ${total} correctly placed.</b> ${placed<total?'('+(total-placed)+' still in the bank.) ':''}<div class="row" style="margin-top:6px">Green = correct. Red = wrong slot — click a chip to send it back to the bank, then drag to a different role and Check again.</div>`;
+  markResult(perfect);
+});
+$('#roles-reshuffle').addEventListener('click', buildRolesMatch);
+
+/* ==================================================
+   ROLES — MCQ
+   ================================================== */
+let rolesMcqCurrent=null, rolesMcqPick=null;
+function newRolesMcq(){
+  rolesMcqCurrent = rand(ROLES_MCQ);
+  rolesMcqPick = null;
+  $('#rolesmcq-text').innerHTML = `<div class="lead">Scenario</div>${rolesMcqCurrent.q}`;
+  const box = $('#rolesmcq-opts');
+  box.innerHTML='';
+  const opts = shuffle([...rolesMcqCurrent.options]);
+  opts.forEach(optKey=>{
+    const label = getRolesMcqLabel(rolesMcqCurrent, optKey);
+    const d = document.createElement('div');
+    d.className='opt'; d.textContent=label; d.dataset.key=optKey;
+    d.addEventListener('click',()=>{
+      $$('#rolesmcq-opts .opt').forEach(x=>x.classList.remove('sel','correct','wrong'));
+      d.classList.add('sel');
+      rolesMcqPick = optKey;
+    });
+    box.appendChild(d);
+  });
+  $('#rolesmcq-explain').classList.remove('show');
+}
+function getRolesMcqLabel(q, key){
+  if(q.optionLabels && q.optionLabels[key]) return q.optionLabels[key];
+  const r = ROLES.find(x=>x.key===key);
+  return r ? r.name : key;
+}
+$('#rolesmcq-new').addEventListener('click', newRolesMcq);
+$('#rolesmcq-check').addEventListener('click',()=>{
+  if(!rolesMcqPick){ alert('Pick an option first.'); return; }
+  const ok = rolesMcqPick === rolesMcqCurrent.correct;
+  $$('#rolesmcq-opts .opt').forEach(o=>{
+    o.classList.remove('correct','wrong');
+    if(o.dataset.key === rolesMcqCurrent.correct) o.classList.add('correct');
+    else if(o.dataset.key === rolesMcqPick) o.classList.add('wrong');
+  });
+  const exp = $('#rolesmcq-explain');
+  exp.classList.add('show');
+  exp.innerHTML = `<b>${ok?'✅ Correct.':'❌ Not quite.'}</b><div class="row" style="margin-top:6px">${rolesMcqCurrent.why}</div>`;
+  markResult(ok);
+});
+
+/* ==================================================
+   LIFECYCLE — ORDER (drop step names into slots 1-6)
+   ================================================== */
+function buildLcOrder(){
+  const grid = $('#order-grid');
+  grid.innerHTML = '';
+  $$('#order-bank .chip').forEach(c=>c.remove());
+
+  for(let i=1;i<=6;i++){
+    const label = document.createElement('div');
+    label.className='pos-label'; label.textContent = i;
+    grid.appendChild(label);
+    const slot = document.createElement('div');
+    slot.className='slot'; slot.dataset.position = i; slot.dataset.slotKind = 'name';
+    bindSlot(slot, 'order');
+    grid.appendChild(slot);
+  }
+
+  shuffle([...LIFECYCLE]).forEach(step=>{
+    const chip = mkChip({
+      text: step.name,
+      position: step.pos,
+      mode: 'order',
+      kind: 'name'
+    });
+    $('#order-bank').appendChild(chip);
+  });
+
+  $('#order-explain').classList.remove('show');
+}
+$('#order-check').addEventListener('click',()=>{
+  let right=0, placed=0;
+  $$('#order-grid .slot').forEach(s=>{
+    const expected = s.dataset.position;
+    s.querySelectorAll('.chip').forEach(chip=>{
+      placed++;
+      const ok = chip.dataset.position === expected;
+      chip.classList.toggle('correct', ok);
+      chip.classList.toggle('wrong', !ok);
+      if(ok) right++;
+    });
+  });
+  const exp = $('#order-explain');
+  exp.classList.add('show');
+  const perfect = right===6 && placed===6;
+  exp.innerHTML = `<b>${right} of 6 in the correct position.</b> ${placed<6?'('+(6-placed)+' step names still in the bank.) ':''}<div class="row" style="margin-top:6px">Click a placed chip to return it to the bank. Order to remember: <b>Detection → Triage → Investigation → Response → Eradication and Recovery → Post-Incident Improvement</b>.</div>`;
+  markResult(perfect);
+});
+$('#order-reshuffle').addEventListener('click', buildLcOrder);
+
+/* ==================================================
+   LIFECYCLE — MATCH (drop definitions onto step names)
+   ================================================== */
+function buildLcMatch(){
+  const zonesEl = $('#lcmatch-zones');
+  zonesEl.innerHTML = '';
+  $$('#lcmatch-bank .chip').forEach(c=>c.remove());
+
+  LIFECYCLE.forEach(step=>{
+    const z = document.createElement('div');
+    z.className='dropzone';
+    z.dataset.zone = 'step-'+step.pos;
+    z.innerHTML = `<div class="z-title">${step.pos}. ${step.name}<span class="z-hint">drop definition here</span></div>`;
+    bindZone(z,'lcmatch');
+    zonesEl.appendChild(z);
+  });
+
+  shuffle([...LIFECYCLE]).forEach(step=>{
+    const chip = mkChip({
+      text: step.def,
+      zone: 'step-'+step.pos,
+      mode: 'lcmatch',
+      kind: 'def',
+      extraClass: 'def-chip'
+    });
+    $('#lcmatch-bank').appendChild(chip);
+  });
+
+  $('#lcmatch-explain').classList.remove('show');
+}
+$('#lcmatch-check').addEventListener('click',()=>{
+  let right=0, placed=0;
+  $$('#lcmatch-zones .dropzone').forEach(z=>{
+    const key = z.dataset.zone;
+    z.querySelectorAll('.chip').forEach(chip=>{
+      placed++;
+      const ok = chip.dataset.zone === key;
+      chip.classList.toggle('correct', ok);
+      chip.classList.toggle('wrong', !ok);
+      if(ok) right++;
+    });
+  });
+  const exp = $('#lcmatch-explain');
+  exp.classList.add('show');
+  const perfect = right===6 && placed===6;
+  exp.innerHTML = `<b>${right} of 6 matched correctly.</b> ${placed<6?'('+(6-placed)+' definitions still in the bank.) ':''}<div class="row" style="margin-top:6px">Click any placed chip to send it back and reassign.</div>`;
+  markResult(perfect);
+});
+$('#lcmatch-reshuffle').addEventListener('click', buildLcMatch);
+
+/* ==================================================
+   LIFECYCLE — MULTI (order + definitions together)
+   ================================================== */
+function buildLcMulti(){
+  const grid = $('#multi-grid');
+  grid.innerHTML = '';
+  $$('#multi-name-bank .chip').forEach(c=>c.remove());
+  $$('#multi-def-bank .chip').forEach(c=>c.remove());
+
+  // Header row
+  const h1 = document.createElement('div'); h1.className='col-header'; h1.textContent='#'; grid.appendChild(h1);
+  const h2 = document.createElement('div'); h2.className='col-header'; h2.textContent='Step name'; grid.appendChild(h2);
+  const h3 = document.createElement('div'); h3.className='col-header'; h3.textContent='Definition'; grid.appendChild(h3);
+
+  for(let i=1;i<=6;i++){
+    const label = document.createElement('div');
+    label.className='pos-label'; label.textContent = i;
+    grid.appendChild(label);
+
+    const nameSlot = document.createElement('div');
+    nameSlot.className='slot'; nameSlot.dataset.position = i; nameSlot.dataset.slotKind = 'name';
+    bindSlot(nameSlot, 'multi');
+    grid.appendChild(nameSlot);
+
+    const defSlot = document.createElement('div');
+    defSlot.className='slot slot-def'; defSlot.dataset.position = i; defSlot.dataset.slotKind = 'def';
+    bindSlot(defSlot, 'multi');
+    grid.appendChild(defSlot);
+  }
+
+  shuffle([...LIFECYCLE]).forEach(step=>{
+    const nameChip = mkChip({ text:step.name, position:step.pos, mode:'multi', kind:'name' });
+    $('#multi-name-bank').appendChild(nameChip);
+  });
+  shuffle([...LIFECYCLE]).forEach(step=>{
+    const defChip = mkChip({ text:step.def, position:step.pos, mode:'multi', kind:'def', extraClass:'def-chip' });
+    $('#multi-def-bank').appendChild(defChip);
+  });
+
+  $('#multi-explain').classList.remove('show');
+}
+$('#multi-check').addEventListener('click',()=>{
+  let rightN=0, placedN=0, rightD=0, placedD=0;
+  $$('#multi-grid .slot').forEach(s=>{
+    const expected = s.dataset.position;
+    const isName = s.dataset.slotKind === 'name';
+    s.querySelectorAll('.chip').forEach(chip=>{
+      if(isName) placedN++; else placedD++;
+      const ok = chip.dataset.position === expected;
+      chip.classList.toggle('correct', ok);
+      chip.classList.toggle('wrong', !ok);
+      if(ok){ if(isName) rightN++; else rightD++; }
+    });
+  });
+  const exp = $('#multi-explain');
+  exp.classList.add('show');
+  const totalOk = rightN + rightD;
+  const perfect = rightN===6 && rightD===6 && placedN===6 && placedD===6;
+  exp.innerHTML = `<b>${totalOk} of 12 slots correct.</b> Step names: ${rightN}/6 · Definitions: ${rightD}/6.<div class="row" style="margin-top:6px">Chips only drop into their matching kind of slot (a definition can't land in a name slot). Click any placed chip to send it back to its bank.</div>`;
+  markResult(perfect);
+});
+$('#multi-reshuffle').addEventListener('click', buildLcMulti);
+
+/* ==================================================
+   LIFECYCLE — MCQ
+   ================================================== */
+let lcmcqCurrent=null, lcmcqPick=null;
+function newLcMcq(){
+  lcmcqCurrent = rand(LC_MCQ);
+  lcmcqPick = null;
+  $('#lcmcq-text').innerHTML = `<div class="lead">Scenario</div>${lcmcqCurrent.q}`;
+  const box = $('#lcmcq-opts');
+  box.innerHTML='';
+
+  let opts;
+  if(lcmcqCurrent.options){
+    opts = shuffle([...lcmcqCurrent.options]);
+  } else {
+    opts = shuffle([1,2,3,4,5,6]);
+  }
+
+  opts.forEach(optKey=>{
+    const label = lcmcqCurrent.labels
+      ? lcmcqCurrent.labels[optKey]
+      : (typeof optKey === 'number' ? optKey + '. ' + LIFECYCLE[optKey-1].name : optKey);
+    const d = document.createElement('div');
+    d.className='opt'; d.textContent=label; d.dataset.key=String(optKey);
+    d.addEventListener('click',()=>{
+      $$('#lcmcq-opts .opt').forEach(x=>x.classList.remove('sel','correct','wrong'));
+      d.classList.add('sel');
+      lcmcqPick = optKey;
+    });
+    box.appendChild(d);
+  });
+  $('#lcmcq-explain').classList.remove('show');
+}
+$('#lcmcq-new').addEventListener('click', newLcMcq);
+$('#lcmcq-check').addEventListener('click',()=>{
+  if(lcmcqPick===null){ alert('Pick an option first.'); return; }
+  const ok = String(lcmcqPick) === String(lcmcqCurrent.correct);
+  $$('#lcmcq-opts .opt').forEach(o=>{
+    o.classList.remove('correct','wrong');
+    if(o.dataset.key === String(lcmcqCurrent.correct)) o.classList.add('correct');
+    else if(o.dataset.key === String(lcmcqPick)) o.classList.add('wrong');
+  });
+  const exp = $('#lcmcq-explain');
+  exp.classList.add('show');
+  exp.innerHTML = `<b>${ok?'✅ Correct.':'❌ Not quite.'}</b><div class="row" style="margin-top:6px">${lcmcqCurrent.why}</div>`;
+  markResult(ok);
+});
+
+/* ==================================================
+   SHARED DRAG-DROP PRIMITIVES
+   ================================================== */
+
+/**
+ * Create a draggable chip element.
+ * opts: { text, mode, kind ('def'|'name'|generic), zone?, position?, extraClass? }
+ */
+function mkChip(opts){
+  const chip = document.createElement('div');
+  chip.className = 'chip' + (opts.extraClass ? ' ' + opts.extraClass : '');
+  chip.draggable = true;
+  chip.textContent = opts.text;
+  chip.dataset.mode = opts.mode;
+  chip.dataset.kind = opts.kind || 'generic';
+  if(opts.zone !== undefined) chip.dataset.zone = opts.zone;
+  if(opts.position !== undefined) chip.dataset.position = String(opts.position);
+
+  chip.addEventListener('dragstart', e=>{
+    e.dataTransfer.setData('text/mode', opts.mode);
+    e.dataTransfer.setData('text/kind', chip.dataset.kind);
+    // Store chip id via a temp attr
+    chip.id = chip.id || ('chip-' + Math.random().toString(36).slice(2,10));
+    e.dataTransfer.setData('text/id', chip.id);
+    chip.style.opacity='.5';
+  });
+  chip.addEventListener('dragend', ()=>{ chip.style.opacity='1'; });
+
+  // Click a placed chip to return it to its bank
+  chip.addEventListener('click',()=>{
+    const parent = chip.parentElement;
+    if(!parent) return;
+    if(parent.classList.contains('dropzone') || parent.classList.contains('slot')){
+      const bank = getBankFor(chip);
+      if(bank){
+        bank.appendChild(chip);
+        chip.classList.remove('correct','wrong');
+      }
+    }
+  });
+
+  return chip;
+}
+function getBankFor(chip){
+  const mode = chip.dataset.mode;
+  const kind = chip.dataset.kind;
+  if(mode==='roles') return $('#roles-bank');
+  if(mode==='order') return $('#order-bank');
+  if(mode==='lcmatch') return $('#lcmatch-bank');
+  if(mode==='multi'){
+    return kind==='name' ? $('#multi-name-bank') : $('#multi-def-bank');
+  }
+  return null;
+}
+
+/**
+ * Bind dropzone (dropzones use data-zone matching).
+ */
+function bindZone(zone, mode){
+  zone.addEventListener('dragover', e=>{
+    if(e.dataTransfer.types.includes('text/mode')){
+      // Best-effort: allow drop; strict validation happens on drop
+    }
+    e.preventDefault();
+    zone.classList.add('over');
+  });
+  zone.addEventListener('dragleave', ()=>zone.classList.remove('over'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault();
+    zone.classList.remove('over');
+    const chipMode = e.dataTransfer.getData('text/mode');
+    if(chipMode !== mode) return;
+    const chipId = e.dataTransfer.getData('text/id');
+    const chip = document.getElementById(chipId);
+    if(!chip) return;
+    zone.appendChild(chip);
+    chip.classList.remove('correct','wrong');
+  });
+}
+
+/**
+ * Bind slot (slots use data-position + data-slot-kind).
+ * Slots enforce kind matching (name-slot rejects def-chips and vice versa).
+ */
+function bindSlot(slot, mode){
+  slot.addEventListener('dragover', e=>{ e.preventDefault(); slot.classList.add('over'); });
+  slot.addEventListener('dragleave', ()=>slot.classList.remove('over'));
+  slot.addEventListener('drop', e=>{
+    e.preventDefault();
+    slot.classList.remove('over');
+    const chipMode = e.dataTransfer.getData('text/mode');
+    if(chipMode !== mode) return;
+    const chipKind = e.dataTransfer.getData('text/kind');
+    const slotKind = slot.dataset.slotKind;
+    // For 'order' mode all chips are 'name' kind and all slots are 'name' — matches.
+    // For 'multi' mode enforce kind alignment.
+    if(slotKind && chipKind && slotKind !== chipKind) return;
+    const chipId = e.dataTransfer.getData('text/id');
+    const chip = document.getElementById(chipId);
+    if(!chip) return;
+
+    // One chip per slot: eject any existing chip back to its bank
+    const existing = slot.querySelector('.chip');
+    if(existing && existing !== chip){
+      const bank = getBankFor(existing);
+      if(bank){
+        bank.appendChild(existing);
+        existing.classList.remove('correct','wrong');
+      }
+    }
+
+    slot.appendChild(chip);
+    chip.classList.remove('correct','wrong');
+  });
+}
+
+/* ==================================================
+   KEYBOARD SHORTCUTS
+   ================================================== */
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA' || e.target.tagName==='SELECT') return;
+  const activeQuiz = $('.quiz-block.active').id.replace('quiz-','');
+  const activeMode = ($('.quiz-block.active .mode.active') || {}).id;
+  if(!activeMode) return;
+  const modeName = activeMode.replace('mode-','');
+
+  if(e.key==='Enter'){
+    const checkBtn = $('#'+modeName+'-check');
+    if(checkBtn) checkBtn.click();
+  } else if(e.key==='n' || e.key==='N'){
+    if(modeName==='roles-mcq') newRolesMcq();
+    else if(modeName==='lc-mcq') newLcMcq();
+    else if(modeName==='roles-match') buildRolesMatch();
+    else if(modeName==='lc-order') buildLcOrder();
+    else if(modeName==='lc-match') buildLcMatch();
+    else if(modeName==='lc-multi') buildLcMulti();
+  } else if(e.key==='r' || e.key==='R'){
+    state.score=0; state.total=0; updateScore();
+  } else if(e.key==='1'){
+    $('#quizSelect').value='roles'; $('#quizSelect').dispatchEvent(new Event('change'));
+  } else if(e.key==='2'){
+    $('#quizSelect').value='lifecycle'; $('#quizSelect').dispatchEvent(new Event('change'));
+  }
+});
+
+/* ==================================================
+   INIT
+   ================================================== */
+buildRolesMatch();
+newRolesMcq();
+buildLcOrder();
+buildLcMatch();
+buildLcMulti();
+newLcMcq();
+updateScore();
+</script>
+</body>
+</html>
