@@ -15,9 +15,14 @@ All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds
 
 **Tag hierarchy:** All cards prefixed with `CySA004`, then module-hierarchical (textbook cards) or domain-hierarchical (quiz cards).
 
-### Interactive HTML Trainers *(1st one is now live)*
+### Interactive HTML Trainers
 
-Web-based practice trainers hosted via GitHub Pages [SOC Roles & Lifecycle](https://ugl13rth4nu.github.io/CySA-004/M1_Roles_and_SOC_Lifecycle_Trainer.html).
+Web-based practice trainers hosted via GitHub Pages:
+
+- [Module 1 - Roles & SOC Lifecycle](https://ugl13rth4nu.github.io/CySA-004/M1_Roles_and_SOC_Lifecycle_Trainer.html) — Interactive trainer covering SOC job roles and the incident lifecycle.
+- [Module 3 - File Systems Trainer](https://ugl13rth4nu.github.io/CySA-004/File_Systems_Trainer.html) — Interactive drag-and-drop trainer covering Windows and Linux file systems, registry hives and keys, critical directories, and common system processes.
+
+These trainers emphasize pattern recognition and active recall, using repeated matching and categorization to build familiarity with how related concepts, tools, processes, and system artifacts fit together.
 
 ## Usage
 
