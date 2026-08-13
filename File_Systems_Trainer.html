@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CySA+ CS0-004 · Module 3 — Windows & Linux File Systems Trainer</title>
+<style>
+:root{
+  --accent:#1F6FB2; --accent2:#2E8B57; --warn:#C0392B; --purple:#8e44ad;
+  --orange:#D97706; --bg:#f4f7fb; --panel:#ffffff; --border:#dbe3ee;
+  --text:#0b1b2b; --muted:#4b5e73; --chip:#eef3f8; --dash:#cfd9e3;
+  --good:#155724; --goodbg:rgba(46,139,87,.14); --goodbd:rgba(46,139,87,.45);
+  --bad:#7a1d1d; --badbg:rgba(192,57,43,.12); --badbd:rgba(192,57,43,.45);
+  --neutral:rgba(31,111,178,.08); --warnbg:rgba(217,119,6,.10);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);
+}
+.dark{
+  --bg:#0c1015; --panel:#121a23; --border:#223042; --text:#e8edf3;
+  --muted:#9ab0c6; --chip:#172233; --dash:#2a374b; --good:#69db7c;
+  --goodbg:rgba(105,219,124,.12); --goodbd:rgba(105,219,124,.35);
+  --bad:#ff8787; --badbg:rgba(255,135,135,.10); --badbd:rgba(255,135,135,.35);
+  --neutral:rgba(120,180,240,.08); --warnbg:rgba(245,158,11,.10);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.45}
+header{display:flex;gap:10px;align-items:center;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;box-shadow:var(--shadow);flex-wrap:wrap}
+h1{margin:0;font-size:clamp(1rem,2.3vw,1.28rem);color:var(--accent)}
+h1 .sub{color:var(--muted);font-weight:500;font-size:.8em;margin-left:7px}
+.spacer{flex:1}
+main{max-width:1420px;margin:0 auto;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:16px;align-items:start}
+body.cheats-collapsed main{grid-template-columns:minmax(0,1fr)}
+body.cheats-collapsed aside{display:none}
+@media(max-width:1050px){main{grid-template-columns:1fr} aside{position:static!important}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.card h2{margin:0 0 10px;font-size:1.05rem;color:var(--accent)}
+.card h3{margin:14px 0 7px;font-size:.95rem;color:var(--accent2)}
+button,select{font:inherit;color:var(--text)}
+button{cursor:pointer;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:7px 11px;transition:transform .05s ease,background .15s ease}
+button:hover{background:var(--dash)} button:active{transform:translateY(1px)}
+button.primary{background:var(--accent);color:white;border-color:var(--accent)}
+button.primary:hover{filter:brightness(.94)}
+button.danger{border-color:rgba(192,57,43,.45);color:var(--bad)}
+.pill{display:inline-flex;align-items:center;gap:5px;background:var(--chip);border:1px solid var(--border);padding:3px 9px;border-radius:999px;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.quiz-picker{display:grid;grid-template-columns:auto minmax(240px,360px) 1fr;gap:10px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.quiz-picker label{font-weight:700;color:var(--muted);font-size:.9rem}
+.quiz-picker select{background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:8px 10px;width:100%}
+.quiz-picker .desc{font-size:.87rem;color:var(--muted)}
+@media(max-width:760px){.quiz-picker{grid-template-columns:1fr}.quiz-picker label{display:none}}
+.topline{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px}
+.progress-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.hint{font-size:.86rem;color:var(--muted);margin:5px 0 10px}
+.callout{background:var(--neutral);border-left:3px solid var(--accent);border-radius:6px;padding:8px 10px;font-size:.86rem;margin:8px 0}
+.callout.warn{background:var(--warnbg);border-left-color:var(--orange)}
+.callout b{color:var(--accent)} .callout.warn b{color:var(--orange)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:10px}
+.dropzone,.bucket{min-height:92px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);transition:background .15s ease,border-color .15s ease}
+.dropzone.over,.bucket.over,.chipbank.over{background:var(--neutral);border-color:var(--accent)}
+.z-title,.bucket-title{font-weight:700;color:var(--accent);font-size:.9rem;display:flex;gap:8px;justify-content:space-between;align-items:flex-start;margin-bottom:6px;min-width:0}
+.z-title span,.bucket-title span{min-width:0;overflow-wrap:anywhere}
+.z-title small,.bucket-title small{font-weight:400;color:var(--muted);font-size:.75rem}
+.bucket-title{color:var(--purple)}
+.chipbank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:var(--chip);border:1px dashed var(--dash);border-radius:10px;min-height:64px;margin-top:12px;transition:background .15s ease,border-color .15s ease}
+.bank-label{width:100%;font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.055em;margin-bottom:2px}
+.chip{padding:7px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--border);cursor:grab;user-select:none;font-size:.87rem;max-width:100%;overflow-wrap:anywhere}
+.chip.def-chip{border-radius:9px;line-height:1.34}
+.chip:active{cursor:grabbing}.chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}
+.chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.feedback{display:none;margin-top:12px;padding:11px;border-radius:9px;background:var(--neutral);border:1px solid var(--border);font-size:.9rem}
+.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}
+.feedback ul{margin:7px 0 0 20px;padding:0}.feedback li{margin:3px 0}
+.bucket-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.bucket .chip{margin:3px 4px 3px 0;display:inline-block}
+aside{position:sticky;top:82px;max-height:calc(100vh - 98px);overflow:auto}
+aside .card{padding:14px}
+aside details{margin-bottom:9px;border-bottom:1px solid var(--border);padding-bottom:6px}
+aside details:last-child{border-bottom:0}
+aside summary{cursor:pointer;font-weight:700;color:var(--accent);padding:4px 0}
+.ref-table{width:100%;border-collapse:collapse;font-size:.81rem;margin-top:6px}
+.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px;text-align:left;vertical-align:top}
+.ref-table th{background:var(--chip)}
+aside ul{margin:6px 0 6px 18px;padding:0} aside li{font-size:.85rem;margin:3px 0}
+code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--chip);border:1px solid var(--border);border-radius:4px;padding:1px 4px;color:var(--text)}
+.source-note{font-size:.77rem;color:var(--muted);margin-top:10px}
+.section-badge{display:inline-block;border:1px solid var(--border);background:var(--neutral);color:var(--muted);border-radius:999px;padding:2px 7px;font-size:.75rem;margin-right:4px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>CySA+ CS0-004 · Module 3 Trainer <span class="sub">Windows &amp; Linux File Systems / Registry / Processes</span></h1>
+  <span class="spacer"></span>
+  <span class="pill">Current: <b id="scorePill">0 / 0</b></span>
+  <span class="pill">Checks: <b id="checksPill">0</b></span>
+  <button id="resetScoreBtn" title="Reset the current score and check counter">Reset Score</button>
+  <button id="cheatBtn" title="Collapse or expand the reference panel">📚 Hide Cheats</button>
+  <button id="darkBtn" title="Toggle dark mode">🌙 Dark</button>
+</header>
+
+<main>
+<section>
+  <div class="card">
+    <div class="quiz-picker">
+      <label for="quizSelect">Quiz:</label>
+      <select id="quizSelect">
+        <option value="winfs" selected>1A · Windows File System</option>
+        <option value="winreg">1B · Windows Registry Root Keys</option>
+        <option value="winhives">1C · Windows Registry Hive Files</option>
+        <option value="winproc">1D · Windows System Processes</option>
+        <option value="linstd">2A · Linux Standard Subdirectories</option>
+        <option value="linkey">2B · Linux Key Directories</option>
+        <option value="linproc">2C · Linux System Processes</option>
+        <option value="buckets">Mixed · Cross-Platform Classification Buckets</option>
+      </select>
+      <div class="desc" id="quizDesc"></div>
+    </div>
+
+    <div class="topline">
+      <div>
+        <span class="section-badge" id="sectionBadge">Section 1A</span>
+        <strong id="quizTitle">Windows File System</strong>
+      </div>
+      <div class="progress-wrap">
+        <span class="pill">Coverage: <b id="coveragePill">0 / 0</b></span>
+        <span class="pill" id="phasePill">First-pass coverage</span>
+      </div>
+    </div>
+
+    <div id="matchQuiz">
+      <h2 id="matchPrompt">Drag each definition onto the correct term.</h2>
+      <p class="hint">Each drop zone accepts one definition. Click a placed chip to return it to the pool, or drag it directly to another term. You may score at any time, then keep changing answers and score again.</p>
+      <div class="match-grid" id="matchZones"></div>
+      <div class="chipbank" id="matchBank"><div class="bank-label">Definition pool</div></div>
+      <div class="controls">
+        <button class="primary" id="matchCheck">Score / Re-score</button>
+        <button id="matchNew">New Set</button>
+        <button id="matchShuffle">Shuffle Pool</button>
+        <button class="danger" id="matchResetProgress">Reset Coverage</button>
+      </div>
+      <div class="feedback" id="matchFeedback"></div>
+    </div>
+
+    <div id="bucketQuiz" class="hidden">
+      <h2>Drag each term into its correct source-aligned bucket.</h2>
+      <p class="hint">Only buckets with at least one correct match in the current set are shown. This intentionally avoids empty “decoy” buckets while preserving classification practice.</p>
+      <div class="bucket-grid" id="bucketGrid"></div>
+      <div class="chipbank" id="bucketBank"><div class="bank-label">Term pool</div></div>
+      <div class="controls">
+        <button class="primary" id="bucketCheck">Score / Re-score</button>
+        <button id="bucketNew">New Set</button>
+        <button id="bucketShuffle">Shuffle Pool</button>
+        <button class="danger" id="bucketResetProgress">Reset Coverage</button>
+      </div>
+      <div class="feedback" id="bucketFeedback"></div>
+    </div>
+
+    <div class="callout" id="progressExplainer">
+      <b>Progression logic:</b> During the first pass, new items are favored and are not repeated until every item has appeared. If the final first-pass set is too small, it is padded with previously seen items so the screen layout stays consistent. After 100% coverage, each new set is fully randomized. Reset Coverage starts that sequence over.
+    </div>
+  </div>
+</section>
+
+<aside id="cheatAside">
+  <div class="card">
+    <h2>Cheat Sheet</h2>
+
+    <details open data-cheat="winfs">
+      <summary>1A · Windows File System</summary>
+      <table class="ref-table">
+        <tr><th>Term</th><th>What to remember</th></tr>
+        <tr><td><code>C:\Users</code></td><td>Per-user profile folders and personal files.</td></tr>
+        <tr><td><code>C:\Program Files</code></td><td>Typical application installation location (64-bit apps on 64-bit Windows).</td></tr>
+        <tr><td><code>C:\Windows\System32</code></td><td>Critical executables, DLLs, drivers/configuration needed by Windows.</td></tr>
+        <tr><td><code>C:\Windows\System32\winevt\Logs</code></td><td>Windows event log files, including security logs.</td></tr>
+        <tr><td><code>bootmgr</code></td><td>Windows Boot Manager.</td></tr>
+        <tr><td><code>winload.exe</code></td><td>Windows OS loader.</td></tr>
+        <tr><td><code>ntoskrnl.exe</code></td><td>Windows kernel.</td></tr>
+        <tr><td><code>winlogon.exe</code></td><td>Manages interactive user logon/logoff.</td></tr>
+        <tr><td><code>explorer.exe</code></td><td>Windows shell/GUI: desktop, taskbar, file browsing.</td></tr>
+      </table>
+      <div class="callout"><b>Exam connection:</b> NTFS Alternate Data Streams (ADS) can hide additional data behind a normal-looking file. Treat unexpected ADS content as a potential persistence/evasion clue.</div>
+    </details>
+
+    <details data-cheat="winreg">
+      <summary>1B · Windows Registry Root Keys</summary>
+      <table class="ref-table">
+        <tr><th>Key</th><th>Core distinction</th></tr>
+        <tr><td><code>HKLM</code></td><td>Machine-wide hardware/software configuration; common to users.</td></tr>
+        <tr><td><code>HKCU</code></td><td>Settings for the currently logged-in user.</td></tr>
+        <tr><td><code>HKCR</code></td><td>File associations and class/COM registration behavior.</td></tr>
+        <tr><td><code>HKU</code></td><td>Loaded user profiles/subkeys.</td></tr>
+        <tr><td><code>HKCC</code></td><td>Current hardware profile/configuration gathered at startup.</td></tr>
+      </table>
+      <div class="callout"><b>Fast contrast:</b> HKCU = current user. HKU = all currently loaded user hives. HKLM = machine-wide.</div>
+    </details>
+
+    <details data-cheat="winhives">
+      <summary>1C · Registry Hive Files</summary>
+      <table class="ref-table">
+        <tr><th>Hive/file</th><th>What to remember</th></tr>
+        <tr><td><code>SAM</code></td><td>Local account information; backs HKLM\SAM.</td></tr>
+        <tr><td><code>SECURITY</code></td><td>Security policy / LSA-related security data. CertMaster describes it as linked to the security database.</td></tr>
+        <tr><td><code>SOFTWARE</code></td><td>Windows and installed software settings.</td></tr>
+        <tr><td><code>SYSTEM</code></td><td>Drivers, services, boot/control-set and file-system related configuration.</td></tr>
+        <tr><td><code>DEFAULT</code></td><td>Default/system profile-related settings.</td></tr>
+        <tr><td><code>NTUSER.DAT</code></td><td>Per-user registry settings in the user profile.</td></tr>
+        <tr><td><code>USRCLASS.DAT</code></td><td>Additional per-user class/shell registration data under AppData\Local\Microsoft\Windows.</td></tr>
+      </table>
+      <div class="callout warn"><b>CertMaster erratum:</b> The Module 3 page labels the first hive-file bullet <code>SYSTEM</code> but immediately describes the Security Accounts Manager. The standard hive is <code>SAM</code>; this trainer grades <code>SAM</code> as the correct term.</div>
+      <div class="callout"><b>Supporting files:</b> No extension = hive data; <code>.LOG</code> = transaction log; <code>.SAV</code> = saved/backup copy; the SYSTEM hive also has an <code>.ALT</code> backup in the source material.</div>
+    </details>
+
+    <details data-cheat="winproc">
+      <summary>1D · Windows System Processes</summary>
+      <table class="ref-table">
+        <tr><th>Process</th><th>Role</th></tr>
+        <tr><td><code>wininit.exe</code></td><td>Initializes critical Windows subsystems during boot.</td></tr>
+        <tr><td><code>lsass.exe</code></td><td>Security policy and authentication; highly sensitive credential/security process.</td></tr>
+        <tr><td><code>svchost.exe</code></td><td>Generic host for Windows services; many instances can be normal.</td></tr>
+        <tr><td><code>explorer.exe</code></td><td>Graphical shell (desktop/taskbar).</td></tr>
+        <tr><td><code>csrss.exe</code></td><td>Client/Server Runtime Subsystem; essential Windows runtime/system process.</td></tr>
+      </table>
+      <div class="callout"><b>Analyst habit:</b> Do not judge a process by name alone. Validate expected path, parent/child relationships, signature, user context, and resource/network behavior.</div>
+    </details>
+
+    <details data-cheat="linstd">
+      <summary>2A · Linux Standard Subdirectories</summary>
+      <table class="ref-table">
+        <tr><th>Path</th><th>Purpose</th></tr>
+        <tr><td><code>/bin</code></td><td>Essential command-line binaries.</td></tr>
+        <tr><td><code>/boot</code></td><td>Boot files.</td></tr>
+        <tr><td><code>/dev</code></td><td>Device files/nodes representing devices. (CertMaster loosely calls these device drivers.)</td></tr>
+        <tr><td><code>/etc</code></td><td>System/service configuration.</td></tr>
+        <tr><td><code>/home</code></td><td>Normal users' home directories.</td></tr>
+        <tr><td><code>/lib</code></td><td>Shared libraries needed by kernel/essential binaries.</td></tr>
+        <tr><td><code>/media</code></td><td>Mount points for removable media.</td></tr>
+        <tr><td><code>/mnt</code></td><td>Temporary/manual mount points.</td></tr>
+        <tr><td><code>/opt</code></td><td>Optional/add-on software packages (for example, Nessus).</td></tr>
+        <tr><td><code>/proc</code></td><td>Virtual filesystem exposing live process/kernel information.</td></tr>
+        <tr><td><code>/root</code></td><td>Root user's home directory.</td></tr>
+        <tr><td><code>/sbin</code></td><td>System/administrative binaries, especially boot/admin tasks.</td></tr>
+        <tr><td><code>/sys</code></td><td>Virtual filesystem exposing device/kernel information.</td></tr>
+        <tr><td><code>/tmp</code></td><td>Temporary files; contents may not survive reboot.</td></tr>
+        <tr><td><code>/usr</code></td><td>Userland programs/shareable files; contains important subdirectories.</td></tr>
+        <tr><td><code>/usr/bin</code></td><td>Executable programs broadly available to users.</td></tr>
+        <tr><td><code>/usr/local</code></td><td>Locally/custom-built or administrator-installed software.</td></tr>
+        <tr><td><code>/usr/lib</code></td><td>Libraries/internal binaries used by programs.</td></tr>
+        <tr><td><code>/usr/lib64</code></td><td>64-bit library location on systems that use it.</td></tr>
+        <tr><td><code>/usr/share</code></td><td>Architecture-independent shared/read-only data.</td></tr>
+        <tr><td><code>/var</code></td><td>Variable/changing data such as logs and spools.</td></tr>
+      </table>
+      <div class="callout"><b>High-yield contrasts:</b> <code>/proc</code> = process/kernel state; <code>/sys</code> = device/kernel object view. <code>/media</code> = removable media; <code>/mnt</code> = temporary/manual mounts. <code>/bin</code> = essential user commands; <code>/sbin</code> = system/admin commands.</div>
+    </details>
+
+    <details data-cheat="linkey">
+      <summary>2B · Four Key Linux Directories</summary>
+      <ul>
+        <li><code>/etc</code> — configuration for the system and services; think firewall, SSH, package/software settings.</li>
+        <li><code>/home</code> — normal users' personal files and per-user resources.</li>
+        <li><code>/root</code> — root user's home. <b>Not</b> the same as filesystem root <code>/</code>.</li>
+        <li><code>/var/log</code> — primary location to investigate system/service logs.</li>
+      </ul>
+      <div class="callout"><b>Home shortcuts:</b> <code>$HOME</code> expands to the current user's home path; <code>~</code> is a common shell shorthand for that home directory.</div>
+    </details>
+
+    <details data-cheat="linproc">
+      <summary>2C · Linux System Processes</summary>
+      <table class="ref-table">
+        <tr><th>Process</th><th>Role</th></tr>
+        <tr><td><code>init / systemd</code></td><td>First userspace process; bootstraps services. Modern distros commonly use systemd.</td></tr>
+        <tr><td><code>sshd</code></td><td>Accepts incoming SSH connections.</td></tr>
+        <tr><td><code>cron</code></td><td>Runs scheduled tasks/jobs.</td></tr>
+        <tr><td><code>kthreadd</code></td><td>Manages/creates kernel threads.</td></tr>
+        <tr><td><code>udevd / systemd-udevd</code></td><td>Handles device events and hardware detection.</td></tr>
+      </table>
+      <div class="callout"><b>Process review tools:</b> CertMaster highlights <code>ps</code>, <code>top</code>, and <code>systemctl</code>. Use them to inspect running processes/services and resource use.</div>
+    </details>
+
+    <details open>
+      <summary>CySA+ exam-oriented traps</summary>
+      <ul>
+        <li><b>Location matters.</b> A legitimate process name running from an unusual path can be suspicious.</li>
+        <li><b>Multiple svchost.exe instances are normal.</b> Investigate what service each instance hosts rather than assuming duplication is malicious.</li>
+        <li><b><code>/root</code> vs <code>/</code>:</b> one is a user's home; the other is the filesystem root.</li>
+        <li><b><code>HKCU</code> vs <code>HKU</code>:</b> current user versus loaded user profiles.</li>
+        <li><b><code>NTUSER.DAT</code> is per-user.</b> Most machine hives are under <code>C:\Windows\System32\Config</code>.</li>
+        <li><b>Filesystems are forensic context.</b> Know where logs, configuration, user data, startup components, and persistence artifacts are likely to live.</li>
+      </ul>
+    </details>
+
+    <div class="source-note">Primary content: CompTIA CertMaster Perform, Module 3. Supplemental framing: Sybex CompTIA CySA+ Study Guide (CS0-004) and standard Windows/Linux platform knowledge. The SAM correction is consistent with Microsoft's standard registry-hive documentation.</div>
+  </div>
+</aside>
+</main>
+
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const shuffle=a=>{const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x;};
+const sample=(arr,n)=>shuffle(arr).slice(0,Math.min(n,arr.length));
+
+const SETS={
+  winfs:{section:'1A',title:'Windows File System',batch:6,desc:'Critical Windows directories, boot components, kernel/logon components, and the Windows shell.',items:[
+    {id:'wf-users',term:'C:\\Users',def:'Contains a dedicated profile folder for each user, including personal files such as Documents, Desktop, Pictures, Music, and Videos.'},
+    {id:'wf-programfiles',term:'C:\\Program Files',def:'Typical installation location for application files.'},
+    {id:'wf-system32',term:'C:\\Windows\\System32',def:'Contains vital Windows executables, DLLs, and configuration/system files needed to boot and operate.'},
+    {id:'wf-eventlogs',term:'C:\\Windows\\System32\\winevt\\Logs',def:'Stores Windows event log files, including security-related logs.'},
+    {id:'wf-bootmgr',term:'bootmgr',def:'The Windows Boot Manager.'},
+    {id:'wf-winload',term:'winload.exe',def:'The Windows operating system boot loader.'},
+    {id:'wf-ntoskrnl',term:'ntoskrnl.exe',def:'The Windows kernel — a core component of the operating system.'},
+    {id:'wf-winlogon',term:'winlogon.exe',def:'Manages interactive Windows user logons.'},
+    {id:'wf-explorer',term:'explorer.exe',def:'Provides and manages the Windows graphical shell/desktop interface.'}
+  ]},
+  winreg:{section:'1B',title:'Windows Registry Root Keys',batch:5,desc:'The five major Windows Registry root keys and the scope of configuration each represents.',items:[
+    {id:'wr-hklm',term:'HKEY_LOCAL_MACHINE (HKLM)',def:'Contains machine-wide hardware and software configuration settings that apply across users.'},
+    {id:'wr-hkcu',term:'HKEY_CURRENT_USER (HKCU)',def:'Stores settings for the currently logged-in user, such as desktop preferences and user-specific software configuration.'},
+    {id:'wr-hkcr',term:'HKEY_CLASSES_ROOT (HKCR)',def:'Manages file associations and class-registration information used to determine how file types are opened.'},
+    {id:'wr-hku',term:'HKEY_USERS (HKU)',def:'Contains subkeys for user profiles that are loaded on the system.'},
+    {id:'wr-hkcc',term:'HKEY_CURRENT_CONFIG (HKCC)',def:'Stores the current hardware profile/configuration information assembled at startup.'}
+  ]},
+  winhives:{section:'1C',title:'Windows Registry Hive Files',batch:6,desc:'Registry hive files, where they live, and the configuration scope they back. Includes a correction to a CertMaster labeling error.',items:[
+    {id:'wh-sam',term:'SAM',def:'Security Accounts Manager hive containing local account information; stored with the machine hives under System32\\Config.'},
+    {id:'wh-security',term:'SECURITY',def:'Security-related hive associated with Windows security policy and LSA/security database information.'},
+    {id:'wh-software',term:'SOFTWARE',def:'Contains settings for installed software and the Windows operating system.'},
+    {id:'wh-system',term:'SYSTEM',def:'Contains configuration for drivers, services/control sets, and file-system/boot-related system settings.'},
+    {id:'wh-default',term:'DEFAULT',def:'Contains default/system-profile related registry settings.'},
+    {id:'wh-ntuser',term:'NTUSER.DAT',def:'Per-user hive containing that user’s settings and preferences; located in C:\\Users\\<username>\\.'},
+    {id:'wh-usrclass',term:'USRCLASS.DAT',def:'Per-user class/shell-registration hive located under C:\\Users\\<username>\\AppData\\Local\\Microsoft\\Windows\\.'}
+  ]},
+  winproc:{section:'1D',title:'Windows System Processes',batch:5,desc:'Common Windows processes and the roles a security analyst should recognize in Task Manager and telemetry.',items:[
+    {id:'wp-wininit',term:'wininit.exe',def:'Initializes critical Windows subsystems during the boot process.'},
+    {id:'wp-lsass',term:'lsass.exe',def:'Local Security Authority Subsystem Service; handles security policy and user authentication and is central to Windows security.'},
+    {id:'wp-svchost',term:'svchost.exe',def:'Generic host process for Windows services; multiple instances commonly run at the same time.'},
+    {id:'wp-explorer',term:'explorer.exe',def:'Provides the Windows graphical shell, including the desktop and taskbar.'},
+    {id:'wp-csrss',term:'csrss.exe',def:'Client/Server Runtime Subsystem; an essential Windows runtime/system process associated with core system stability.'}
+  ]},
+  linstd:{section:'2A',title:'Linux Standard Subdirectories',batch:6,desc:'Filesystem Hierarchy Standard (FHS) locations that commonly appear in Linux administration and security analysis.',items:[
+    {id:'ls-bin',term:'/bin',def:'Stores essential command-line utilities and binaries, such as the binary for ls.'},
+    {id:'ls-boot',term:'/boot',def:'Stores files necessary to boot the Linux operating system.'},
+    {id:'ls-dev',term:'/dev',def:'Contains device files/nodes that represent hardware and software devices connected to the system.'},
+    {id:'ls-etc',term:'/etc',def:'Stores basic system and service configuration files.'},
+    {id:'ls-home',term:'/home',def:'Stores normal users’ home directories and personal files.'},
+    {id:'ls-lib',term:'/lib',def:'Stores shared libraries required by the kernel and essential command-line utilities/binaries.'},
+    {id:'ls-media',term:'/media',def:'Provides mount points for removable media.'},
+    {id:'ls-mnt',term:'/mnt',def:'Common location for temporary/manual mounting of filesystems, including remote filesystems.'},
+    {id:'ls-opt',term:'/opt',def:'Stores optional/add-on software packages, often in a product-specific subdirectory such as /opt/nessus.'},
+    {id:'ls-proc',term:'/proc',def:'Virtual filesystem that exposes continually updated process and kernel information in file-like form.'},
+    {id:'ls-root',term:'/root',def:'The home directory of the root user.'},
+    {id:'ls-sbin',term:'/sbin',def:'Stores system/administrative binaries used for boot and privileged system-management tasks.'},
+    {id:'ls-sys',term:'/sys',def:'Virtual filesystem that exposes information about devices and kernel objects.'},
+    {id:'ls-tmp',term:'/tmp',def:'Stores temporary files that may be removed or lost during shutdown/reboot.'},
+    {id:'ls-usr',term:'/usr',def:'Stores userland programs and shareable files accessible broadly on the system; contains several important subdirectories.'},
+    {id:'ls-usrbin',term:'/usr/bin',def:'Contains executable programs that general users can run.'},
+    {id:'ls-usrlocal',term:'/usr/local',def:'Common location for locally installed or custom-built applications.'},
+    {id:'ls-usrlib',term:'/usr/lib',def:'Contains libraries and internal binaries needed by executable programs.'},
+    {id:'ls-usrlib64',term:'/usr/lib64',def:'Provides a 64-bit library location on systems that use this convention.'},
+    {id:'ls-usrshare',term:'/usr/share',def:'Contains architecture-independent shared/read-only data files.'},
+    {id:'ls-var',term:'/var',def:'Stores variable data expected to change while the system runs, such as logs and spools.'}
+  ]},
+  linkey:{section:'2B',title:'Linux Key Directories',batch:4,desc:'The four FHS locations CertMaster emphasizes as especially important for administration and investigation.',items:[
+    {id:'lk-etc',term:'/etc',def:'Configuration location for the system and services; common place for firewall, SSH, and software-management settings.'},
+    {id:'lk-home',term:'/home',def:'Contains normal users’ personal files and user-specific resources; $HOME and ~ commonly reference the current user’s home.'},
+    {id:'lk-root',term:'/root',def:'The root user’s home directory; do not confuse it with filesystem root /.'},
+    {id:'lk-varlog',term:'/var/log',def:'Primary location where Linux and installed services typically write log files used for investigation and auditing.'}
+  ]},
+  linproc:{section:'2C',title:'Linux System Processes',batch:5,desc:'Common Linux processes plus the process/service-management context CompTIA expects you to recognize.',items:[
+    {id:'lp-systemd',term:'init / systemd',def:'The first userspace process that bootstraps the operating system and launches other services; modern distributions typically use systemd.'},
+    {id:'lp-sshd',term:'sshd',def:'Handles incoming SSH connections for secure remote access.'},
+    {id:'lp-cron',term:'cron',def:'Runs scheduled tasks and maintenance jobs.'},
+    {id:'lp-kthreadd',term:'kthreadd',def:'Handles/creates kernel threads necessary for system operations.'},
+    {id:'lp-udevd',term:'udevd / systemd-udevd',def:'Manages device events and hardware detection.'}
+  ]}
+};
+
+const BUCKETS={
+  winfs:{label:'Windows File System · 1A',hint:'directories / files / boot & shell components'},
+  winreg:{label:'Registry Root Keys · 1B',hint:'HKLM / HKCU / HKCR / HKU / HKCC'},
+  winhives:{label:'Registry Hive Files · 1C',hint:'SAM / SYSTEM / NTUSER.DAT …'},
+  winproc:{label:'Windows Processes · 1D',hint:'running Windows system processes'},
+  linuxfs:{label:'Linux File System · 2A/2B',hint:'FHS directories and key locations'},
+  linproc:{label:'Linux Processes · 2C',hint:'common Linux processes'}
+};
+
+function buildBucketItems(){
+  const out=[];
+  for(const [setId,set] of Object.entries(SETS)){
+    if(setId==='linkey'){
+      for(const it of set.items){
+        if(!out.some(x=>x.term===it.term && x.bucket==='linuxfs')) out.push({id:'b-'+it.id,term:it.term,bucket:'linuxfs'});
+      }
+      continue;
+    }
+    let bucket=setId;
+    if(setId==='linstd') bucket='linuxfs';
+    for(const it of set.items){
+      let term=it.term;
+      // explorer.exe is intentionally taught in both 1A and 1D; qualify it only in this mixed drill to remove ambiguity.
+      if(it.id==='wf-explorer') term='explorer.exe — file/shell component (1A)';
+      if(it.id==='wp-explorer') term='explorer.exe — running process (1D)';
+      if(out.some(x=>x.term===term && x.bucket===bucket)) continue;
+      out.push({id:'b-'+it.id,term,bucket});
+    }
+  }
+  return out;
+}
+const BUCKET_ITEMS=buildBucketItems();
+const BUCKET_SET={section:'Mixed',title:'Cross-Platform Classification Buckets',batch:8,desc:'Classify terms by the Module 3 section/category in which they are taught. Visible buckets always have at least one correct match.',items:BUCKET_ITEMS};
+
+const state={quiz:'winfs',current:[],checks:0,lastScore:0,lastTotal:0};
+const STORAGE_KEY='cysa004-m3-filesystems-progress-v1';
+let progress=loadProgress();
+
+function validIds(quiz){const set=quiz==='buckets'?BUCKET_SET:SETS[quiz];return new Set(set.items.map(x=>x.id));}
+function loadProgress(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+    const clean={};
+    for(const q of [...Object.keys(SETS),'buckets']){
+      const valid=validIds(q); clean[q]=(Array.isArray(raw[q])?raw[q]:[]).filter(id=>valid.has(id));
+    }
+    return clean;
+  }catch(e){return Object.fromEntries([...Object.keys(SETS),'buckets'].map(q=>[q,[]]));}
+}
+function saveProgress(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(progress));}catch(e){/* local file browsers may restrict storage */}}
+function currentSetDef(){return state.quiz==='buckets'?BUCKET_SET:SETS[state.quiz];}
+function currentSeen(){return new Set(progress[state.quiz]||[]);}
+
+function chooseDiverse(items,n,keyFn){
+  if(items.length<=n) return shuffle(items);
+  const groups={};
+  for(const item of shuffle(items)){const k=keyFn(item);(groups[k]??=[]).push(item);}
+  const keys=shuffle(Object.keys(groups)); const picked=[];
+  for(const k of keys){if(picked.length>=n) break;picked.push(groups[k].shift());}
+  const leftovers=shuffle(Object.values(groups).flat());
+  for(const it of leftovers){if(picked.length>=n) break;picked.push(it);}
+  return picked;
+}
+
+function nextSetItems(){
+  const set=currentSetDef(), seen=currentSeen();
+  const unseen=set.items.filter(x=>!seen.has(x.id));
+  const batch=Math.min(set.batch,set.items.length);
+  let chosen=[];
+  if(unseen.length===0){
+    chosen=state.quiz==='buckets'?chooseDiverse(set.items,batch,x=>x.bucket):sample(set.items,batch);
+  }else if(unseen.length>=batch){
+    chosen=state.quiz==='buckets'?chooseDiverse(unseen,batch,x=>x.bucket):sample(unseen,batch);
+  }else{
+    chosen=[...unseen];
+    const fillerPool=set.items.filter(x=>!chosen.some(c=>c.id===x.id));
+    const need=batch-chosen.length;
+    const fillers=state.quiz==='buckets'?chooseDiverse(fillerPool,need,x=>x.bucket):sample(fillerPool,need);
+    chosen.push(...fillers);
+    chosen=shuffle(chosen);
+  }
+  for(const x of chosen) seen.add(x.id);
+  progress[state.quiz]=[...seen]; saveProgress();
+  return chosen;
+}
+
+function resetCoverage(){progress[state.quiz]=[];saveProgress();state.current=[];state.lastScore=0;state.lastTotal=0;updateHeader();newSet();}
+function resetCheckCounter(){state.checks=0;state.lastScore=0;state.lastTotal=0;updateHeader();}
+function updateHeader(){
+  const set=currentSetDef(), seen=currentSeen();
+  $('#scorePill').textContent=`${state.lastScore} / ${state.lastTotal}`;
+  $('#checksPill').textContent=state.checks;
+  $('#coveragePill').textContent=`${seen.size} / ${set.items.length}`;
+  $('#phasePill').textContent=seen.size>=set.items.length?'Full random mode':'First-pass coverage';
+  $('#sectionBadge').textContent=set.section==='Mixed'?'Mixed drill':`Section ${set.section}`;
+  $('#quizTitle').textContent=set.title;
+  $('#quizDesc').textContent=set.desc;
+}
+
+function mkChip({text,itemId,answer,mode,extraClass=''}){
+  const chip=document.createElement('div');
+  chip.className='chip '+extraClass; chip.draggable=true; chip.textContent=text;
+  chip.dataset.itemId=itemId; chip.dataset.answer=answer; chip.dataset.mode=mode;
+  chip.id='chip-'+itemId+'-'+Math.random().toString(36).slice(2,7);
+  chip.addEventListener('dragstart',e=>{
+    e.dataTransfer.setData('text/id',chip.id); e.dataTransfer.setData('text/mode',mode); chip.style.opacity='.5';
+  });
+  chip.addEventListener('dragend',()=>chip.style.opacity='1');
+  chip.addEventListener('click',()=>{
+    const parent=chip.parentElement;
+    if(parent && (parent.classList.contains('dropzone')||parent.classList.contains('bucket'))){
+      getBank(mode).appendChild(chip); chip.classList.remove('correct','wrong'); clearFeedback(mode);
+    }
+  });
+  return chip;
+}
+function getBank(mode){return mode==='match'?$('#matchBank'):$('#bucketBank');}
+function clearFeedback(mode){
+  const el=mode==='match'?$('#matchFeedback'):$('#bucketFeedback');
+  el.classList.remove('show');
+}
+function bindBank(bank,mode){
+  bank.addEventListener('dragover',e=>{e.preventDefault();bank.classList.add('over');});
+  bank.addEventListener('dragleave',()=>bank.classList.remove('over'));
+  bank.addEventListener('drop',e=>{
+    e.preventDefault();bank.classList.remove('over'); if(e.dataTransfer.getData('text/mode')!==mode)return;
+    const chip=document.getElementById(e.dataTransfer.getData('text/id')); if(!chip)return;
+    bank.appendChild(chip);chip.classList.remove('correct','wrong');clearFeedback(mode);
+  });
+}
+function bindMatchZone(zone){
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('over');if(e.dataTransfer.getData('text/mode')!=='match')return;
+    const chip=document.getElementById(e.dataTransfer.getData('text/id'));if(!chip)return;
+    const existing=zone.querySelector('.chip');
+    if(existing && existing!==chip){$('#matchBank').appendChild(existing);existing.classList.remove('correct','wrong');}
+    zone.appendChild(chip);chip.classList.remove('correct','wrong');clearFeedback('match');
+  });
+}
+function bindBucket(bucket){
+  bucket.addEventListener('dragover',e=>{e.preventDefault();bucket.classList.add('over');});
+  bucket.addEventListener('dragleave',()=>bucket.classList.remove('over'));
+  bucket.addEventListener('drop',e=>{
+    e.preventDefault();bucket.classList.remove('over');if(e.dataTransfer.getData('text/mode')!=='bucket')return;
+    const chip=document.getElementById(e.dataTransfer.getData('text/id'));if(!chip)return;
+    bucket.appendChild(chip);chip.classList.remove('correct','wrong');clearFeedback('bucket');
+  });
+}
+
+function buildMatch(items){
+  const zones=$('#matchZones'),bank=$('#matchBank'); zones.innerHTML=''; bank.innerHTML='<div class="bank-label">Definition pool</div>';
+  for(const it of items){
+    const z=document.createElement('div');z.className='dropzone';z.dataset.answer=it.id;
+    z.innerHTML=`<div class="z-title"><span>${escapeHtml(it.term)}</span><small>drop here</small></div>`;
+    bindMatchZone(z);zones.appendChild(z);
+  }
+  for(const it of shuffle(items)) bank.appendChild(mkChip({text:it.def,itemId:it.id,answer:it.id,mode:'match',extraClass:'def-chip'}));
+  $('#matchFeedback').classList.remove('show');
+}
+function buildBuckets(items){
+  const grid=$('#bucketGrid'),bank=$('#bucketBank');grid.innerHTML='';bank.innerHTML='<div class="bank-label">Term pool</div>';
+  const represented=[...new Set(items.map(x=>x.bucket))];
+  for(const key of represented){
+    const meta=BUCKETS[key],b=document.createElement('div');b.className='bucket';b.dataset.bucket=key;
+    b.innerHTML=`<div class="bucket-title"><span>${escapeHtml(meta.label)}</span><small>${escapeHtml(meta.hint)}</small></div>`;bindBucket(b);grid.appendChild(b);
+  }
+  for(const it of shuffle(items)) bank.appendChild(mkChip({text:it.term,itemId:it.id,answer:it.bucket,mode:'bucket'}));
+  $('#bucketFeedback').classList.remove('show');
+}
+function newSet(){
+  state.current=nextSetItems();state.lastScore=0;state.lastTotal=state.current.length;updateHeader();
+  if(state.quiz==='buckets') buildBuckets(state.current); else buildMatch(state.current);
+}
+function scoreMatch(){
+  let right=0,placed=0;const wrong=[];
+  $$('#matchZones .dropzone').forEach(z=>{
+    const chip=z.querySelector('.chip'); if(!chip)return; placed++;
+    const ok=chip.dataset.answer===z.dataset.answer;chip.classList.toggle('correct',ok);chip.classList.toggle('wrong',!ok);
+    if(ok) right++; else wrong.push(z.querySelector('.z-title span').textContent);
+  });
+  $$('#matchBank .chip').forEach(c=>c.classList.remove('correct','wrong'));
+  state.checks++;state.lastScore=right;state.lastTotal=state.current.length;updateHeader();
+  const fb=$('#matchFeedback');fb.classList.add('show');
+  let extra=placed<state.current.length?` ${state.current.length-placed} item(s) are still unplaced.`:'';
+  fb.innerHTML=`<div class="scoreline">${right} of ${state.current.length} correct.${extra}</div><div style="margin-top:5px">Green = correct. Red = wrong. Move or return any chip and use <b>Score / Re-score</b> again.</div>${wrong.length?`<div style="margin-top:5px;color:var(--muted)">Revisit: ${wrong.map(escapeHtml).join(', ')}</div>`:''}`;
+}
+function scoreBuckets(){
+  let right=0,placed=0;const wrong=[];
+  $$('#bucketGrid .bucket').forEach(b=>{
+    b.querySelectorAll('.chip').forEach(chip=>{placed++;const ok=chip.dataset.answer===b.dataset.bucket;chip.classList.toggle('correct',ok);chip.classList.toggle('wrong',!ok);if(ok)right++;else wrong.push(chip.textContent);});
+  });
+  $$('#bucketBank .chip').forEach(c=>c.classList.remove('correct','wrong'));
+  state.checks++;state.lastScore=right;state.lastTotal=state.current.length;updateHeader();
+  const fb=$('#bucketFeedback');fb.classList.add('show');
+  const extra=placed<state.current.length?` ${state.current.length-placed} term(s) are still in the pool.`:'';
+  fb.innerHTML=`<div class="scoreline">${right} of ${state.current.length} correctly classified.${extra}</div><div style="margin-top:5px">You can drag red items directly to another bucket, or click them to return them to the pool, then re-score.</div>${wrong.length?`<div style="margin-top:5px;color:var(--muted)">Revisit: ${wrong.map(escapeHtml).join(', ')}</div>`:''}`;
+}
+function shuffleBank(bank){const chips=shuffle($$('.chip',bank));for(const c of chips)bank.appendChild(c);}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function setCheatFocus(q){
+  const key=q==='buckets'?null:q;
+  $$('aside details[data-cheat]').forEach(d=>{if(key)d.open=d.dataset.cheat===key;});
+}
+function switchQuiz(q){
+  state.quiz=q;state.current=[];state.lastScore=0;state.lastTotal=0;
+  const bucket=q==='buckets';$('#matchQuiz').classList.toggle('hidden',bucket);$('#bucketQuiz').classList.toggle('hidden',!bucket);
+  setCheatFocus(q);newSet();
+}
+
+bindBank($('#matchBank'),'match');bindBank($('#bucketBank'),'bucket');
+$('#quizSelect').addEventListener('change',e=>switchQuiz(e.target.value));
+$('#matchCheck').addEventListener('click',scoreMatch);$('#bucketCheck').addEventListener('click',scoreBuckets);
+$('#matchNew').addEventListener('click',newSet);$('#bucketNew').addEventListener('click',newSet);
+$('#matchShuffle').addEventListener('click',()=>shuffleBank($('#matchBank')));$('#bucketShuffle').addEventListener('click',()=>shuffleBank($('#bucketBank')));
+$('#matchResetProgress').addEventListener('click',resetCoverage);$('#bucketResetProgress').addEventListener('click',resetCoverage);
+$('#resetScoreBtn').addEventListener('click',resetCheckCounter);
+$('#darkBtn').addEventListener('click',()=>{document.body.classList.toggle('dark');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark';});
+$('#cheatBtn').addEventListener('click',()=>{document.body.classList.toggle('cheats-collapsed');$('#cheatBtn').textContent=document.body.classList.contains('cheats-collapsed')?'📚 Show Cheats':'📚 Hide Cheats';});
+
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;
+  if(e.key==='Enter'){(state.quiz==='buckets'?$('#bucketCheck'):$('#matchCheck')).click();}
+  else if(e.key==='n'||e.key==='N') newSet();
+  else if(e.key==='s'||e.key==='S') shuffleBank(state.quiz==='buckets'?$('#bucketBank'):$('#matchBank'));
+});
+
+// Initialize the requested default quiz.
+switchQuiz('winfs');
+</script>
+</body>
+</html>
