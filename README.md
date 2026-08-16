@@ -22,6 +22,7 @@ Web-based practice trainers hosted via GitHub Pages:
 - [Module 1 - Roles & SOC Lifecycle](https://ugl13rth4nu.github.io/CySA-004/M1_Roles_and_SOC_Lifecycle_Trainer.html) — Interactive trainer covering SOC job roles and the incident lifecycle.
 - [Module 3 - File Systems Trainer](https://ugl13rth4nu.github.io/CySA-004/File_Systems_Trainer.html) — Interactive drag-and-drop trainer covering Windows and Linux file systems, registry hives and keys, critical directories, and common system processes.
 - [Module 3 - NMAP Trainer](https://ugl13rth4nu.github.io/CySA-004/Nmap_Trainer_v4.html) — Interactive trainer covering Nmap scan types, host discovery, target and port specification, service/OS detection, NSE, output formats, port-state interpretation, timing/evasion techniques, command construction, and scenario-based scan analysis.
+- [Module 7 - CVSS v4.0 + EPSS](https://ugl13rth4nu.github.io/CySA-004/CVSS_4_0_Trainer_v2.html) — Interactive trainer covering CVSS 4.0
 
 These trainers emphasize pattern recognition and active recall, using repeated matching and categorization to build familiarity with how related concepts, tools, processes, and system artifacts fit together.
 
