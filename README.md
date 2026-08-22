@@ -19,13 +19,16 @@ All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds
 
 Web-based practice trainers hosted via GitHub Pages:
 
-- [Lesson 1 - Roles & SOC Lifecycle](https://ugl13rth4nu.github.io/CySA-004/M1_Roles_and_SOC_Lifecycle_Trainer.html) — Interactive trainer covering SOC job roles and the incident lifecycle.
-- [Lesson 3 - File Systems Trainer](https://ugl13rth4nu.github.io/CySA-004/File_Systems_Trainer.html) — Interactive drag-and-drop trainer covering Windows and Linux file systems, registry hives and keys, critical directories, and common system processes.
-- [Lesson 3 - NMAP Trainer](https://ugl13rth4nu.github.io/CySA-004/Nmap_Trainer_v4.html) — Interactive trainer covering Nmap scan types, host discovery, target and port specification, service/OS detection, NSE, output formats, port-state interpretation, timing/evasion techniques, command construction, and scenario-based scan analysis.
-- [Lesson 4 - OT / ICS / IIoT Trainer](https://ugl13rth4nu.github.io/CySA-004/OT_IIoT_Trainer_v1.html) — Interactive drag-and-drop and scenario trainer for operational technology, industrial control systems, SCADA/DCS architecture, ICS protocols, OT security practices, and recognition of common OT security platforms including Dragos, Nozomi Guardian, and Claroty CTD.
-- [Module 7 - CVSS v4.0 + EPSS](https://ugl13rth4nu.github.io/CySA-004/CVSS_4_0_Trainer_v2.html) — Interactive trainer covering CVSS 4.0
-- [Tools Trainer (external)](https://ugl13rth4nu.github.io/CySA-004/Tools_Trainer_v1.html) — Interactive HTML trainer designed to build recognition of the third-party tools, platforms, and services encountered on the CySA+ exam. Covers 100+ tools organized by functional category and Free/Open Source vs. Commercial/Paid, with drag-and-drop classification, tool-to-function matching, scenario-based “BEST tool” questions, high-confusion tool comparisons, and legitimate-vs.-synthetic tool-name drills. Emphasizes not just knowing what a tool does, but recognizing why one plausible tool is a better choice than another given the scenario.
-- [Frameworks, Models & Scoring Systems Trainer](https://ugl13rth4nu.github.io/CySA-004/Frameworks_Models_Scoring_Trainer_v1.html) — Interactive drills covering MITRE ATT&CK, Cyber Kill Chain, Diamond Model, Pyramid of Pain, STRIDE, CVSS, EPSS, and STIX/TAXII, with deeper practice on the major threat-analysis models and exam-style recognition cues.
+| Trainer | Topic |
+| --- | --- |
+| [CVSS 4.0](https://ugl13rth4nu.github.io/CySA-004/Trainers/CVSS_4-0.html) | CVSS v4.0 vector strings, metric groups, and score interpretation |
+| [File Systems](https://ugl13rth4nu.github.io/CySA-004/Trainers/File_Systems.html) | NTFS, FAT, ext, APFS — structure, artifacts, forensic relevance |
+| [Frameworks](https://ugl13rth4nu.github.io/CySA-004/Trainers/Frameworks.html) | NIST CSF, MITRE ATT&CK, Cyber Kill Chain, Diamond Model, and related |
+| [Logging](https://ugl13rth4nu.github.io/CySA-004/Trainers/Logging.html) | Log sources, formats, and analyst-relevant fields |
+| [OT](https://ugl13rth4nu.github.io/CySA-004/Trainers/OT.html) | Operational Technology — ICS/SCADA, protocols, and security considerations |
+| [SOC Roles](https://ugl13rth4nu.github.io/CySA-004/Trainers/Soc_Roles.html) | Tier 1/2/3, IR team composition, and responsibility boundaries |
+| [Tools](https://ugl13rth4nu.github.io/CySA-004/Trainers/Tools.html) | Security tool identification, categorization, and scenario-to-tool matching |
+
 
 
 These trainers emphasize pattern recognition and active recall, using repeated matching and categorization to build familiarity with how related concepts, tools, processes, and system artifacts fit together.
