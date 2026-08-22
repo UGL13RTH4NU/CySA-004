@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CySA+ CS0-004 · Windows Event IDs & Logging Fundamentals Trainer</title>
+<style>
+:root{
+  --accent:#1f6fb2; --accent2:#2e8b57; --warn:#c0392b; --amber:#a86400; --purple:#7b4bb7;
+  --bg:#f4f7fb; --panel:#ffffff; --panel2:#f8fafc; --border:#d8e1eb; --text:#102132; --muted:#56697d;
+  --chip:#edf3f8; --dash:#c7d3df; --good:#155724; --goodbg:rgba(46,139,87,.13); --goodbd:rgba(46,139,87,.46);
+  --bad:#7a1d1d; --badbg:rgba(192,57,43,.12); --badbd:rgba(192,57,43,.44); --selbg:rgba(31,111,178,.12);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 5px 14px rgba(0,0,0,.04);
+}
+body.dark{
+  --bg:#0c1117; --panel:#121a23; --panel2:#0f1720; --border:#263548; --text:#e7edf4; --muted:#9fb2c6;
+  --chip:#182536; --dash:#32435a; --good:#76df8b; --goodbg:rgba(118,223,139,.11); --goodbd:rgba(118,223,139,.36);
+  --bad:#ff9494; --badbg:rgba(255,148,148,.10); --badbd:rgba(255,148,148,.35); --selbg:rgba(104,171,235,.12);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 5px 14px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Arial,sans-serif;line-height:1.42}
+button,select{font:inherit}
+button{cursor:pointer}
+header{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--border);box-shadow:var(--shadow)
+}
+.title-wrap{min-width:290px;flex:1}
+h1{margin:0;color:var(--accent);font-size:clamp(1.05rem,2.3vw,1.34rem);line-height:1.2}
+.subtitle{font-size:.79rem;color:var(--muted);margin-top:2px}
+.header-controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.control,.btn{
+  border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:8px;padding:7px 9px
+}
+.btn:hover,.control:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.btn.small{padding:5px 8px;font-size:.82rem}
+.status{
+  padding:5px 9px;border-radius:999px;background:var(--chip);border:1px solid var(--border);
+  color:var(--muted);font-size:.8rem;white-space:nowrap
+}
+main{
+  max-width:1500px;margin:0 auto;padding:14px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px
+}
+body.cheats-hidden main{grid-template-columns:minmax(0,1fr)}
+body.cheats-hidden aside{display:none}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:14px}
+.quiz-head{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+.quiz-head h2{margin:0;color:var(--accent);font-size:1.08rem}
+.quiz-head p{margin:3px 0 0;color:var(--muted);font-size:.86rem}
+.mode-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.note,.callout{
+  border-left:3px solid var(--accent);background:var(--selbg);padding:8px 10px;border-radius:7px;margin:8px 0;font-size:.86rem
+}
+.callout.warn{border-left-color:var(--amber)}
+.callout.good{border-left-color:var(--accent2)}
+.drag-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:12px;align-items:start}
+.targets{display:grid;gap:7px}
+.target-row{
+  display:grid;grid-template-columns:minmax(120px,.72fr) minmax(220px,1.65fr);gap:7px;align-items:stretch
+}
+.target-label{
+  border:1px solid var(--border);background:var(--panel2);border-radius:8px;padding:8px 9px;display:flex;flex-direction:column;justify-content:center
+}
+.target-label .big{font-weight:800;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.06rem}
+.target-label .minor{font-size:.73rem;color:var(--muted);margin-top:2px}
+.slot{
+  min-height:57px;border:2px dashed var(--dash);border-radius:8px;padding:5px;background:var(--panel);
+  display:flex;align-items:center;gap:5px;transition:.12s ease
+}
+.slot.over{border-color:var(--accent);background:var(--selbg)}
+.slot.correct{border-color:var(--goodbd);background:var(--goodbg)}
+.slot.wrong{border-color:var(--badbd);background:var(--badbg)}
+.slot.empty-wrong::after{content:"Unanswered";color:var(--bad);font-size:.78rem;font-weight:700;padding-left:4px}
+.answer-tray{
+  position:sticky;top:84px;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:9px;max-height:calc(100vh - 104px);overflow:auto
+}
+.answer-tray h3{font-size:.82rem;margin:0 0 5px;color:var(--muted);text-transform:uppercase;letter-spacing:.045em}
+.pool{display:grid;gap:6px}
+.chip{
+  border:1px solid var(--border);background:var(--chip);color:var(--text);border-radius:8px;padding:7px 8px;
+  font-size:.84rem;line-height:1.3;user-select:none;cursor:grab;box-shadow:0 1px 1px rgba(0,0,0,.02)
+}
+.chip:hover{border-color:var(--accent)}
+.chip.selected{outline:2px solid var(--accent);background:var(--selbg)}
+.chip:active{cursor:grabbing}
+.chip .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:800;color:var(--accent)}
+.chip .meta{font-size:.72rem;color:var(--muted);margin-top:2px}
+.inline-score{font-size:.83rem;color:var(--muted);min-height:1.2em}
+.inline-score.good{color:var(--good);font-weight:700}
+.inline-score.bad{color:var(--bad);font-weight:700}
+.coverage{font-size:.78rem;color:var(--muted);padding:4px 7px;border:1px solid var(--border);border-radius:999px;background:var(--panel2)}
+.order-grid{display:grid;grid-template-columns:64px minmax(0,1fr);gap:7px;align-items:stretch}
+.order-num{
+  border:1px solid var(--border);background:var(--panel2);border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:800;color:var(--accent);font-size:1.02rem
+}
+.mcq-card{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:12px}
+.mcq-q{font-weight:700;margin-bottom:10px}
+.mcq-options{display:grid;gap:7px}
+.opt{
+  text-align:left;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:9px;padding:9px 10px
+}
+.opt:hover{border-color:var(--accent)}
+.opt.selected{outline:2px solid var(--accent);background:var(--selbg)}
+.opt.correct{border-color:var(--goodbd);background:var(--goodbg);color:var(--good)}
+.opt.wrong{border-color:var(--badbd);background:var(--badbg);color:var(--bad)}
+.explanation{display:none;margin-top:10px;border-left:3px solid var(--accent);background:var(--panel);border-radius:7px;padding:9px;font-size:.88rem}
+.explanation.show{display:block}
+.explanation .disc{color:var(--accent);font-weight:800}
+.kbd{display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--chip);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.75rem}
+aside{min-width:0}
+aside .card{position:sticky;top:84px;max-height:calc(100vh - 104px);overflow:auto}
+aside h2{font-size:1rem;margin:0 0 7px;color:var(--accent)}
+details{border-top:1px solid var(--border);padding:6px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:700;color:var(--accent);font-size:.9rem}
+.ref-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-top:6px}
+.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px;vertical-align:top;text-align:left}
+.ref-table th{background:var(--chip)}
+.ref-table code{font-size:.75rem}
+.memory{font-size:.81rem;color:var(--muted);margin:6px 0}
+.trap{font-size:.79rem;border-left:3px solid var(--amber);padding:6px 8px;background:rgba(168,100,0,.08);margin:6px 0;border-radius:5px}
+.source-list{font-size:.76rem;padding-left:18px;margin:6px 0}
+.source-list li{margin:4px 0}
+a{color:var(--accent)}
+.trainer-footer{max-width:1500px;margin:0 auto;padding:2px 14px 20px;color:var(--muted);font-size:.78rem}
+.trainer-footer a{text-decoration:none}
+.hidden{display:none!important}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 7px;font-size:.72rem;background:var(--chip);color:var(--muted);margin-left:4px}
+@media(max-width:1180px){
+  main{grid-template-columns:minmax(0,1fr)}
+  aside .card{position:static;max-height:none}
+  .drag-layout{grid-template-columns:minmax(0,1fr) 280px}
+}
+@media(max-width:760px){
+  header{position:static}
+  main{padding:9px}
+  .drag-layout{display:block}
+  .answer-tray{position:sticky;bottom:0;top:auto;max-height:38vh;margin-top:9px;z-index:10;box-shadow:var(--shadow)}
+  .target-row{grid-template-columns:105px minmax(0,1fr)}
+  .slot{min-height:62px}
+  .title-wrap{min-width:220px}
+}
+@media(max-width:480px){
+  .target-row{grid-template-columns:1fr}
+  .target-label{padding:6px 8px}
+  .header-controls{width:100%}
+  #quizSelect{max-width:100%;flex:1}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="title-wrap">
+    <h1>CySA+ CS0-004 · Event IDs &amp; Logging Fundamentals</h1>
+    <div class="subtitle">Windows event recognition, logon types, syslog severity, Windows event levels, and CS0-004 logging concepts</div>
+  </div>
+  <div class="header-controls">
+    <select id="quizSelect" class="control" aria-label="Quiz selector">
+      <option value="core">Core Event IDs — Meaning → ID</option>
+      <option value="reverse">Core Event IDs — ID → Meaning</option>
+      <option value="expanded">High-Yield Event IDs — Expansion</option>
+      <option value="logon">Windows Logon Types</option>
+      <option value="syslog">Syslog Severity 0–7</option>
+      <option value="winlevels">Windows Event Levels</option>
+      <option value="concepts">CS0-004 Logging Concepts</option>
+      <option value="scenarios">Correlation &amp; Exam Scenarios</option>
+    </select>
+    <span id="scoreStatus" class="status">Not graded</span>
+    <button id="themeBtn" class="btn small" type="button">Dark mode</button>
+    <button id="cheatBtn" class="btn small" type="button">Hide cheats</button>
+    <button id="resetBtn" class="btn small" type="button">Reset quiz</button>
+  </div>
+</header>
+
+<main>
+<section id="quizCard" class="card" aria-live="polite"></section>
+
+<aside id="cheatPanel">
+  <div class="card">
+    <h2>Cheat Sheet / Reference</h2>
+    <div class="memory"><b>Recall first.</b> Hide this panel when you want pure retrieval practice.</div>
+
+    <details open>
+      <summary>Core Event IDs</summary>
+      <table class="ref-table">
+        <tr><th>ID</th><th>Meaning</th><th>Channel</th></tr>
+        <tr><td><code>4624</code></td><td>Successful logon</td><td>Security</td></tr>
+        <tr><td><code>4625</code></td><td>Failed logon</td><td>Security</td></tr>
+        <tr><td><code>4688</code></td><td>New process created</td><td>Security</td></tr>
+        <tr><td><code>4698</code></td><td>Scheduled task created</td><td>Security</td></tr>
+        <tr><td><code>7045</code></td><td>Service installed</td><td>System / SCM</td></tr>
+        <tr><td><code>1102</code></td><td>Security audit log cleared</td><td>Security</td></tr>
+      </table>
+      <div class="memory"><b>Pattern hook:</b> 46xx = authentication/process/audit activity; 70xx here is Service Control Manager; 1102 is log-clearing evidence.</div>
+    </details>
+
+    <details>
+      <summary>High-Yield Expansion</summary>
+      <table class="ref-table">
+        <tr><th>ID</th><th>Meaning</th></tr>
+        <tr><td><code>4648</code></td><td>Logon attempted using explicit credentials</td></tr>
+        <tr><td><code>4663</code></td><td>Attempt made to access an object</td></tr>
+        <tr><td><code>4672</code></td><td>Special privileges assigned to new logon</td></tr>
+        <tr><td><code>4697</code></td><td>Service installed — Security audit event</td></tr>
+        <tr><td><code>4719</code></td><td>System audit policy changed</td></tr>
+        <tr><td><code>4720</code></td><td>User account created</td></tr>
+        <tr><td><code>4732</code></td><td>Member added to security-enabled local group</td></tr>
+        <tr><td><code>4740</code></td><td>User account locked out</td></tr>
+        <tr><td><code>4768</code></td><td>Kerberos TGT requested</td></tr>
+        <tr><td><code>4769</code></td><td>Kerberos service ticket requested</td></tr>
+        <tr><td><code>4771</code></td><td>Kerberos pre-authentication failed</td></tr>
+        <tr><td><code>4776</code></td><td>Domain controller attempted credential validation</td></tr>
+      </table>
+    </details>
+
+    <details>
+      <summary>Windows Logon Types</summary>
+      <table class="ref-table">
+        <tr><th>Type</th><th>Meaning</th></tr>
+        <tr><td><code>2</code></td><td>Interactive — local user logon</td></tr>
+        <tr><td><code>3</code></td><td>Network</td></tr>
+        <tr><td><code>4</code></td><td>Batch</td></tr>
+        <tr><td><code>5</code></td><td>Service</td></tr>
+        <tr><td><code>7</code></td><td>Unlock</td></tr>
+        <tr><td><code>8</code></td><td>NetworkCleartext</td></tr>
+        <tr><td><code>9</code></td><td>NewCredentials</td></tr>
+        <tr><td><code>10</code></td><td>RemoteInteractive — RDP / Terminal Services</td></tr>
+        <tr><td><code>11</code></td><td>CachedInteractive</td></tr>
+      </table>
+      <div class="memory"><b>High-value four:</b> 2 local interactive, 3 network, 5 service, 10 RDP.</div>
+    </details>
+
+    <details>
+      <summary>Syslog Severity 0–7</summary>
+      <table class="ref-table">
+        <tr><th>#</th><th>RFC 5424</th><th>Meaning</th></tr>
+        <tr><td>0</td><td>Emergency</td><td>System unusable</td></tr>
+        <tr><td>1</td><td>Alert</td><td>Immediate action</td></tr>
+        <tr><td>2</td><td>Critical</td><td>Critical conditions</td></tr>
+        <tr><td>3</td><td>Error</td><td>Error conditions</td></tr>
+        <tr><td>4</td><td>Warning</td><td>Warning conditions</td></tr>
+        <tr><td>5</td><td>Notice</td><td>Normal but significant</td></tr>
+        <tr><td>6</td><td>Informational</td><td>Informational</td></tr>
+        <tr><td>7</td><td>Debug</td><td>Debug-level</td></tr>
+      </table>
+      <div class="memory"><b>Direction:</b> lower number = more severe. Cisco often labels severity 5 <i>Notifications</i>, corresponding to RFC <i>Notice</i>.</div>
+    </details>
+
+    <details>
+      <summary>Windows Event Levels</summary>
+      <table class="ref-table">
+        <tr><th>Value</th><th>Windows level</th></tr>
+        <tr><td>0</td><td>LogAlways — special filtering value, not “most severe”</td></tr>
+        <tr><td>1</td><td>Critical</td></tr>
+        <tr><td>2</td><td>Error</td></tr>
+        <tr><td>3</td><td>Warning</td></tr>
+        <tr><td>4</td><td>Informational</td></tr>
+        <tr><td>5</td><td>Verbose</td></tr>
+      </table>
+      <div class="trap"><b>Trap:</b> Windows and syslog numbers do not mean the same thing. Syslog 0 = Emergency. Windows 0 = LogAlways / bypass level filtering.</div>
+      <div class="trap"><b>Trap:</b> <i>Audit Success</i> and <i>Audit Failure</i> are Windows event <b>keywords</b>, not severity levels.</div>
+    </details>
+
+    <details>
+      <summary>CS0-004 Logging Concepts</summary>
+      <table class="ref-table">
+        <tr><th>Concept</th><th>Exam clue</th></tr>
+        <tr><td>Ingestion</td><td>Are logs actually reaching the collector/SIEM?</td></tr>
+        <tr><td>Configuration</td><td>Are the right events/fields/verbosity enabled?</td></tr>
+        <tr><td>Integrity &amp; security</td><td>Can logs be altered, deleted, or accessed improperly?</td></tr>
+        <tr><td>Time synchronization</td><td>Can events across systems be placed on one reliable timeline?</td></tr>
+        <tr><td>Retention</td><td>Will evidence still exist when it is needed?</td></tr>
+      </table>
+    </details>
+
+    <details>
+      <summary>Common Exam Traps</summary>
+      <div class="trap"><code>7045</code> and <code>4697</code> can both describe service installation. <b>7045</b> is Service Control Manager in the <b>System</b> log; <b>4697</b> is a <b>Security auditing</b> event.</div>
+      <div class="trap"><code>4624</code>, <code>4698</code>, and <code>7045</code> are not malicious by themselves. The account, source, command/path, timing, and surrounding events decide whether the activity is suspicious.</div>
+      <div class="trap"><code>4732</code> means a member was added to a security-enabled <b>local group</b>. It does not itself say that the group was privileged.</div>
+      <div class="trap"><code>4771</code> means Kerberos pre-authentication failed. Do not automatically call it Kerberoasting; service-ticket activity is centered on <code>4769</code>, and attack identification requires pattern/context.</div>
+      <div class="trap">A burst of <code>4625</code> events can be attack activity, user error, stale credentials, or a broken service. Pattern + context matters.</div>
+    </details>
+
+    <details>
+      <summary>Source &amp; Scope Notes</summary>
+      <div class="memory">The current CS0-004 V4 objectives explicitly require logging concepts and EVTX awareness, but they do not publish a fixed Event-ID memorization list. The “Core” set begins with the IDs supplied for this trainer; the Expansion set is deliberately labeled high-yield supplemental material.</div>
+      <ul class="source-list">
+        <li><a href="https://lecbyo.files.cmp.optimizely.com/download/68b1eae88e5011f08868a275d699e612" target="_blank" rel="noopener noreferrer">CompTIA CySA+ CS0-004 V4 Exam Objectives v2.0</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/appendix-l--events-to-monitor" target="_blank" rel="noopener noreferrer">Microsoft — Events to Monitor</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624" target="_blank" rel="noopener noreferrer">Microsoft — Event 4624 / Logon Types</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/windows/win32/wes/eventmanifestschema-leveltype-complextype" target="_blank" rel="noopener noreferrer">Microsoft — Windows Event Levels</a></li>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc5424.html" target="_blank" rel="noopener noreferrer">RFC 5424 — Syslog Protocol</a></li>
+      </ul>
+    </details>
+  </div>
+</aside>
+</main>
+
+<footer class="trainer-footer">
+  <a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a>
+</footer>
+
+<script>
+"use strict";
+
+/* ---------- DATA ---------- */
+const CORE = [
+  {id:"4624", meaning:"An account was successfully logged on", short:"Successful logon", channel:"Security", cue:"Authentication baseline; inspect logon type, account, source, and time."},
+  {id:"4625", meaning:"An account failed to log on", short:"Failed logon", channel:"Security", cue:"Repeated failures may be suspicious, but one event is not automatically an attack."},
+  {id:"4688", meaning:"A new process has been created", short:"New process created", channel:"Security", cue:"Useful for process path, parent/creator process, and command-line analysis when enabled."},
+  {id:"4698", meaning:"A scheduled task was created", short:"Scheduled task created", channel:"Security", cue:"Scheduled tasks are a common persistence method; creation can also be legitimate."},
+  {id:"7045", meaning:"A service was installed in the system", short:"Service installed", channel:"System · Service Control Manager", cue:"Common service-persistence clue. Contrast with Security event 4697."},
+  {id:"1102", meaning:"The Security audit log was cleared", short:"Security audit log cleared", channel:"Security", cue:"Unusual and investigation-worthy; may indicate defense evasion or legitimate administration."}
+];
+
+const EXPANDED = [
+  {id:"4648", meaning:"A logon was attempted using explicit credentials", channel:"Security", cue:"Useful for alternate credentials / runas-style activity; context determines legitimacy."},
+  {id:"4663", meaning:"An attempt was made to access an object", channel:"Security", cue:"Object-access auditing; useful for sensitive file/folder access when auditing is configured."},
+  {id:"4672", meaning:"Special privileges were assigned to a new logon", channel:"Security", cue:"Correlate by Logon ID with 4624; common for privileged/service sessions and not automatically malicious."},
+  {id:"4697", meaning:"A service was installed in the system (Security auditing)", channel:"Security", cue:"Security-audit counterpart to System/SCM 7045."},
+  {id:"4719", meaning:"System audit policy was changed", channel:"Security", cue:"Watch unexpected weakening or alteration of audit coverage."},
+  {id:"4720", meaning:"A user account was created", channel:"Security", cue:"Unexpected account creation can indicate persistence/backdoor activity."},
+  {id:"4732", meaning:"A member was added to a security-enabled local group", channel:"Security", cue:"Check which group; the event does not itself mean the group is privileged."},
+  {id:"4740", meaning:"A user account was locked out", channel:"Security", cue:"Can support password-spray/brute-force investigation or identify stale credentials."},
+  {id:"4768", meaning:"A Kerberos authentication ticket (TGT) was requested", channel:"Security · domain controller", cue:"Kerberos authentication activity; analyze requester, encryption, failures, and patterns."},
+  {id:"4769", meaning:"A Kerberos service ticket was requested", channel:"Security · domain controller", cue:"Service-ticket activity; unusual request patterns can support Kerberoasting hunts."},
+  {id:"4771", meaning:"Kerberos pre-authentication failed", channel:"Security · domain controller", cue:"Often bad credentials or spray/brute-force signal; not synonymous with Kerberoasting."},
+  {id:"4776", meaning:"The domain controller attempted to validate credentials for an account", channel:"Security · domain controller", cue:"Credential validation / NTLM-oriented investigation context."}
+];
+
+const LOGON_TYPES = [
+  {id:"2", name:"Interactive", meaning:"A user logged on locally to this computer."},
+  {id:"3", name:"Network", meaning:"A user or computer logged on to this computer from the network."},
+  {id:"4", name:"Batch", meaning:"A batch process ran on behalf of a user without direct interaction."},
+  {id:"5", name:"Service", meaning:"The Service Control Manager started a service."},
+  {id:"7", name:"Unlock", meaning:"The workstation was unlocked."},
+  {id:"8", name:"NetworkCleartext", meaning:"Network logon where the authentication package receives the password in unhashed form."},
+  {id:"9", name:"NewCredentials", meaning:"Current local token is cloned while different credentials are used for outbound connections."},
+  {id:"10", name:"RemoteInteractive", meaning:"Remote Desktop / Terminal Services interactive logon."},
+  {id:"11", name:"CachedInteractive", meaning:"Domain credentials cached locally were used; the domain controller was not contacted."}
+];
+
+const SYSLOG = [
+  {id:"0", name:"Emergency", meaning:"System is unusable"},
+  {id:"1", name:"Alert", meaning:"Action must be taken immediately"},
+  {id:"2", name:"Critical", meaning:"Critical conditions"},
+  {id:"3", name:"Error", meaning:"Error conditions"},
+  {id:"4", name:"Warning", meaning:"Warning conditions"},
+  {id:"5", name:"Notice", meaning:"Normal but significant condition"},
+  {id:"6", name:"Informational", meaning:"Informational messages"},
+  {id:"7", name:"Debug", meaning:"Debug-level messages"}
+];
+
+const WIN_LEVELS = [
+  {id:"0", name:"LogAlways", meaning:"Special value that bypasses level-based filtering; not a severity ranking."},
+  {id:"1", name:"Critical", meaning:"Critical error / abnormal termination"},
+  {id:"2", name:"Error", meaning:"Severe error event"},
+  {id:"3", name:"Warning", meaning:"Condition that could require attention"},
+  {id:"4", name:"Informational", meaning:"Non-error informational event"},
+  {id:"5", name:"Verbose", meaning:"Detailed trace/state information"}
+];
+
+const CONCEPT_QS = [
+  {
+    q:"A newly deployed endpoint is generating local Windows logs, but none of its events appear in the SIEM. Which CS0-004 logging concept should you check first?",
+    options:["Retention","Ingestion","Time synchronization","Integrity and security"], answer:"Ingestion",
+    why:"<b>Ingestion</b> is whether log data is actually collected and delivered into the logging/SIEM pipeline. If the endpoint has local logs but the SIEM never receives them, the first boundary is collection/forwarding.",
+    distract:"Retention is how long logs are kept; time synchronization affects correlation; integrity/security protects logs from tampering or unauthorized access."
+  },
+  {
+    q:"A responder knows an incident occurred six months ago, but the SIEM only retains 30 days of data. Which logging concept caused the evidence gap?",
+    options:["Configuration","Retention","Ingestion","Time synchronization"], answer:"Retention",
+    why:"<b>Retention</b> determines how long log data remains available. The logs may have been collected correctly but aged out before the investigation.",
+    distract:"Ingestion would mean the logs never arrived. Configuration controls what/how much is logged. Time synchronization affects timestamps."
+  },
+  {
+    q:"Firewall, domain controller, and cloud events appear to describe the same incident, but their timestamps differ by 12–20 minutes. Which concept is the BEST first check?",
+    options:["Time synchronization","Retention","Configuration","Log compression"], answer:"Time synchronization",
+    why:"<b>Time synchronization</b> is the discriminator when multiple sources cannot be placed on a reliable common timeline. NTP or another trusted time source is the usual operational control.",
+    distract:"Configuration could affect fields or verbosity, but a consistent cross-source clock skew points first to time."
+  },
+  {
+    q:"An attacker with administrator access deletes local evidence before disconnecting. Which logging concept most directly addresses confidence that collected evidence has not been altered or destroyed?",
+    options:["Integrity and security","Ingestion","Retention","Normalization"], answer:"Integrity and security",
+    why:"<b>Integrity and security</b> covers protecting logs against alteration, deletion, and unauthorized access. Off-host forwarding, access controls, and tamper-resistant storage can reduce the attacker's ability to rewrite history.",
+    distract:"Retention answers how long evidence is kept. Ingestion answers whether it is collected. Neither by itself guarantees trustworthy evidence."
+  },
+  {
+    q:"Event 4688 records process creation, but the command-line field is empty because the relevant audit/policy setting was never enabled. Which logging concept is most directly involved?",
+    options:["Configuration","Retention","Time synchronization","Integrity and security"], answer:"Configuration",
+    why:"<b>Configuration</b> determines what is logged and at what detail. For 4688, command-line capture depends on the applicable Windows policy being enabled.",
+    distract:"The event exists, so ingestion is not the main problem. Retention and time synchronization do not add a missing field."
+  },
+  {
+    q:"A SOC wants logs to remain useful even if an endpoint is fully compromised. Which design BEST supports both ingestion and log integrity?",
+    options:["Forward events promptly to a protected centralized collector","Keep only a larger local circular log","Disable verbose logging everywhere","Clear old logs after every alert"], answer:"Forward events promptly to a protected centralized collector",
+    why:"Central forwarding moves evidence away from the compromised endpoint while also making it available for correlation. It supports <b>ingestion</b> and helps protect <b>integrity/security</b> when the collector is separately controlled.",
+    distract:"A larger local log helps capacity but remains exposed to an attacker controlling the host."
+  }
+];
+
+const SCENARIO_QS = [
+  {
+    q:"You see 85 Event ID 4625 failures for one account from the same source IP in three minutes, followed by Event ID 4624 for that account from the same IP. What is the BEST interpretation?",
+    options:["Likely brute-force activity followed by a successful logon","A scheduled task created persistence","The Security audit log was cleared","Normal service startup"],
+    answer:"Likely brute-force activity followed by a successful logon",
+    why:"<code>4625</code> = failed logon and <code>4624</code> = successful logon. A dense failure burst against one account followed by success is consistent with brute force and deserves investigation.",
+    distract:"The events are evidence of authentication activity, not proof of attacker identity; verify source, logon type, account behavior, and surrounding telemetry."
+  },
+  {
+    q:"A 4624 event shows Logon Type 10 from an external address to an administrative workstation. What does Type 10 identify?",
+    options:["RemoteInteractive / RDP logon","Network file-share logon","Service logon","Cached local logon"],
+    answer:"RemoteInteractive / RDP logon",
+    why:"Logon Type <b>10</b> is <b>RemoteInteractive</b>, used for Terminal Services / Remote Desktop.",
+    distract:"Type 3 is Network; Type 5 is Service; Type 11 is CachedInteractive."
+  },
+  {
+    q:"A 4624 successful logon and a 4672 event share the same Logon ID. What does the pair tell you?",
+    options:["The new logon received sensitive/special privileges","The user definitely exploited a privilege-escalation vulnerability","The account failed Kerberos pre-authentication","The audit log was cleared"],
+    answer:"The new logon received sensitive/special privileges",
+    why:"<code>4672</code> reports special privileges assigned to a new logon, and Microsoft explicitly notes that its Logon ID can be correlated with <code>4624</code>.",
+    distract:"A privileged logon can be expected for administrators, SYSTEM, and services. The pair is important context, not automatic proof of compromise."
+  },
+  {
+    q:"Event 4688 shows powershell.exe started with an encoded command, hidden window, and an unusual parent process. What is the strongest immediate significance of 4688?",
+    options:["It records process creation and supplies process/parent/command context","It records a failed logon","It records service installation","It proves PowerShell is malware"],
+    answer:"It records process creation and supplies process/parent/command context",
+    why:"<code>4688</code> is process creation. With command-line auditing enabled, it can expose arguments; parent/creator context helps identify suspicious LOLBin use.",
+    distract:"PowerShell itself is legitimate. Suspicion comes from the command, parent/child relationship, user, path, and surrounding activity."
+  },
+  {
+    q:"A new scheduled task named 'Updater' launches an executable from a user's Temp directory at logon. Which event most directly records creation of the scheduled task?",
+    options:["4698","4688","7045","4719"], answer:"4698",
+    why:"<code>4698</code> = a scheduled task was created. The task content/name can be valuable persistence evidence.",
+    distract:"4688 records process creation; 7045 service installation; 4719 audit-policy change."
+  },
+  {
+    q:"A System log entry from Service Control Manager states 'A service was installed in the system.' Which Event ID is the best match?",
+    options:["7045","4697","4698","4720"], answer:"7045",
+    why:"<code>7045</code> is the classic <b>System log / Service Control Manager</b> service-install event.",
+    distract:"<code>4697</code> also reports service installation, but it is a <b>Security auditing</b> event. Channel/source wording is the discriminator."
+  },
+  {
+    q:"A Security-auditing record says a service was installed and includes service name, binary path, start type, and service account. Which event is the best match?",
+    options:["4697","7045","4688","1102"], answer:"4697",
+    why:"<code>4697</code> is the Security-audit event generated when a service is installed.",
+    distract:"<code>7045</code> is the nearby confusable event from Service Control Manager in the System log."
+  },
+  {
+    q:"Minutes after suspicious process execution, Event ID 1102 appears. What should the analyst infer first?",
+    options:["The Security audit log was cleared and the action should be investigated","The host rebooted normally","A user account was created","Kerberos pre-authentication failed"],
+    answer:"The Security audit log was cleared and the action should be investigated",
+    why:"<code>1102</code> fires when the Windows Security audit log is cleared. Microsoft recommends monitoring and investigating it because manual clearing should be uncommon.",
+    distract:"It can have a legitimate administrative explanation, so do not jump straight from 1102 to 'confirmed attacker'."
+  },
+  {
+    q:"Event 4720 is followed shortly by 4732 adding the new account to a local Administrators group. What is the BEST interpretation?",
+    options:["Potential account-based persistence plus privilege escalation","A normal Kerberos ticket renewal","A failed interactive logon","A syslog severity change"],
+    answer:"Potential account-based persistence plus privilege escalation",
+    why:"<code>4720</code> = user created. <code>4732</code> = member added to a security-enabled local group. If that group is Administrators and the activity is unauthorized, the sequence is a strong backdoor/privilege signal.",
+    distract:"4732 alone does not say 'privileged'; the group identity in the event supplies that context."
+  },
+  {
+    q:"A domain controller shows a large, unusual burst of Event ID 4769 service-ticket requests from one user for many SPNs. Which threat-hunting hypothesis is most relevant?",
+    options:["Kerberoasting activity","Security log clearing","Scheduled-task persistence","Interactive RDP logon"],
+    answer:"Kerberoasting activity",
+    why:"<code>4769</code> records Kerberos service-ticket requests. Unusual service-ticket request patterns can support a Kerberoasting hunt.",
+    distract:"4769 is common in normal domain operations. The suspicious pattern—not the mere existence of one 4769 event—is the discriminator."
+  },
+  {
+    q:"A domain controller records many Event ID 4771 entries across user accounts. What does 4771 actually mean?",
+    options:["Kerberos pre-authentication failed","A Kerberos service ticket was requested","A user account was locked out","A new process started"],
+    answer:"Kerberos pre-authentication failed",
+    why:"<code>4771</code> means Kerberos pre-authentication failed. A burst can support password-spray/bad-credential investigation.",
+    distract:"Do not memorize '4771 = Kerberoasting.' Kerberoasting hunts focus heavily on service-ticket requests such as 4769 and their attributes/patterns."
+  },
+  {
+    q:"A log excerpt shows syslog severity 0. A different Windows event XML shows Level=0. Are the zeros equivalent?",
+    options:["No — syslog 0 is Emergency; Windows 0 is LogAlways/bypass filtering","Yes — both always mean the system is unusable","Yes — both mean debug output","No — syslog 0 is informational and Windows 0 is critical"],
+    answer:"No — syslog 0 is Emergency; Windows 0 is LogAlways/bypass filtering",
+    why:"This is a high-confusion boundary. RFC syslog severity <b>0 = Emergency</b>. The Windows event level numeric model uses <b>0 = LogAlways</b>, a special filtering value.",
+    distract:"Never transfer the numeric severity meaning from one logging scheme to another without identifying the scheme."
+  },
+  {
+    q:"A Windows Security event is displayed with the keyword 'Audit Failure.' Which statement is most accurate?",
+    options:["Audit Failure is a keyword/category marker, not a Windows severity level","Audit Failure is Windows severity level 1","Audit Failure is syslog severity 3","Any Audit Failure proves malicious activity"],
+    answer:"Audit Failure is a keyword/category marker, not a Windows severity level",
+    why:"Windows event <b>Level</b> and audit <b>Keywords</b> are separate metadata. Security auditing commonly uses Audit Success/Audit Failure keywords.",
+    distract:"An audit failure can be benign or malicious depending on the event and context."
+  },
+  {
+    q:"You need the ID that most directly indicates the system audit policy itself changed. Which one?",
+    options:["4719","1102","4698","4740"], answer:"4719",
+    why:"<code>4719</code> = system audit policy was changed.",
+    distract:"1102 is log clearing; 4698 task creation; 4740 account lockout."
+  }
+];
+
+/* ---------- STATE ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const quizCard = $("#quizCard");
+const scoreStatus = $("#scoreStatus");
+let selectedChip = null;
+let currentReset = () => {};
+let currentShuffle = () => {};
+const deckState = {
+  expanded:{remaining:EXPANDED.map((_,i)=>i), seen:new Set(), random:false},
+  concepts:{remaining:CONCEPT_QS.map((_,i)=>i), seen:new Set(), random:false, current:null},
+  scenarios:{remaining:SCENARIO_QS.map((_,i)=>i), seen:new Set(), random:false, current:null}
+};
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+function setStatus(text,kind=""){
+  scoreStatus.textContent=text;
+  scoreStatus.style.color=kind==="good"?"var(--good)":kind==="bad"?"var(--bad)":"var(--muted)";
+}
+function clearSelection(){
+  if(selectedChip) selectedChip.classList.remove("selected");
+  selectedChip=null;
+}
+function resetSlotStyle(slot){
+  slot.classList.remove("correct","wrong","empty-wrong");
+}
+function makeChip(item, type, renderer){
+  const d=document.createElement("div");
+  d.className="chip";
+  d.draggable=true;
+  d.dataset.key=item.id;
+  d.dataset.type=type;
+  d.innerHTML=renderer(item);
+  d.addEventListener("dragstart",e=>{
+    clearSelection();
+    e.dataTransfer.setData("text/plain",item.id);
+    e.dataTransfer.effectAllowed="move";
+    d.classList.add("dragging");
+  });
+  d.addEventListener("dragend",()=>d.classList.remove("dragging"));
+  d.addEventListener("click",e=>{
+    e.stopPropagation();
+    if(d.closest(".slot")){
+      returnChipHome(d);
+      return;
+    }
+    if(selectedChip===d){clearSelection();return;}
+    clearSelection(); selectedChip=d; d.classList.add("selected");
+  });
+  return d;
+}
+function compatible(chip,slot){return !slot.dataset.type || chip.dataset.type===slot.dataset.type}
+function homePoolFor(chip){
+  return quizCard.querySelector(`.pool[data-type="${CSS.escape(chip.dataset.type)}"]`);
+}
+function returnChipHome(chip){
+  const old=chip.closest(".slot");
+  const pool=homePoolFor(chip);
+  if(pool){ pool.appendChild(chip); }
+  if(old) resetSlotStyle(old);
+  chip.classList.remove("selected");
+  if(selectedChip===chip) selectedChip=null;
+  setStatus("Modified — re-grade");
+}
+function placeChip(chip,slot){
+  if(!chip || !slot || !compatible(chip,slot)) return;
+  const oldSlot=chip.closest(".slot");
+  const existing=slot.querySelector(".chip");
+  if(existing && existing!==chip){
+    const pool=homePoolFor(existing);
+    if(pool) pool.appendChild(existing);
+  }
+  slot.appendChild(chip);
+  resetSlotStyle(slot);
+  if(oldSlot && oldSlot!==slot) resetSlotStyle(oldSlot);
+  clearSelection();
+  setStatus("Modified — re-grade");
+}
+function bindSlots(){
+  $$(".slot").forEach(slot=>{
+    slot.addEventListener("dragover",e=>{
+      const chip=$(".chip.dragging");
+      if(chip && compatible(chip,slot)){e.preventDefault();slot.classList.add("over");}
+    });
+    slot.addEventListener("dragleave",()=>slot.classList.remove("over"));
+    slot.addEventListener("drop",e=>{
+      e.preventDefault();slot.classList.remove("over");
+      const chip=$(".chip.dragging");
+      if(chip) placeChip(chip,slot);
+    });
+    slot.addEventListener("click",()=>{
+      if(selectedChip) placeChip(selectedChip,slot);
+    });
+  });
+  quizCard.addEventListener("click",e=>{
+    if(!e.target.closest(".chip") && !e.target.closest(".slot")) clearSelection();
+  },{once:true});
+}
+function gradeDrag(){
+  const slots=$$(".slot");
+  let correct=0, answered=0;
+  slots.forEach(slot=>{
+    resetSlotStyle(slot);
+    const chip=slot.querySelector(".chip");
+    if(!chip){slot.classList.add("empty-wrong");return;}
+    answered++;
+    if(chip.dataset.key===slot.dataset.answer){slot.classList.add("correct");correct++;}
+    else slot.classList.add("wrong");
+  });
+  const unused=$$(".answer-tray .chip").length;
+  const text=`${correct} of ${slots.length} correct${unused?` · ${unused} unused`:""}`;
+  setStatus(text,correct===slots.length?"good":"bad");
+  const out=$("#inlineScore");
+  if(out){
+    out.textContent=text;
+    out.className="inline-score "+(correct===slots.length?"good":"bad");
+  }
+}
+function resetDrag(){
+  $$(".slot .chip").forEach(returnChipHome);
+  $$(".slot").forEach(resetSlotStyle);
+  clearSelection();
+  setStatus("Not graded");
+  const out=$("#inlineScore"); if(out){out.textContent="";out.className="inline-score";}
+}
+function shufflePool(){
+  $$(".pool").forEach(pool=>shuffle([...pool.children]).forEach(ch=>pool.appendChild(ch)));
+  clearSelection();
+}
+function controlsHtml(extra=""){
+  return `<div class="mode-tools">
+    <button class="btn small primary" id="gradeBtn" type="button">Grade / Re-score</button>
+    <button class="btn small" id="shuffleBtn" type="button">Shuffle pool</button>
+    <button class="btn small" id="modeResetBtn" type="button">Reset</button>
+    ${extra}
+    <span id="inlineScore" class="inline-score"></span>
+  </div>`;
+}
+function wireDragControls(){
+  $("#gradeBtn").addEventListener("click",gradeDrag);
+  $("#shuffleBtn").addEventListener("click",shufflePool);
+  $("#modeResetBtn").addEventListener("click",resetDrag);
+  currentReset=resetDrag; currentShuffle=shufflePool;
+}
+
+/* ---------- MATCH RENDERERS ---------- */
+function renderCore(reverse=false){
+  clearSelection(); setStatus("Not graded");
+  const title=reverse?"Core Event IDs — ID → Meaning":"Core Event IDs — Meaning → ID";
+  const sub=reverse
+    ?"Drag each Event ID onto its correct event meaning. Click a placed chip to return it home."
+    :"Drag each anonymous event meaning onto the correct Event ID. These six are the core set supplied for this trainer.";
+  quizCard.innerHTML=`<div class="quiz-head"><div><h2>${title}</h2><p>${sub}</p></div>${controlsHtml()}</div>
+    <div class="drag-layout"><div class="targets" id="targets"></div><div class="answer-tray"><h3>Answer pool</h3><div class="pool" data-type="${reverse?"id":"meaning"}"></div>
+    <div class="memory">Tip: click an answer, then click a destination. Click a placed answer to return it.</div></div></div>`;
+  const targets=$("#targets"), pool=$(".pool");
+  const items=shuffle(CORE);
+  CORE.forEach(item=>{
+    const row=document.createElement("div");row.className="target-row";
+    const label=document.createElement("div");label.className="target-label";
+    if(reverse){
+      label.innerHTML=`<div><b>${esc(item.short)}</b></div><div class="minor">${esc(item.channel)}</div>`;
+    }else{
+      label.innerHTML=`<div class="big">${esc(item.id)}</div><div class="minor">${esc(item.channel)}</div>`;
+    }
+    const slot=document.createElement("div");slot.className="slot";slot.dataset.answer=item.id;slot.dataset.type=reverse?"id":"meaning";
+    row.append(label,slot);targets.appendChild(row);
+  });
+  items.forEach(item=>{
+    const chip=reverse
+      ?makeChip(item,"id",x=>`<span class="code">${esc(x.id)}</span>`)
+      :makeChip(item,"meaning",x=>`<b>${esc(x.short)}</b><div class="meta">${esc(x.cue)}</div>`);
+    pool.appendChild(chip);
+  });
+  bindSlots();wireDragControls();
+}
+
+function nextExpandedSet(){
+  const st=deckState.expanded;
+  const size=7;
+  let picks=[];
+  if(st.remaining.length){
+    const take=Math.min(size,st.remaining.length);
+    const shuffled=shuffle(st.remaining);
+    picks=shuffled.slice(0,take);
+    const pickSet=new Set(picks);
+    st.remaining=st.remaining.filter(i=>!pickSet.has(i));
+    picks.forEach(i=>st.seen.add(i));
+    if(st.remaining.length===0) st.random=true;
+    if(picks.length<size){
+      const candidates=shuffle(EXPANDED.map((_,i)=>i).filter(i=>!pickSet.has(i)));
+      picks=picks.concat(candidates.slice(0,size-picks.length));
+    }
+  }else{
+    picks=shuffle(EXPANDED.map((_,i)=>i)).slice(0,size);
+  }
+  return picks.map(i=>EXPANDED[i]);
+}
+function renderExpanded(){
+  clearSelection();setStatus("Not graded");
+  const set=nextExpandedSet();
+  const st=deckState.expanded;
+  quizCard.innerHTML=`<div class="quiz-head"><div><h2>High-Yield Event IDs — Expansion</h2>
+    <p>Supplemental recognition set. Seven at a time; every ID is served before the mode enters full-random review.</p></div>
+    ${controlsHtml(`<button class="btn small" id="nextSetBtn" type="button">Next set</button><button class="btn small" id="coverageResetBtn" type="button">Reset coverage</button>
+    <span class="coverage">${st.seen.size}/${EXPANDED.length} covered${st.random?" · random phase":""}</span>`)}</div>
+    <div class="callout warn"><b>Scope:</b> these are useful Windows/SOC IDs, but the CS0-004 objectives do not publish a fixed “memorize these Event IDs” list.</div>
+    <div class="drag-layout"><div class="targets" id="targets"></div><div class="answer-tray"><h3>Event ID pool</h3><div class="pool" data-type="id"></div></div></div>`;
+  const targets=$("#targets"),pool=$(".pool");
+  set.forEach(item=>{
+    const row=document.createElement("div");row.className="target-row";
+    const label=document.createElement("div");label.className="target-label";
+    label.innerHTML=`<div><b>${esc(item.meaning)}</b></div><div class="minor">${esc(item.channel)}</div>`;
+    const slot=document.createElement("div");slot.className="slot";slot.dataset.answer=item.id;slot.dataset.type="id";
+    row.append(label,slot);targets.appendChild(row);
+  });
+  shuffle(set).forEach(item=>pool.appendChild(makeChip(item,"id",x=>`<span class="code">${esc(x.id)}</span>`)));
+  bindSlots();wireDragControls();
+  $("#nextSetBtn").addEventListener("click",renderExpanded);
+  $("#coverageResetBtn").addEventListener("click",()=>{
+    deckState.expanded={remaining:EXPANDED.map((_,i)=>i),seen:new Set(),random:false};
+    renderExpanded();
+  });
+}
+
+function renderSimpleNumeric(data,title,sub,scheme,type="value"){
+  clearSelection();setStatus("Not graded");
+  quizCard.innerHTML=`<div class="quiz-head"><div><h2>${title}</h2><p>${sub}</p></div>${controlsHtml()}</div>
+    ${scheme||""}<div class="drag-layout"><div class="order-grid" id="orderGrid"></div>
+    <div class="answer-tray"><h3>Answer pool</h3><div class="pool" data-type="${type}"></div>
+    <div class="memory">The number slots stay canonical; the answer pool is shuffled.</div></div></div>`;
+  const grid=$("#orderGrid"),pool=$(".pool");
+  data.forEach(item=>{
+    const num=document.createElement("div");num.className="order-num";num.textContent=item.id;
+    const slot=document.createElement("div");slot.className="slot";slot.dataset.answer=item.id;slot.dataset.type=type;
+    grid.append(num,slot);
+  });
+  shuffle(data).forEach(item=>pool.appendChild(makeChip(item,type,x=>`<b>${esc(x.name)}</b><div class="meta">${esc(x.meaning)}</div>`)));
+  bindSlots();wireDragControls();
+}
+function renderLogon(){
+  renderSimpleNumeric(LOGON_TYPES,"Windows Logon Types","Match the Logon Type number to its meaning. These values appear inside 4624/4625-style authentication analysis.",
+    `<div class="callout"><b>Fast anchors:</b> 2 = local interactive · 3 = network · 5 = service · 10 = RDP/RemoteInteractive.</div>`,"logon");
+}
+function renderSyslog(){
+  renderSimpleNumeric(SYSLOG,"Syslog Severity 0–7","Match RFC 5424 severity names to their numeric levels.",
+    `<div class="callout warn"><b>Direction test:</b> in syslog, a lower number means greater severity. Level 0 is Emergency; level 7 is Debug.</div>`,"syslog");
+}
+function renderWinLevels(){
+  renderSimpleNumeric(WIN_LEVELS,"Windows Event Levels","Match Windows event level names to numeric values. Do not import syslog meanings into this scale.",
+    `<div class="callout warn"><b>High-confusion point:</b> Windows 0 is <i>LogAlways</i>, not “Emergency.” Audit Success/Failure are keywords, not Windows severity levels.</div>`,"winlevel");
+}
+
+/* ---------- MCQ ---------- */
+function resetQuestionDeck(name,data){
+  deckState[name]={remaining:data.map((_,i)=>i),seen:new Set(),random:false,current:null};
+}
+function nextQuestionIndex(name,data){
+  const st=deckState[name];
+  let idx;
+  if(st.remaining.length){
+    const pos=Math.floor(Math.random()*st.remaining.length);
+    idx=st.remaining.splice(pos,1)[0];
+    st.seen.add(idx);
+    if(st.remaining.length===0) st.random=true;
+  }else idx=Math.floor(Math.random()*data.length);
+  st.current=idx;
+  return idx;
+}
+function renderMCQ(name,data,title,sub,newQuestion=true){
+  clearSelection();setStatus("Not graded");
+  const st=deckState[name];
+  const idx=(newQuestion||st.current===null)?nextQuestionIndex(name,data):st.current;
+  const item=data[idx];
+  const options=shuffle(item.options);
+  quizCard.innerHTML=`<div class="quiz-head"><div><h2>${title}</h2><p>${sub}</p></div>
+    <div class="mode-tools"><button class="btn small primary" id="mcqGrade" type="button">Grade / Re-score</button>
+    <button class="btn small" id="newQ" type="button">New question</button>
+    <button class="btn small" id="resetDeck" type="button">Reset coverage</button>
+    <span class="coverage">${st.seen.size}/${data.length} covered${st.random?" · random phase":""}</span></div></div>
+    <div class="mcq-card">
+      <div class="mcq-q">${item.q}</div>
+      <div class="mcq-options">${options.map((o,i)=>`<button type="button" class="opt" data-value="${esc(o)}"><b>${String.fromCharCode(65+i)}.</b> ${o}</button>`).join("")}</div>
+      <div id="mcqExplain" class="explanation"></div>
+    </div>`;
+  let selected=null;
+  $$(".opt").forEach(opt=>opt.addEventListener("click",()=>{
+    $$(".opt").forEach(o=>o.classList.remove("selected","correct","wrong"));
+    selected=opt;opt.classList.add("selected");
+    $("#mcqExplain").classList.remove("show");
+    setStatus("Selected — grade when ready");
+  }));
+  $("#mcqGrade").addEventListener("click",()=>{
+    if(!selected){setStatus("Select an answer first","bad");return;}
+    $$(".opt").forEach(o=>o.classList.remove("correct","wrong"));
+    const chosen=selected.dataset.value;
+    $$(".opt").forEach(o=>{
+      if(o.dataset.value===item.answer)o.classList.add("correct");
+      else if(o===selected)o.classList.add("wrong");
+    });
+    const ok=chosen===item.answer;
+    setStatus(ok?"Correct":"Incorrect",ok?"good":"bad");
+    const ex=$("#mcqExplain");
+    ex.innerHTML=`<div class="disc">${ok?"Correct.":"Best answer: "+esc(item.answer)}</div><div>${item.why}</div><div class="memory"><b>Discriminator:</b> ${item.distract}</div>`;
+    ex.classList.add("show");
+  });
+  $("#newQ").addEventListener("click",()=>renderMCQ(name,data,title,sub,true));
+  $("#resetDeck").addEventListener("click",()=>{
+    resetQuestionDeck(name,data);renderMCQ(name,data,title,sub,true);
+  });
+  currentReset=()=>renderMCQ(name,data,title,sub,false);
+  currentShuffle=()=>renderMCQ(name,data,title,sub,false);
+}
+function renderConcepts(){
+  renderMCQ("concepts",CONCEPT_QS,"CS0-004 Logging Concepts — BEST Answer",
+    "Scenario discrimination for the five logging concepts named in the current CS0-004 V4 objectives.");
+}
+function renderScenarios(){
+  renderMCQ("scenarios",SCENARIO_QS,"Correlation & Exam Scenarios",
+    "Interpret event patterns, nearby confusable IDs, logon types, and logging schemes. Events are evidence; context supplies the verdict.");
+}
+
+/* ---------- NAVIGATION ---------- */
+const renderers={
+  core:()=>renderCore(false),
+  reverse:()=>renderCore(true),
+  expanded:renderExpanded,
+  logon:renderLogon,
+  syslog:renderSyslog,
+  winlevels:renderWinLevels,
+  concepts:renderConcepts,
+  scenarios:renderScenarios
+};
+function renderSelected(){
+  const key=$("#quizSelect").value;
+  renderers[key]();
+}
+$("#quizSelect").addEventListener("change",renderSelected);
+$("#resetBtn").addEventListener("click",()=>currentReset());
+$("#themeBtn").addEventListener("click",()=>{
+  document.body.classList.toggle("dark");
+  const dark=document.body.classList.contains("dark");
+  $("#themeBtn").textContent=dark?"Light mode":"Dark mode";
+  try{localStorage.setItem("cysaLogTrainerTheme",dark?"dark":"light");}catch(_){}
+});
+$("#cheatBtn").addEventListener("click",()=>{
+  document.body.classList.toggle("cheats-hidden");
+  $("#cheatBtn").textContent=document.body.classList.contains("cheats-hidden")?"Show cheats":"Hide cheats";
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")clearSelection();});
+try{
+  if(localStorage.getItem("cysaLogTrainerTheme")==="dark"){
+    document.body.classList.add("dark");$("#themeBtn").textContent="Light mode";
+  }
+}catch(_){}
+renderSelected();
+</script>
+</body>
+</html>
