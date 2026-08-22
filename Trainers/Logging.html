@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CySA+ CS0-004 · Windows Event IDs & Logging Fundamentals Trainer</title>
+<title>CySA+ CS0-004 · Windows Event IDs & Log Severity Trainer v2</title>
 <style>
 :root{
   --accent:#1f6fb2; --accent2:#2e8b57; --warn:#c0392b; --amber:#a86400; --purple:#7b4bb7;
@@ -156,19 +156,21 @@ a{color:var(--accent)}
 <body>
 <header>
   <div class="title-wrap">
-    <h1>CySA+ CS0-004 · Event IDs &amp; Logging Fundamentals</h1>
-    <div class="subtitle">Windows event recognition, logon types, syslog severity, Windows event levels, and CS0-004 logging concepts</div>
+    <h1>CySA+ CS0-004 · Windows Event IDs &amp; Log Severity</h1>
+    <div class="subtitle">Exam-focused Windows Event ID recognition plus CertMaster, syslog/Cisco, and Windows severity schemes</div>
   </div>
   <div class="header-controls">
     <select id="quizSelect" class="control" aria-label="Quiz selector">
-      <option value="core">Core Event IDs — Meaning → ID</option>
-      <option value="reverse">Core Event IDs — ID → Meaning</option>
-      <option value="expanded">High-Yield Event IDs — Expansion</option>
+      <option value="core">Priority Event IDs — Meaning → ID</option>
+      <option value="reverse">Priority Event IDs — ID → Meaning</option>
+      <option value="expanded">Additional High-Yield Event IDs</option>
       <option value="logon">Windows Logon Types</option>
-      <option value="syslog">Syslog Severity 0–7</option>
-      <option value="winlevels">Windows Event Levels</option>
-      <option value="concepts">CS0-004 Logging Concepts</option>
-      <option value="scenarios">Correlation &amp; Exam Scenarios</option>
+      <option value="genericsev">CertMaster Log Severity — Low → High</option>
+      <option value="syslog">Syslog / Cisco Severity 0–7</option>
+      <option value="winlevels">Windows Event Levels 0–5</option>
+      <option value="severitymix">Severity Schemes — Mixed Exam Drill</option>
+      <option value="concepts">Logging Concepts — Supporting Review</option>
+      <option value="scenarios">Event Correlation &amp; Exam Scenarios</option>
     </select>
     <span id="scoreStatus" class="status">Not graded</span>
     <button id="themeBtn" class="btn small" type="button">Dark mode</button>
@@ -186,36 +188,38 @@ a{color:var(--accent)}
     <div class="memory"><b>Recall first.</b> Hide this panel when you want pure retrieval practice.</div>
 
     <details open>
-      <summary>Core Event IDs</summary>
+      <summary>Priority Event IDs</summary>
+      <div class="memory"><b>Primary memorization set.</b> The ★ IDs are the six you specifically identified from your CertMaster/Dion study as exam-callout items. The + IDs are closely related, high-value Windows events retained from the broader exam-prep set.</div>
       <table class="ref-table">
         <tr><th>ID</th><th>Meaning</th><th>Channel</th></tr>
-        <tr><td><code>4624</code></td><td>Successful logon</td><td>Security</td></tr>
-        <tr><td><code>4625</code></td><td>Failed logon</td><td>Security</td></tr>
-        <tr><td><code>4688</code></td><td>New process created</td><td>Security</td></tr>
-        <tr><td><code>4698</code></td><td>Scheduled task created</td><td>Security</td></tr>
-        <tr><td><code>7045</code></td><td>Service installed</td><td>System / SCM</td></tr>
-        <tr><td><code>1102</code></td><td>Security audit log cleared</td><td>Security</td></tr>
+        <tr><td><code>4624</code> ★</td><td>Successful logon</td><td>Security</td></tr>
+        <tr><td><code>4625</code> ★</td><td>Failed logon</td><td>Security</td></tr>
+        <tr><td><code>4648</code> +</td><td>Logon attempted using explicit credentials</td><td>Security</td></tr>
+        <tr><td><code>4663</code> +</td><td>Attempt made to access an object</td><td>Security</td></tr>
+        <tr><td><code>4688</code> ★</td><td>New process created</td><td>Security</td></tr>
+        <tr><td><code>4698</code> ★</td><td>Scheduled task created</td><td>Security</td></tr>
+        <tr><td><code>4720</code> +</td><td>User account created</td><td>Security</td></tr>
+        <tr><td><code>4732</code> +</td><td>Member added to security-enabled local group</td><td>Security</td></tr>
+        <tr><td><code>7045</code> ★</td><td>Service installed</td><td>System / SCM</td></tr>
+        <tr><td><code>1102</code> ★</td><td>Security audit log cleared</td><td>Security</td></tr>
       </table>
-      <div class="memory"><b>Pattern hook:</b> 46xx = authentication/process/audit activity; 70xx here is Service Control Manager; 1102 is log-clearing evidence.</div>
+      <div class="memory"><b>Recognition first:</b> know the number ↔ event meaning both directions; then use account/source/logon-type/process/path/timing context to decide whether the event is suspicious.</div>
     </details>
 
     <details>
-      <summary>High-Yield Expansion</summary>
+      <summary>Additional High-Yield Event IDs</summary>
       <table class="ref-table">
         <tr><th>ID</th><th>Meaning</th></tr>
-        <tr><td><code>4648</code></td><td>Logon attempted using explicit credentials</td></tr>
-        <tr><td><code>4663</code></td><td>Attempt made to access an object</td></tr>
         <tr><td><code>4672</code></td><td>Special privileges assigned to new logon</td></tr>
         <tr><td><code>4697</code></td><td>Service installed — Security audit event</td></tr>
         <tr><td><code>4719</code></td><td>System audit policy changed</td></tr>
-        <tr><td><code>4720</code></td><td>User account created</td></tr>
-        <tr><td><code>4732</code></td><td>Member added to security-enabled local group</td></tr>
         <tr><td><code>4740</code></td><td>User account locked out</td></tr>
         <tr><td><code>4768</code></td><td>Kerberos TGT requested</td></tr>
         <tr><td><code>4769</code></td><td>Kerberos service ticket requested</td></tr>
         <tr><td><code>4771</code></td><td>Kerberos pre-authentication failed</td></tr>
         <tr><td><code>4776</code></td><td>Domain controller attempted credential validation</td></tr>
       </table>
+      <div class="memory">These are useful for correlation and nearby-confusion questions. They are deliberately separated from the priority set so the trainer does not imply equal course emphasis.</div>
     </details>
 
     <details>
@@ -236,19 +240,32 @@ a{color:var(--accent)}
     </details>
 
     <details>
-      <summary>Syslog Severity 0–7</summary>
+      <summary>CertMaster Generic Log Severity</summary>
       <table class="ref-table">
-        <tr><th>#</th><th>RFC 5424</th><th>Meaning</th></tr>
-        <tr><td>0</td><td>Emergency</td><td>System unusable</td></tr>
-        <tr><td>1</td><td>Alert</td><td>Immediate action</td></tr>
-        <tr><td>2</td><td>Critical</td><td>Critical conditions</td></tr>
-        <tr><td>3</td><td>Error</td><td>Error conditions</td></tr>
-        <tr><td>4</td><td>Warning</td><td>Warning conditions</td></tr>
-        <tr><td>5</td><td>Notice</td><td>Normal but significant</td></tr>
-        <tr><td>6</td><td>Informational</td><td>Informational</td></tr>
-        <tr><td>7</td><td>Debug</td><td>Debug-level</td></tr>
+        <tr><th>Priority</th><th>Level</th><th>Meaning</th></tr>
+        <tr><td>Lowest</td><td><b>DEBUG</b></td><td>Fine-grained details used for debugging</td></tr>
+        <tr><td>↑</td><td><b>INFO</b></td><td>General operational information</td></tr>
+        <tr><td>↑</td><td><b>WARNING</b></td><td>Potential issue/unusual behavior that may not cause failure</td></tr>
+        <tr><td>↑</td><td><b>ERROR</b></td><td>Failure/problem affecting part of the system</td></tr>
+        <tr><td>Highest</td><td><b>CRITICAL / FATAL</b></td><td>Severe failure or imminent crash</td></tr>
       </table>
-      <div class="memory"><b>Direction:</b> lower number = more severe. Cisco often labels severity 5 <i>Notifications</i>, corresponding to RFC <i>Notice</i>.</div>
+      <div class="trap"><b>Important:</b> CertMaster presents this as an ordered severity hierarchy, not a universal numeric scale. Do not invent numbers for it.</div>
+    </details>
+
+    <details>
+      <summary>Syslog / Cisco Severity 0–7</summary>
+      <table class="ref-table">
+        <tr><th>#</th><th>RFC / common name</th><th>Meaning</th></tr>
+        <tr><td>0</td><td>Emergency / Emergencies</td><td>System unusable</td></tr>
+        <tr><td>1</td><td>Alert / Alerts</td><td>Immediate action</td></tr>
+        <tr><td>2</td><td>Critical</td><td>Critical conditions</td></tr>
+        <tr><td>3</td><td>Error / Errors</td><td>Error conditions</td></tr>
+        <tr><td>4</td><td>Warning</td><td>Warning conditions</td></tr>
+        <tr><td>5</td><td>Notice / Notifications</td><td>Normal but significant / notification</td></tr>
+        <tr><td>6</td><td>Informational / Information</td><td>Informational messages</td></tr>
+        <tr><td>7</td><td>Debug / Debugging</td><td>Debug-level detail</td></tr>
+      </table>
+      <div class="memory"><b>Direction:</b> lower number = more severe. Sybex notes Cisco's names/numbers align with syslog priorities; wording varies slightly (for example Notice vs Notifications).</div>
     </details>
 
     <details>
@@ -262,8 +279,19 @@ a{color:var(--accent)}
         <tr><td>4</td><td>Informational</td></tr>
         <tr><td>5</td><td>Verbose</td></tr>
       </table>
-      <div class="trap"><b>Trap:</b> Windows and syslog numbers do not mean the same thing. Syslog 0 = Emergency. Windows 0 = LogAlways / bypass level filtering.</div>
-      <div class="trap"><b>Trap:</b> <i>Audit Success</i> and <i>Audit Failure</i> are Windows event <b>keywords</b>, not severity levels.</div>
+      <div class="trap"><b>Trap:</b> Syslog 0 = Emergency. Windows Event Level 0 = LogAlways. Same number, different scheme, different meaning.</div>
+      <div class="trap"><b>Trap:</b> <i>Audit Success</i> and <i>Audit Failure</i> are Windows event keywords/categories, not severity levels.</div>
+    </details>
+
+    <details>
+      <summary>Severity Scheme Quick Compare</summary>
+      <table class="ref-table">
+        <tr><th>Scheme</th><th>How to recognize it</th><th>Anchor</th></tr>
+        <tr><td>CertMaster generic</td><td>DEBUG, INFO, WARNING, ERROR, CRITICAL/FATAL; usually unnumbered</td><td>DEBUG low → CRITICAL/FATAL high</td></tr>
+        <tr><td>Syslog / Cisco</td><td>Numbered 0–7</td><td>0 Emergency → 7 Debug</td></tr>
+        <tr><td>Windows Event Levels</td><td>Level 0–5</td><td>0 LogAlways; 1 Critical; 5 Verbose</td></tr>
+      </table>
+      <div class="memory"><b>Rule:</b> identify the scheme first. A severity number by itself is not portable between logging systems.</div>
     </details>
 
     <details>
@@ -289,7 +317,8 @@ a{color:var(--accent)}
 
     <details>
       <summary>Source &amp; Scope Notes</summary>
-      <div class="memory">The current CS0-004 V4 objectives explicitly require logging concepts and EVTX awareness, but they do not publish a fixed Event-ID memorization list. The “Core” set begins with the IDs supplied for this trainer; the Expansion set is deliberately labeled high-yield supplemental material.</div>
+      <div class="memory">The official CS0-004 objectives require logging concepts/EVTX awareness but do not publish a fixed Windows Event-ID memorization list. CertMaster directly demonstrates 4624/4625, and your course notes/Dion study specifically call out the ★ priority IDs. The + and Additional sets are clearly labeled supplementation rather than being presented as an official CompTIA list.</div>
+      <div class="memory"><b>Project study basis:</b> CompTIA CertMaster Perform Module 8 (Logging) and the Sybex CompTIA CySA+ Study Guide logging sections. External authoritative references below support Windows/syslog technical details.</div>
       <ul class="source-list">
         <li><a href="https://lecbyo.files.cmp.optimizely.com/download/68b1eae88e5011f08868a275d699e612" target="_blank" rel="noopener noreferrer">CompTIA CySA+ CS0-004 V4 Exam Objectives v2.0</a></li>
         <li><a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/appendix-l--events-to-monitor" target="_blank" rel="noopener noreferrer">Microsoft — Events to Monitor</a></li>
@@ -311,22 +340,22 @@ a{color:var(--accent)}
 
 /* ---------- DATA ---------- */
 const CORE = [
-  {id:"4624", meaning:"An account was successfully logged on", short:"Successful logon", channel:"Security", cue:"Authentication baseline; inspect logon type, account, source, and time."},
-  {id:"4625", meaning:"An account failed to log on", short:"Failed logon", channel:"Security", cue:"Repeated failures may be suspicious, but one event is not automatically an attack."},
-  {id:"4688", meaning:"A new process has been created", short:"New process created", channel:"Security", cue:"Useful for process path, parent/creator process, and command-line analysis when enabled."},
-  {id:"4698", meaning:"A scheduled task was created", short:"Scheduled task created", channel:"Security", cue:"Scheduled tasks are a common persistence method; creation can also be legitimate."},
-  {id:"7045", meaning:"A service was installed in the system", short:"Service installed", channel:"System · Service Control Manager", cue:"Common service-persistence clue. Contrast with Security event 4697."},
-  {id:"1102", meaning:"The Security audit log was cleared", short:"Security audit log cleared", channel:"Security", cue:"Unusual and investigation-worthy; may indicate defense evasion or legitimate administration."}
+  {id:"4624", meaning:"An account was successfully logged on", short:"Successful logon", channel:"Security", cue:"Authentication baseline; inspect logon type, account, source, and time.", emphasis:"★"},
+  {id:"4625", meaning:"An account failed to log on", short:"Failed logon", channel:"Security", cue:"Repeated failures can indicate brute force/password spray, but context matters.", emphasis:"★"},
+  {id:"4648", meaning:"A logon was attempted using explicit credentials", short:"Explicit-credential logon attempt", channel:"Security", cue:"Useful for alternate credentials / runas-style activity and lateral-movement investigation.", emphasis:"+"},
+  {id:"4663", meaning:"An attempt was made to access an object", short:"Object access attempt", channel:"Security", cue:"Useful for audited access to sensitive files/folders/objects when object-access auditing is configured.", emphasis:"+"},
+  {id:"4688", meaning:"A new process has been created", short:"New process created", channel:"Security", cue:"Process/parent/path/command-line context can reveal suspicious execution when auditing is enabled.", emphasis:"★"},
+  {id:"4698", meaning:"A scheduled task was created", short:"Scheduled task created", channel:"Security", cue:"Scheduled tasks are a common persistence mechanism but can be legitimate.", emphasis:"★"},
+  {id:"4720", meaning:"A user account was created", short:"User account created", channel:"Security", cue:"Unexpected account creation can indicate persistence/backdoor activity.", emphasis:"+"},
+  {id:"4732", meaning:"A member was added to a security-enabled local group", short:"Member added to local security group", channel:"Security", cue:"Check which group. The event itself does not say that the group is privileged.", emphasis:"+"},
+  {id:"7045", meaning:"A service was installed in the system", short:"Service installed", channel:"System · Service Control Manager", cue:"Classic service-persistence clue. Contrast with Security event 4697.", emphasis:"★"},
+  {id:"1102", meaning:"The Security audit log was cleared", short:"Security audit log cleared", channel:"Security", cue:"Unusual and investigation-worthy; can indicate defense evasion or legitimate administration.", emphasis:"★"}
 ];
 
 const EXPANDED = [
-  {id:"4648", meaning:"A logon was attempted using explicit credentials", channel:"Security", cue:"Useful for alternate credentials / runas-style activity; context determines legitimacy."},
-  {id:"4663", meaning:"An attempt was made to access an object", channel:"Security", cue:"Object-access auditing; useful for sensitive file/folder access when auditing is configured."},
   {id:"4672", meaning:"Special privileges were assigned to a new logon", channel:"Security", cue:"Correlate by Logon ID with 4624; common for privileged/service sessions and not automatically malicious."},
   {id:"4697", meaning:"A service was installed in the system (Security auditing)", channel:"Security", cue:"Security-audit counterpart to System/SCM 7045."},
   {id:"4719", meaning:"System audit policy was changed", channel:"Security", cue:"Watch unexpected weakening or alteration of audit coverage."},
-  {id:"4720", meaning:"A user account was created", channel:"Security", cue:"Unexpected account creation can indicate persistence/backdoor activity."},
-  {id:"4732", meaning:"A member was added to a security-enabled local group", channel:"Security", cue:"Check which group; the event does not itself mean the group is privileged."},
   {id:"4740", meaning:"A user account was locked out", channel:"Security", cue:"Can support password-spray/brute-force investigation or identify stale credentials."},
   {id:"4768", meaning:"A Kerberos authentication ticket (TGT) was requested", channel:"Security · domain controller", cue:"Kerberos authentication activity; analyze requester, encryption, failures, and patterns."},
   {id:"4769", meaning:"A Kerberos service ticket was requested", channel:"Security · domain controller", cue:"Service-ticket activity; unusual request patterns can support Kerberoasting hunts."},
@@ -364,6 +393,30 @@ const WIN_LEVELS = [
   {id:"3", name:"Warning", meaning:"Condition that could require attention"},
   {id:"4", name:"Informational", meaning:"Non-error informational event"},
   {id:"5", name:"Verbose", meaning:"Detailed trace/state information"}
+];
+
+const GENERIC_SEVERITY = [
+  {id:"g1", name:"DEBUG", meaning:"Fine-grained, detailed logs useful for debugging", rank:"Lowest priority"},
+  {id:"g2", name:"INFO", meaning:"General operational information such as application start/shutdown", rank:"Higher"},
+  {id:"g3", name:"WARNING", meaning:"Potential issues or unusual behavior that do not necessarily cause failure", rank:"Higher"},
+  {id:"g4", name:"ERROR", meaning:"Failures or problems affecting part of the system, often requiring attention", rank:"Higher"},
+  {id:"g5", name:"CRITICAL / FATAL", meaning:"Severe errors indicating system failure or imminent crash", rank:"Highest priority"}
+];
+
+const SEVERITY_QS = [
+  {q:"CertMaster shows DEBUG, INFO, WARNING, ERROR, and CRITICAL/FATAL. Which statement is correct?",options:["They form an ordered severity hierarchy but are not presented as universal numeric levels","DEBUG is always level 0","CRITICAL/FATAL is always level 7","They are Windows Security Audit keywords"],answer:"They form an ordered severity hierarchy but are not presented as universal numeric levels",why:"CertMaster explicitly orders these common log levels from lowest to highest priority without assigning a universal number to each.",distract:"Do not borrow numbers from syslog or Windows Event Levels and attach them to CertMaster's generic hierarchy."},
+  {q:"In the CertMaster generic logging hierarchy, which level has the HIGHEST priority?",options:["CRITICAL / FATAL","DEBUG","INFO","WARNING"],answer:"CRITICAL / FATAL",why:"CertMaster places CRITICAL (or FATAL) at the top: severe errors indicating system failure or imminent crash.",distract:"DEBUG is the lowest-priority, most detailed troubleshooting level in this hierarchy."},
+  {q:"Which is the correct CertMaster order from LOWEST to HIGHEST priority?",options:["DEBUG → INFO → WARNING → ERROR → CRITICAL/FATAL","CRITICAL/FATAL → ERROR → WARNING → INFO → DEBUG","DEBUG → NOTICE → INFO → ERROR → EMERGENCY","INFO → DEBUG → WARNING → CRITICAL → ERROR"],answer:"DEBUG → INFO → WARNING → ERROR → CRITICAL/FATAL",why:"That is the exact low-to-high sequence taught in CertMaster's Severity section.",distract:"NOTICE and EMERGENCY belong to syslog-style naming, not this CertMaster five-level hierarchy."},
+  {q:"A syslog record has severity 0. What does that mean?",options:["Emergency — the most severe syslog level","Debug — the least severe syslog level","LogAlways — a special Windows filtering value","Informational"],answer:"Emergency — the most severe syslog level",why:"Syslog severity runs 0 through 7 with lower numbers more severe: 0 Emergency, 7 Debug.",distract:"Windows Event Level 0 is LogAlways. The scheme must be identified before interpreting the number."},
+  {q:"A syslog record has severity 7. What does that mean?",options:["Debug / Debugging","Emergency","Critical","Verbose Windows event"],answer:"Debug / Debugging",why:"Syslog/Cisco 7 is Debugging, the least severe/more detailed end of the numbered scale.",distract:"Windows uses Verbose at level 5; syslog uses Debug at level 7."},
+  {q:"Which syslog/Cisco severity number corresponds to Critical?",options:["2","0","5","7"],answer:"2",why:"The syslog/Cisco sequence is 0 Emergency, 1 Alert, 2 Critical, 3 Error, 4 Warning, 5 Notice/Notifications, 6 Informational, 7 Debug.",distract:"Critical is not Windows Event Level 1 when the question explicitly says syslog/Cisco."},
+  {q:"Sybex/Cisco may call syslog level 5 'Notifications.' RFC syslog commonly calls the same severity what?",options:["Notice","Alert","Informational","Verbose"],answer:"Notice",why:"The wording differs slightly: Cisco commonly uses Notifications while RFC 5424 uses Notice at severity 5.",distract:"The numeric position and role are the important anchors; naming varies slightly by implementation/documentation."},
+  {q:"Windows event XML shows Level=0. Which interpretation is correct?",options:["LogAlways — a special filtering value, not 'Emergency'","Emergency — system unusable","Debugging","Audit Failure"],answer:"LogAlways — a special filtering value, not 'Emergency'",why:"Windows Event Levels use 0 as LogAlways, which is not the syslog Emergency severity.",distract:"Same numeral does not imply same meaning across severity schemes."},
+  {q:"Which Windows Event Level is Critical?",options:["1","0","2","5"],answer:"1",why:"Windows Event Levels use 1 Critical, 2 Error, 3 Warning, 4 Informational, 5 Verbose; 0 is LogAlways.",distract:"Syslog uses 2 for Critical. Identify the scheme first."},
+  {q:"Which Windows Event Level is Verbose?",options:["5","7","4","0"],answer:"5",why:"Windows Event Level 5 is Verbose.",distract:"Syslog uses 7 for Debug; Windows does not use that same numbered scale."},
+  {q:"A Windows Security event is labeled 'Audit Failure.' What is that label?",options:["An audit keyword/category marker, not a severity level","Windows severity level 1","Syslog severity level 3","A universal indication of malicious activity"],answer:"An audit keyword/category marker, not a severity level",why:"Audit Success/Audit Failure are Windows event keywords/categories separate from the Windows Level field.",distract:"Failure can be benign or malicious depending on the event and context."},
+  {q:"You see only the text 'severity 1' with no indication of the logging system. What is the BEST response?",options:["Identify the severity scheme before assigning meaning","Assume Alert","Assume Critical","Assume LogAlways"],answer:"Identify the severity scheme before assigning meaning",why:"Syslog 1 = Alert, while Windows Event Level 1 = Critical. A bare number is ambiguous across systems.",distract:"This is the central cross-scheme exam trap: numbers are not portable between logging systems."},
+  {q:"Which clue most strongly identifies the syslog/Cisco scheme rather than the CertMaster generic hierarchy?",options:["A numbered 0–7 scale with 0 Emergency and 7 Debug","The unnumbered sequence DEBUG → INFO → WARNING → ERROR → CRITICAL/FATAL","Level 0 is LogAlways","Audit Success/Audit Failure keywords"],answer:"A numbered 0–7 scale with 0 Emergency and 7 Debug",why:"That numeric direction is the distinctive syslog/Cisco pattern.",distract:"CertMaster's generic hierarchy uses similar words but is presented as an unnumbered low-to-high sequence."}
 ];
 
 const CONCEPT_QS = [
@@ -412,6 +465,20 @@ const SCENARIO_QS = [
     answer:"Likely brute-force activity followed by a successful logon",
     why:"<code>4625</code> = failed logon and <code>4624</code> = successful logon. A dense failure burst against one account followed by success is consistent with brute force and deserves investigation.",
     distract:"The events are evidence of authentication activity, not proof of attacker identity; verify source, logon type, account behavior, and surrounding telemetry."
+  },
+  {
+    q:"An analyst sees Event ID 4648 immediately before a remote administrative action. What does 4648 directly indicate?",
+    options:["A logon was attempted using explicit credentials","A user account was created","A process terminated","The Security log was cleared"],
+    answer:"A logon was attempted using explicit credentials",
+    why:"<code>4648</code> records a logon attempt using explicit credentials. It can be important around runas-style activity, alternate credentials, and lateral movement.",
+    distract:"The event is a clue, not proof of credential theft. Correlate account, target server, process, source, and surrounding logons."
+  },
+  {
+    q:"Object-access auditing is enabled on a sensitive file share. Which Event ID most directly records an attempt to access an audited object?",
+    options:["4663","4688","4720","7045"],
+    answer:"4663",
+    why:"<code>4663</code> means an attempt was made to access an object. It becomes useful when the relevant object auditing/SACL is configured.",
+    distract:"4688 is process creation; 4720 account creation; 7045 service installation."
   },
   {
     q:"A 4624 event shows Logon Type 10 from an external address to an administrative workstation. What does Type 10 identify?",
@@ -512,6 +579,7 @@ let currentReset = () => {};
 let currentShuffle = () => {};
 const deckState = {
   expanded:{remaining:EXPANDED.map((_,i)=>i), seen:new Set(), random:false},
+  severitymix:{remaining:SEVERITY_QS.map((_,i)=>i), seen:new Set(), random:false, current:null},
   concepts:{remaining:CONCEPT_QS.map((_,i)=>i), seen:new Set(), random:false, current:null},
   scenarios:{remaining:SCENARIO_QS.map((_,i)=>i), seen:new Set(), random:false, current:null}
 };
@@ -657,10 +725,10 @@ function wireDragControls(){
 /* ---------- MATCH RENDERERS ---------- */
 function renderCore(reverse=false){
   clearSelection(); setStatus("Not graded");
-  const title=reverse?"Core Event IDs — ID → Meaning":"Core Event IDs — Meaning → ID";
+  const title=reverse?"Priority Event IDs — ID → Meaning":"Priority Event IDs — Meaning → ID";
   const sub=reverse
     ?"Drag each Event ID onto its correct event meaning. Click a placed chip to return it home."
-    :"Drag each anonymous event meaning onto the correct Event ID. These six are the core set supplied for this trainer.";
+    :"Drag each event meaning onto the correct Event ID. This priority set combines the six specifically called out in your study with four closely related high-value IDs.";
   quizCard.innerHTML=`<div class="quiz-head"><div><h2>${title}</h2><p>${sub}</p></div>${controlsHtml()}</div>
     <div class="drag-layout"><div class="targets" id="targets"></div><div class="answer-tray"><h3>Answer pool</h3><div class="pool" data-type="${reverse?"id":"meaning"}"></div>
     <div class="memory">Tip: click an answer, then click a destination. Click a placed answer to return it.</div></div></div>`;
@@ -672,7 +740,7 @@ function renderCore(reverse=false){
     if(reverse){
       label.innerHTML=`<div><b>${esc(item.short)}</b></div><div class="minor">${esc(item.channel)}</div>`;
     }else{
-      label.innerHTML=`<div class="big">${esc(item.id)}</div><div class="minor">${esc(item.channel)}</div>`;
+      label.innerHTML=`<div class="big">${esc(item.id)} ${esc(item.emphasis||"")}</div><div class="minor">${esc(item.channel)}</div>`;
     }
     const slot=document.createElement("div");slot.className="slot";slot.dataset.answer=item.id;slot.dataset.type=reverse?"id":"meaning";
     row.append(label,slot);targets.appendChild(row);
@@ -711,11 +779,11 @@ function renderExpanded(){
   clearSelection();setStatus("Not graded");
   const set=nextExpandedSet();
   const st=deckState.expanded;
-  quizCard.innerHTML=`<div class="quiz-head"><div><h2>High-Yield Event IDs — Expansion</h2>
-    <p>Supplemental recognition set. Seven at a time; every ID is served before the mode enters full-random review.</p></div>
+  quizCard.innerHTML=`<div class="quiz-head"><div><h2>Additional High-Yield Event IDs</h2>
+    <p>Additional recognition set. Seven at a time; every ID is served before the mode enters full-random review.</p></div>
     ${controlsHtml(`<button class="btn small" id="nextSetBtn" type="button">Next set</button><button class="btn small" id="coverageResetBtn" type="button">Reset coverage</button>
     <span class="coverage">${st.seen.size}/${EXPANDED.length} covered${st.random?" · random phase":""}</span>`)}</div>
-    <div class="callout warn"><b>Scope:</b> these are useful Windows/SOC IDs, but the CS0-004 objectives do not publish a fixed “memorize these Event IDs” list.</div>
+    <div class="callout warn"><b>Scope:</b> these are useful Windows/SOC correlation IDs. They are intentionally separated from the Priority set rather than presented as an official fixed CompTIA list.</div>
     <div class="drag-layout"><div class="targets" id="targets"></div><div class="answer-tray"><h3>Event ID pool</h3><div class="pool" data-type="id"></div></div></div>`;
   const targets=$("#targets"),pool=$(".pool");
   set.forEach(item=>{
@@ -753,8 +821,22 @@ function renderLogon(){
   renderSimpleNumeric(LOGON_TYPES,"Windows Logon Types","Match the Logon Type number to its meaning. These values appear inside 4624/4625-style authentication analysis.",
     `<div class="callout"><b>Fast anchors:</b> 2 = local interactive · 3 = network · 5 = service · 10 = RDP/RemoteInteractive.</div>`,"logon");
 }
+function renderGenericSeverity(){
+  clearSelection();setStatus("Not graded");
+  quizCard.innerHTML=`<div class="quiz-head"><div><h2>CertMaster Log Severity — Low → High</h2><p>Place the five generic log levels in the exact priority order taught by CertMaster. The positions are ordinal only — CertMaster does not assign these universal numeric values.</p></div>${controlsHtml()}</div>
+    <div class="callout warn"><b>Do not import syslog numbers.</b> Learn this as an unnumbered hierarchy: DEBUG → INFO → WARNING → ERROR → CRITICAL/FATAL.</div>
+    <div class="drag-layout"><div class="order-grid" id="orderGrid"></div><div class="answer-tray"><h3>Severity-level pool</h3><div class="pool" data-type="genericsev"></div><div class="memory">Lowest priority at the top; highest priority at the bottom.</div></div></div>`;
+  const labels=["Lowest priority","↑","↑","↑","Highest priority"],grid=$("#orderGrid"),pool=$(".pool");
+  GENERIC_SEVERITY.forEach((item,i)=>{
+    const num=document.createElement("div");num.className="order-num";num.textContent=labels[i];
+    const slot=document.createElement("div");slot.className="slot";slot.dataset.answer=item.id;slot.dataset.type="genericsev";
+    grid.append(num,slot);
+  });
+  shuffle(GENERIC_SEVERITY).forEach(item=>pool.appendChild(makeChip(item,"genericsev",x=>`<b>${esc(x.name)}</b><div class="meta">${esc(x.meaning)}</div>`)));
+  bindSlots();wireDragControls();
+}
 function renderSyslog(){
-  renderSimpleNumeric(SYSLOG,"Syslog Severity 0–7","Match RFC 5424 severity names to their numeric levels.",
+  renderSimpleNumeric(SYSLOG,"Syslog / Cisco Severity 0–7","Match severity names to the numbered syslog/Cisco scale.",
     `<div class="callout warn"><b>Direction test:</b> in syslog, a lower number means greater severity. Level 0 is Emergency; level 7 is Debug.</div>`,"syslog");
 }
 function renderWinLevels(){
@@ -822,9 +904,13 @@ function renderMCQ(name,data,title,sub,newQuestion=true){
   currentReset=()=>renderMCQ(name,data,title,sub,false);
   currentShuffle=()=>renderMCQ(name,data,title,sub,false);
 }
+function renderSeverityMix(){
+  renderMCQ("severitymix",SEVERITY_QS,"Severity Schemes — Mixed Exam Drill",
+    "Identify the scheme first, then interpret the name or number. This deliberately mixes CertMaster generic, syslog/Cisco, Windows Event Levels, and Windows audit keywords.");
+}
 function renderConcepts(){
-  renderMCQ("concepts",CONCEPT_QS,"CS0-004 Logging Concepts — BEST Answer",
-    "Scenario discrimination for the five logging concepts named in the current CS0-004 V4 objectives.");
+  renderMCQ("concepts",CONCEPT_QS,"Logging Concepts — Supporting Review",
+    "Short supporting review of the five logging concepts named in the current CS0-004 V4 objectives; kept secondary to Event IDs and severity recognition.");
 }
 function renderScenarios(){
   renderMCQ("scenarios",SCENARIO_QS,"Correlation & Exam Scenarios",
@@ -837,8 +923,10 @@ const renderers={
   reverse:()=>renderCore(true),
   expanded:renderExpanded,
   logon:renderLogon,
+  genericsev:renderGenericSeverity,
   syslog:renderSyslog,
   winlevels:renderWinLevels,
+  severitymix:renderSeverityMix,
   concepts:renderConcepts,
   scenarios:renderScenarios
 };
