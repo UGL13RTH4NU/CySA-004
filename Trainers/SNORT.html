@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CySA+ CS0-004 · SNORT IDS/IPS Trainer</title>
+<style>
+:root{
+  --accent:#1f6fb2;--accent2:#2e8b57;--orange:#c46a13;--purple:#7d4aa8;--warn:#b8322a;
+  --bg:#f3f6fa;--panel:#fff;--panel2:#f8fafc;--border:#d7e0eb;--text:#102132;--muted:#53677b;
+  --chip:#edf2f7;--dash:#c4d0dd;--good:#166534;--goodbg:rgba(34,197,94,.12);--goodbd:rgba(34,197,94,.42);
+  --bad:#991b1b;--badbg:rgba(239,68,68,.11);--badbd:rgba(239,68,68,.42);--neutral:rgba(31,111,178,.08);
+  --selected:rgba(31,111,178,.14);--amberbg:rgba(196,106,19,.10);--purplebg:rgba(125,74,168,.09);--shadow:0 1px 2px rgba(0,0,0,.04),0 5px 15px rgba(0,0,0,.045);
+}
+body.dark{
+  --bg:#0c1117;--panel:#121a23;--panel2:#0f1720;--border:#263648;--text:#e7edf4;--muted:#9eb1c4;
+  --chip:#182434;--dash:#34465b;--good:#70e08a;--goodbg:rgba(112,224,138,.11);--goodbd:rgba(112,224,138,.35);
+  --bad:#ff8d8d;--badbg:rgba(255,120,120,.10);--badbd:rgba(255,120,120,.35);--neutral:rgba(92,169,245,.08);
+  --selected:rgba(92,169,245,.14);--amberbg:rgba(230,150,70,.10);--purplebg:rgba(175,120,220,.10);--shadow:0 1px 2px rgba(0,0,0,.35),0 5px 15px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.42}
+button,select,input{font:inherit;color:var(--text)}button{cursor:pointer;border:1px solid var(--border);background:var(--chip);border-radius:8px;padding:7px 10px}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:#fff}button.danger{color:var(--warn)}
+header{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 15px;background:var(--panel);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+h1{font-size:clamp(1rem,2.2vw,1.28rem);margin:0;color:var(--accent)}h1 .sub{font-size:.79em;font-weight:500;color:var(--muted);margin-left:7px}.spacer{flex:1}.pill{padding:4px 9px;border:1px solid var(--border);border-radius:999px;background:var(--chip);font-size:.8rem;color:var(--muted);white-space:nowrap}
+main{max-width:1600px;margin:0 auto;padding:14px;display:grid;grid-template-columns:minmax(0,1fr) 385px;gap:14px;align-items:start}body.hide-cheats main{grid-template-columns:minmax(0,1fr)}body.hide-cheats aside{display:none}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow);min-width:0}.quiz-picker{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-bottom:11px;border-bottom:1px solid var(--border);margin-bottom:11px}.quiz-picker label{font-weight:750;color:var(--muted);font-size:.86rem}select{background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:7px 9px;min-width:315px}.quiz-desc{font-size:.83rem;color:var(--muted);flex:1;min-width:250px}
+h2{font-size:1.04rem;color:var(--accent);margin:2px 0 7px}h3{font-size:.92rem;color:var(--accent2);margin:10px 0 5px}.hint{font-size:.83rem;color:var(--muted);margin:4px 0 10px}.small{font-size:.76rem;color:var(--muted)}
+.badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 7px;background:var(--chip);color:var(--muted);font-size:.72rem;margin-right:4px}.badge.core{color:var(--accent);background:var(--neutral)}.badge.supp{color:var(--orange);background:var(--amberbg)}
+.callout{border-left:3px solid var(--accent);background:var(--neutral);border-radius:7px;padding:8px 10px;margin:8px 0;font-size:.84rem}.callout.warn{border-left-color:var(--orange);background:var(--amberbg)}.callout.purple{border-left-color:var(--purple);background:var(--purplebg)}.callout b{color:var(--accent)}
+.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{background:rgba(128,128,128,.10);border-radius:4px;padding:1px 4px;color:var(--orange)}
+.scenario{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:11px;margin-bottom:10px}.scenario .lead{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;margin-bottom:4px}.scenario .q{font-weight:700}.rule-display{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.94rem;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:10px;margin:8px 0;overflow-wrap:anywhere;color:var(--accent)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}.opt{text-align:left;padding:9px;border:1px solid var(--border);border-radius:9px;background:var(--panel);cursor:pointer;font-size:.85rem}.opt:hover{border-color:var(--accent)}.opt.sel{outline:2px solid var(--accent);background:var(--selected)}.opt.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.opt.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.mcq-list{display:grid;gap:10px}.mcq-card{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:11px}.mcq-q{font-weight:750;margin-bottom:7px}.mcq-why{display:none;font-size:.8rem;color:var(--muted);border-left:3px solid var(--accent);padding-left:8px;margin-top:8px}.mcq-card.graded .mcq-why{display:block}
+.drag-workspace{display:grid;grid-template-columns:minmax(0,1fr) 315px;gap:12px;align-items:start}.stage{min-width:0}.answer-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:11px;padding:9px;max-height:calc(100vh - 90px);overflow:auto;box-shadow:var(--shadow)}.tray-title{font-weight:800;color:var(--accent);font-size:.88rem}.tray-help{font-size:.75rem;color:var(--muted);margin:3px 0 8px}.pool{display:flex;gap:7px;flex-wrap:wrap;min-height:55px;padding:8px;border:1px dashed var(--dash);background:var(--chip);border-radius:9px}.pool.vertical{display:grid}.chip{padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:var(--panel);font-size:.82rem;cursor:grab;user-select:none;overflow-wrap:anywhere}.chip.mono{font-size:.8rem}.chip.selected{outline:2px solid var(--accent);background:var(--selected)}.chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.match-grid{display:grid;gap:8px}.match-row{display:grid;grid-template-columns:minmax(120px,.65fr) minmax(230px,1.35fr);gap:8px;align-items:stretch}.match-term{display:flex;align-items:center;padding:8px 9px;border:1px solid var(--border);border-radius:8px;background:var(--chip);font-weight:800;color:var(--accent);overflow-wrap:anywhere}.slot{min-height:54px;border:2px dashed var(--dash);border-radius:8px;padding:5px;background:var(--panel);display:flex;align-items:center;gap:5px;flex-wrap:wrap}.slot.over{border-color:var(--accent);background:var(--neutral)}.slot.correct{border-color:var(--goodbd);background:var(--goodbg)}.slot.wrong{border-color:var(--badbd);background:var(--badbg)}
+.order-grid{display:grid;grid-template-columns:52px minmax(0,1fr);gap:7px}.pos{display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:8px;background:var(--chip);font-weight:800;color:var(--accent)}.order-grid .slot{min-height:51px}.order-grid .slot .chip{width:100%}
+.type-input{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.95rem;background:var(--panel);border:2px solid var(--dash);color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.type-input:focus{border-color:var(--accent)}.type-input.correct{border-color:var(--goodbd);background:var(--goodbg)}.type-input.wrong{border-color:var(--badbd);background:var(--badbg)}
+.anatomy-rule{display:flex;gap:6px;flex-wrap:wrap;background:var(--chip);border:1px solid var(--border);border-radius:9px;padding:9px;margin-bottom:10px}.rule-piece{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border:1px solid var(--border);background:var(--panel);border-radius:7px;padding:5px 7px;color:var(--accent);font-size:.8rem}
+.alert-line{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem;background:var(--chip);border:1px solid var(--border);border-radius:9px;padding:10px;overflow-wrap:anywhere;margin-bottom:10px;line-height:1.55}
+aside .card{position:sticky;top:74px;max-height:calc(100vh - 90px);overflow:auto}aside h2{font-size:1rem;margin:0 0 7px;color:var(--accent)}aside details{border-top:1px solid var(--border);padding:6px 0 8px}aside details:first-of-type{border-top:0}aside summary{cursor:pointer;color:var(--accent);font-weight:750;font-size:.88rem}.ref-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-top:6px}.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px;vertical-align:top;text-align:left}.ref-table th{background:var(--chip)}aside p,aside li{font-size:.81rem}aside ul{padding-left:18px;margin:6px 0}
+footer{max-width:1600px;margin:0 auto;padding:3px 15px 18px;text-align:center;font-size:.76rem;color:var(--muted)}footer a{color:var(--accent);text-decoration:none}
+@media(max-width:1120px){main{grid-template-columns:1fr}aside .card{position:static;max-height:none}.drag-workspace{grid-template-columns:minmax(0,1fr) 285px}}
+@media(max-width:820px){header{position:static}.drag-workspace{display:block}.answer-tray{position:sticky;top:auto;bottom:6px;max-height:38vh;margin-top:9px;z-index:20}.opts{grid-template-columns:1fr}.match-row{grid-template-columns:110px minmax(0,1fr)}}
+@media(max-width:520px){main{padding:8px}.card{padding:10px}select{min-width:100%;width:100%}.match-row{grid-template-columns:1fr}.match-term{padding:6px 8px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>CySA+ CS0-004 · SNORT Trainer <span class="sub">IDS/IPS · Rule Syntax · Rule Reading · Alerts</span></h1>
+  <span class="spacer"></span>
+  <span class="pill">Current: <b id="score">Not graded</b></span>
+  <button id="cheatBtn">Hide Cheats</button>
+  <button id="darkBtn">🌙 Dark</button>
+  <button id="resetBtn">Reset Quiz</button>
+</header>
+<main>
+<section><div class="card">
+  <div class="quiz-picker">
+    <label for="quizSelect">Quiz:</label>
+    <select id="quizSelect">
+      <option value="idsips" selected>1 · IDS vs IPS — Detect or Block?</option>
+      <option value="anatomy">2 · Rule Anatomy — Match the Parts</option>
+      <option value="assemble">3 · Assemble the SNORT Rule</option>
+      <option value="write">4 · Write the SNORT Rule</option>
+      <option value="read">5 · Read the Rule — Parse What It Does</option>
+      <option value="options">6 · Rule Options — msg / content / sid / rev</option>
+      <option value="direction">7 · Direction — → vs ↔</option>
+      <option value="alerts">8 · Read SNORT Alert Output</option>
+      <option value="modes">9 · SNORT Operating Modes</option>
+      <option value="compare">10 · Snort vs Suricata vs Zeek</option>
+      <option value="mixed">11 · Mixed CySA+ Exam Drill</option>
+    </select>
+    <div class="quiz-desc" id="quizDesc"></div>
+  </div>
+  <div id="quizHost"></div>
+</div></section>
+<aside id="cheats"><div class="card">
+  <h2>SNORT Cheat Sheet / Reference</h2>
+
+  <details open><summary>IDS vs IPS — know this cold</summary>
+    <table class="ref-table"><tr><th>Mode / action</th><th>What happens</th></tr>
+      <tr><td><b>IDS</b> + <code>alert</code></td><td>Detects a rule match and generates an alert. Traffic is not automatically blocked.</td></tr>
+      <tr><td><b>IPS</b> + <code>drop</code></td><td>Runs inline and discards matching traffic. Use when the scenario requires automatic prevention/blocking.</td></tr>
+    </table>
+    <div class="callout"><b>Exam discriminator:</b> “Detect / notify / monitor” → IDS / <code>alert</code>. “Automatically block / prevent / discard” → IPS / <code>drop</code>.</div>
+  </details>
+
+  <details open><summary>Canonical rule anatomy</summary>
+    <div class="rule-display">[action] [protocol] [source IP] [source port] [direction] [destination IP] [destination port] ([options])</div>
+    <div class="rule-display">alert tcp any any -&gt; 192.168.1.0/24 80 (msg:"Label"; content:"cmd.exe"; sid:1000001; rev:1;)</div>
+    <table class="ref-table"><tr><th>Piece</th><th>Meaning</th></tr>
+      <tr><td><code>alert</code> / <code>drop</code></td><td>Action.</td></tr>
+      <tr><td><code>tcp</code></td><td>Protocol.</td></tr>
+      <tr><td><code>any any</code></td><td>Source IP, then source port.</td></tr>
+      <tr><td><code>-&gt;</code></td><td>Unidirectional source → destination.</td></tr>
+      <tr><td><code>&lt;&gt;</code></td><td>Bidirectional: either endpoint can be source/destination.</td></tr>
+      <tr><td><code>192.168.1.0/24 80</code></td><td>Destination IP/network, then destination port.</td></tr>
+      <tr><td><code>(...)</code></td><td>Rule options.</td></tr>
+    </table>
+  </details>
+
+  <details open><summary>Core option keywords</summary>
+    <table class="ref-table"><tr><th>Keyword</th><th>What to remember</th></tr>
+      <tr><td><code>msg</code></td><td>Human-readable alert message / label.</td></tr>
+      <tr><td><code>content</code></td><td>Payload string the rule is looking for.</td></tr>
+      <tr><td><code>sid</code></td><td>Signature / rule identifier.</td></tr>
+      <tr><td><code>rev</code></td><td>Revision number for that rule.</td></tr>
+    </table>
+    <div class="callout"><b>Dion’s read-the-rule habit:</b> first identify <b>action, protocol, direction, and content match</b>.</div>
+  </details>
+
+  <details><summary>Alert-output anatomy</summary>
+    <p>Dion calls out these fields in SNORT alert output:</p>
+    <ul><li>Timestamp</li><li><code>[generator:sid:rev]</code></li><li>Message</li><li>Priority</li><li>Protocol</li><li>Source address/port</li><li>Destination address/port</li></ul>
+  </details>
+
+  <details><summary>Three operating modes</summary>
+    <table class="ref-table"><tr><th>Mode</th><th>Purpose</th></tr>
+      <tr><td><b>Sniffer</b></td><td>Print packets to the console.</td></tr>
+      <tr><td><b>Packet logger</b></td><td>Write/log packets to disk.</td></tr>
+      <tr><td><b>Network IDS/IPS</b></td><td>Apply detection/prevention rules to production traffic.</td></tr>
+    </table>
+  </details>
+
+  <details><summary>Snort vs Suricata vs Zeek</summary>
+    <table class="ref-table"><tr><th>Tool</th><th>Exam tell</th></tr>
+      <tr><td><b>Snort</b></td><td>Signature/rule-based IDS/IPS; established Snort rule syntax.</td></tr>
+      <tr><td><b>Suricata</b></td><td>Multi-threaded IDS/IPS/NSM, Snort-compatible syntax, EVE JSON; Dion contrasts it with single-threaded Snort 2.</td></tr>
+      <tr><td><b>Zeek</b></td><td>Network security monitoring and rich behavioral/metadata logs rather than signature-rule alerting.</td></tr>
+    </table>
+  </details>
+
+  <details><summary>Sources & scope</summary>
+    <p><b>Primary source:</b> Dion Training, CompTIA CySA+ (CS0-004) Course Notes, Section 17 — Snort IDS/IPS Analysis (OBJ. 1.3).</p>
+    <p><b>Adjacent comparison:</b> Dion’s Suricata and Zeek lessons immediately following SNORT are used only for the small comparison drill.</p>
+    <p><b>Scope decision:</b> this trainer deliberately stays with Dion’s core SNORT keywords (<code>msg</code>, <code>content</code>, <code>sid</code>, <code>rev</code>) rather than adding a broad catalog of advanced rule options that his notes do not require.</p>
+  </details>
+</div></aside>
+</main>
+<footer><a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a></footer>
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const shuffle=a=>{const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x};
+const sample=(a,n)=>shuffle(a).slice(0,Math.min(n,a.length));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+let selectedChip=null,currentQuiz='idsips',currentReset=()=>{};
+
+const DESCS={
+ idsips:'Burn in the operational distinction Dion says to know cold: IDS detects/alerts; IPS is inline and blocks. Connect the mode to alert vs drop.',
+ anatomy:'Map a real SNORT rule into action, protocol, source, direction, destination, and option roles.',
+ assemble:'Build complete rules from shuffled syntax pieces. The sticky pool stays beside the ordered rule slots.',
+ write:'Hard mode: type the complete rule from the scenario. Exact syntax and punctuation matter; whitespace is normalized.',
+ read:'Practice the exam habit Dion recommends: action, protocol, direction, and what content is matching — plus source/destination context.',
+ options:'Associate the four core option keywords Dion calls out: msg, content, sid, and rev.',
+ direction:'Recognize -> as unidirectional and <> as bidirectional, and understand what that changes.',
+ alerts:'Identify timestamp, [generator:sid:rev], message, priority, protocol, source, and destination in SNORT alert output.',
+ modes:'Separate SNORT sniffer, packet logger, and network IDS/IPS modes.',
+ compare:'Small high-confusion drill only: Snort vs Suricata vs Zeek. This stays secondary to SNORT operation.',
+ mixed:'Mixed exam-style questions across rule syntax, operation, alerts, modes, and nearby-tool discrimination.'
+};
+
+const IDSIPS=[
+ {q:'A sensor should detect matching malicious traffic and notify analysts, but must not interfere with packet delivery. Which behavior is the best fit?',opts:['IDS mode using an alert rule','IPS mode using a drop rule','Packet logger mode only','Sniffer mode only'],a:0,why:'Dion: IDS detects and alerts without traffic interference.'},
+ {q:'A requirement says matching traffic must be discarded automatically before it reaches the protected host. Which pair is correct?',opts:['IPS + drop','IDS + alert','IDS + drop but passive','Sniffer + alert'],a:0,why:'Blocking requires inline IPS behavior and a drop action.'},
+ {q:'What is the most important operational difference between IDS and IPS in Dion’s SNORT discussion?',opts:['IDS alerts; IPS can block inline','IDS uses TCP; IPS uses UDP','IDS saves PCAP; IPS cannot','IDS has rules; IPS has no rules'],a:0,why:'The distinction is detection/alerting versus inline prevention.'},
+ {q:'A SNORT rule begins with alert. What should you infer first?',opts:['A match generates an alert rather than automatically discarding the packet','The rule is necessarily running inline','The rule will always block the source IP','The rule only logs packets to disk'],a:0,why:'alert is the IDS-style action in Dion’s exam framing.'},
+ {q:'A SNORT rule begins with drop and the sensor is deployed inline. What is the intended behavior on a match?',opts:['Discard the matching packet','Only print the packet to console','Only add a label to the PCAP','Reverse the source and destination'],a:0,why:'drop is the prevention action Dion associates with IPS mode.'},
+ {q:'Which clue most strongly demands IPS rather than IDS?',opts:['Automatically prevent matching traffic','Generate an analyst notification','Observe traffic without disruption','Create a passive detection record'],a:0,why:'Automatic prevention/blocking is the decisive IPS clue.'},
+ {q:'Which statement is FALSE?',opts:['An alert action automatically blocks matching traffic','IDS can use alert rules','IPS operates inline for blocking','drop is associated with discarding matching packets'],a:0,why:'alert does not automatically block; that is the trap Dion highlights.'},
+ {q:'The team is worried about false positives and wants to observe a new rule before allowing it to block production traffic. Which starting behavior best matches that objective?',opts:['IDS-style alerting','IPS drop immediately','Packet logger with no rule evaluation','Disable SNORT entirely'],a:0,why:'Passive alerting lets analysts validate the rule without automatically interfering with traffic.'}
+];
+
+const ANATOMY=[
+ {term:'alert',def:'Action — tells SNORT what to do when the rule matches.'},
+ {term:'tcp',def:'Protocol — the network protocol this rule evaluates.'},
+ {term:'any',def:'Source IP — here, any source address is allowed.'},
+ {term:'any ',def:'Source port — here, any source port is allowed.'},
+ {term:'->',def:'Direction — traffic is evaluated from the source side toward the destination side.'},
+ {term:'192.168.1.0/24',def:'Destination IP/network — the protected target network in this example.'},
+ {term:'80',def:'Destination port — the target service port in this example.'},
+ {term:'(msg...content...sid...rev...)',def:'Options — message, payload match, signature ID, revision, and other rule details live inside parentheses.'}
+];
+
+const OPTION_ITEMS=[
+ {term:'msg',def:'Human-readable alert message / label shown when the rule fires.'},
+ {term:'content',def:'Payload string the rule is searching for.'},
+ {term:'sid',def:'Signature/rule identifier.'},
+ {term:'rev',def:'Revision number for the rule.'}
+];
+const MODE_ITEMS=[
+ {term:'Sniffer',def:'Print packets to the console for direct observation.'},
+ {term:'Packet logger',def:'Write/log captured packets to disk.'},
+ {term:'Network IDS/IPS',def:'Apply rules to production network traffic for detection and/or prevention.'}
+];
+const ALERT_ITEMS=[
+ {term:'08/25-10:14:33.421555',def:'Timestamp — when the alerting packet/event was observed.'},
+ {term:'[1:1000001:1]',def:'Generator : SID : revision identifier.'},
+ {term:'Suspicious cmd.exe request',def:'Alert message produced by the rule.'},
+ {term:'[Priority: 1]',def:'Priority value assigned to the alert.'},
+ {term:'{TCP}',def:'Protocol identified for the traffic.'},
+ {term:'203.0.113.25:51514',def:'Source address and source port.'},
+ {term:'192.168.1.50:80',def:'Destination address and destination port.'}
+];
+
+const RULES=[
+ {id:'webcmd',scenario:'Alert on TCP traffic from any source/port to the 192.168.1.0/24 web network on port 80 when the payload contains cmd.exe.',tokens:['alert','tcp','any','any','->','192.168.1.0/24','80','(msg:"Web cmd";','content:"cmd.exe";','sid:1000001;','rev:1;)'],answer:'alert tcp any any -> 192.168.1.0/24 80 (msg:"Web cmd"; content:"cmd.exe"; sid:1000001; rev:1;)',meta:{action:'alert',protocol:'tcp',source:'any:any',direction:'->',destination:'192.168.1.0/24:80',content:'cmd.exe'}},
+ {id:'ftp',scenario:'Alert on TCP traffic from the 10.10.0.0/16 network, any source port, to 192.168.50.25 port 21 when the payload contains USER root.',tokens:['alert','tcp','10.10.0.0/16','any','->','192.168.50.25','21','(msg:"FTP root login";','content:"USER root";','sid:1000002;','rev:1;)'],answer:'alert tcp 10.10.0.0/16 any -> 192.168.50.25 21 (msg:"FTP root login"; content:"USER root"; sid:1000002; rev:1;)',meta:{action:'alert',protocol:'tcp',source:'10.10.0.0/16:any',direction:'->',destination:'192.168.50.25:21',content:'USER root'}},
+ {id:'smtpdrop',scenario:'Inline IPS rule: drop TCP traffic from any source/port to mail server 192.168.20.10 port 25 when the payload contains the string X-Malware.',tokens:['drop','tcp','any','any','->','192.168.20.10','25','(msg:"Malware mail marker";','content:"X-Malware";','sid:1000003;','rev:1;)'],answer:'drop tcp any any -> 192.168.20.10 25 (msg:"Malware mail marker"; content:"X-Malware"; sid:1000003; rev:1;)',meta:{action:'drop',protocol:'tcp',source:'any:any',direction:'->',destination:'192.168.20.10:25',content:'X-Malware'}},
+ {id:'syslog',scenario:'Alert on UDP traffic from any source/port to log collector 10.0.0.50 port 514 when the payload contains FAILED_LOGIN.',tokens:['alert','udp','any','any','->','10.0.0.50','514','(msg:"Failed login marker";','content:"FAILED_LOGIN";','sid:1000004;','rev:1;)'],answer:'alert udp any any -> 10.0.0.50 514 (msg:"Failed login marker"; content:"FAILED_LOGIN"; sid:1000004; rev:1;)',meta:{action:'alert',protocol:'udp',source:'any:any',direction:'->',destination:'10.0.0.50:514',content:'FAILED_LOGIN'}},
+ {id:'bidir',scenario:'Alert on TCP traffic in either direction between any endpoint and the 192.168.25.0/24 network on port 445 when the payload contains ADMIN$.',tokens:['alert','tcp','any','any','<>','192.168.25.0/24','445','(msg:"SMB admin share";','content:"ADMIN$";','sid:1000005;','rev:1;)'],answer:'alert tcp any any <> 192.168.25.0/24 445 (msg:"SMB admin share"; content:"ADMIN$"; sid:1000005; rev:1;)',meta:{action:'alert',protocol:'tcp',source:'any:any',direction:'<>',destination:'192.168.25.0/24:445',content:'ADMIN$'}}
+];
+
+const DIRECTION_MCQS=[
+ {q:'What does -> mean in a SNORT rule?',opts:['Evaluate traffic in the stated source-to-destination direction','Match both directions interchangeably','Drop traffic automatically','Negate the source network'],a:0,why:'Dion identifies -> as unidirectional.'},
+ {q:'What does <> mean in a SNORT rule?',opts:['Bidirectional traffic matching either direction','Only return traffic from destination to source','A syntax error','An IPS-only drop operator'],a:0,why:'Dion identifies <> as bidirectional.'},
+ {q:'Which operator should you choose when the rule must treat the two endpoint sides as bidirectional?',opts:['<>','->','==','&&'],a:0,why:'<> is the bidirectional direction operator.'},
+ {q:'Which operator most clearly preserves a defined client/source side and server/destination side?',opts:['->','<>','rev','sid'],a:0,why:'-> evaluates the source side toward the destination side.'},
+ {q:'In alert tcp any any -> 192.168.1.0/24 80 (...), which side is the destination?',opts:['192.168.1.0/24 on port 80','any source on any port','Both sides equally because -> is bidirectional','The content string inside parentheses'],a:0,why:'Everything after -> is the destination side: destination address followed by destination port.'},
+ {q:'In alert tcp any any <> 192.168.25.0/24 445 (...), what is the key difference from ->?',opts:['Traffic can match in either direction between the defined sides','The rule automatically becomes an IPS drop rule','TCP becomes UDP on return traffic','The SID is ignored'],a:0,why:'<> changes directionality, not action, protocol, or SID behavior.'}
+];
+
+const COMPARE=[
+ {q:'Which tool is the classic signature/rule-based IDS/IPS answer with its own established rule language?',opts:['Snort','Zeek','Wireshark','CyberChef'],a:0,why:'SNORT is the rule/signature-driven IDS/IPS focus of this trainer.'},
+ {q:'A high-throughput scenario specifically emphasizes multi-threading and EVE JSON while retaining Snort-compatible rules. Which tool?',opts:['Suricata','Snort 2','Zeek','tcpdump'],a:0,why:'Dion’s Suricata discriminator is multi-threading plus EVE JSON; he contrasts it with single-threaded Snort 2.'},
+ {q:'Which tool is primarily associated with structured behavioral network logs rather than firing signature-based rules?',opts:['Zeek','Snort','Suricata in IPS mode','Nmap'],a:0,why:'Dion presents Zeek as network security monitoring with structured behavioral logs, not signature-rule alerting.'},
+ {q:'Which statement best describes the relationship between Suricata and Snort rule syntax in Dion’s notes?',opts:['Suricata supports Snort-compatible rule syntax','Suricata cannot use signature rules','Snort rules are Zeek scripts','They share only Wireshark display filters'],a:0,why:'Suricata uses Snort-compatible rule syntax.'},
+ {q:'The stem gives no performance or EVE JSON clue and simply asks for the established signature-based network IDS/IPS with SNORT-style rules. Which is the cleanest pick?',opts:['Snort','Zeek','Wireshark','OpenVAS'],a:0,why:'Without a Suricata-specific throughput/JSON clue, Snort is the direct rule-based IDS/IPS answer.'}
+];
+
+const MIXED=[
+ ...IDSIPS.slice(0,4),
+ {q:'Which rule option tells you the actual payload string being searched for?',opts:['content','msg','sid','rev'],a:0,why:'content is the payload match keyword.'},
+ {q:'Which rule option is the signature/rule identifier?',opts:['sid','rev','msg','content'],a:0,why:'sid is the signature ID.'},
+ {q:'Which rule option tracks the rule revision?',opts:['rev','sid','msg','content'],a:0,why:'rev is the revision number.'},
+ {q:'Which part of a SNORT rule appears first?',opts:['Action','Destination port','content option','SID'],a:0,why:'The rule header begins with the action, then protocol, source, direction, and destination.'},
+ {q:'Which SNORT operating mode simply prints packets to the console?',opts:['Sniffer','Packet logger','Network IDS/IPS','Drop mode'],a:0,why:'Sniffer mode is the console-view mode.'},
+ {q:'Which SNORT operating mode writes captured packets to disk?',opts:['Packet logger','Sniffer','Network IDS/IPS','Alert-only mode'],a:0,why:'Packet logger mode stores packets on disk.'},
+ {q:'In [1:1000001:1], which middle value is the SID?',opts:['1000001','1 on the left','1 on the right','The brackets themselves'],a:0,why:'Dion gives the format [generator:sid:rev].'},
+ {q:'A rule says drop udp any any -> 10.0.0.53 53 (...). What should you notice first?',opts:['The action is drop, so this is prevention/blocking behavior when deployed inline','UDP rules can only alert','Port 53 forces bidirectional matching','The rule is a packet logger configuration'],a:0,why:'Dion’s first parsing habit starts with action; drop is the IPS-style prevention action.'},
+ ...DIRECTION_MCQS.slice(0,3),...COMPARE.slice(0,3)
+];
+
+function setScore(t){$('#score').textContent=t}
+function clearSelected(){if(selectedChip){selectedChip.classList.remove('selected');selectedChip=null}}
+function setSelected(ch){clearSelected();selectedChip=ch;ch.classList.add('selected')}
+function normalizeRule(s){return String(s).trim().replace(/\s+/g,' ')}
+
+function mcqRenderer(items,title,intro,count=6){
+ const host=$('#quizHost'), chosen=sample(items,count);
+ host.innerHTML=`<h2>${esc(title)}</h2><p class="hint">${esc(intro)}</p><div class="mcq-list" id="mcqList"></div><div class="controls"><button class="primary" id="checkBtn">Score / Re-score</button><button id="newBtn">New Set</button></div><div class="feedback" id="feedback"></div>`;
+ const list=$('#mcqList');
+ chosen.forEach((q,qi)=>{
+   const opts=shuffle(q.opts.map((text,i)=>({text,correct:i===q.a})));
+   const card=document.createElement('div');card.className='mcq-card';card.dataset.q=qi;
+   card.innerHTML=`<div class="mcq-q">${qi+1}. ${esc(q.q)}</div>${q.pre?`<div class="rule-display">${esc(q.pre)}</div>`:''}<div class="opts"></div><div class="mcq-why">${esc(q.why)}</div>`;
+   const box=$('.opts',card);opts.forEach(o=>{const b=document.createElement('button');b.className='opt';b.type='button';b.textContent=o.text;b.dataset.correct=o.correct?'1':'0';b.onclick=()=>{if(card.classList.contains('graded')) card.classList.remove('graded');$$('.opt',card).forEach(x=>x.classList.remove('sel','correct','wrong'));b.classList.add('sel');setScore('Not graded')};box.appendChild(b)});list.appendChild(card);
+ });
+ $('#checkBtn').onclick=()=>{let right=0;$$('.mcq-card',list).forEach(c=>{c.classList.add('graded');const s=$('.opt.sel',c);$$('.opt',c).forEach(o=>o.classList.remove('correct','wrong'));if(s){if(s.dataset.correct==='1'){s.classList.add('correct');right++}else{s.classList.add('wrong');const good=$$('.opt',c).find(o=>o.dataset.correct==='1');if(good)good.classList.add('correct')}}});setScore(`${right} / ${chosen.length}`);$('#feedback').className='feedback show';$('#feedback').innerHTML=`<span class="scoreline">${right} of ${chosen.length} correct.</span> Change any answer and re-score.`};
+ $('#newBtn').onclick=()=>mcqRenderer(items,title,intro,count);
+ currentReset=()=>mcqRenderer(items,title,intro,count);
+}
+
+function setupMatch(items,prefix){
+ const bank=$(`#${prefix}Bank`), slots=$$(`#${prefix}Grid .slot`);
+ function home(ch){ch.classList.remove('correct','wrong','selected');bank.appendChild(ch);clearSelected();setScore('Not graded')}
+ function place(ch,slot){const old=$('.chip',slot);if(old)home(old);ch.classList.remove('correct','wrong','selected');slot.classList.remove('correct','wrong');slot.appendChild(ch);clearSelected();setScore('Not graded')}
+ $$('.chip',bank).forEach(ch=>{
+   ch.draggable=true;ch.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',ch.id));ch.onclick=()=>{if(ch.parentElement.classList.contains('slot'))home(ch);else setSelected(ch)};
+ });
+ [bank,...slots].forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const ch=document.getElementById(e.dataTransfer.getData('text/plain'));if(!ch)return;if(z===bank)home(ch);else place(ch,z)});});
+ slots.forEach(s=>s.onclick=e=>{if(e.target.closest('.chip'))return;if(selectedChip)place(selectedChip,s)});
+}
+
+function matchRenderer(items,title,intro,prefix='m'){
+ const host=$('#quizHost');
+ host.innerHTML=`<h2>${esc(title)}</h2><p class="hint">${esc(intro)}</p><div class="drag-workspace"><div class="stage"><div class="match-grid" id="${prefix}Grid"></div><div class="controls"><button class="primary" id="checkBtn">Score / Re-score</button><button id="shuffleBtn">Shuffle Pool</button></div><div class="feedback" id="feedback"></div></div><div class="answer-tray"><div class="tray-title">Answer Pool</div><div class="tray-help">Drag, or click an answer then click a destination. Click a placed answer to return it.</div><div class="pool vertical" id="${prefix}Bank"></div></div></div>`;
+ const grid=$(`#${prefix}Grid`), bank=$(`#${prefix}Bank`);
+ items.forEach((it,i)=>{const row=document.createElement('div');row.className='match-row';row.innerHTML=`<div class="match-term ${prefix==='alert'?'mono':''}">${esc(it.term)}</div><div class="slot" data-answer="${esc(String(i))}"></div>`;grid.appendChild(row)});
+ shuffle(items.map((it,i)=>({it,i}))).forEach(({it,i})=>{const ch=document.createElement('div');ch.className='chip';ch.id=`${prefix}chip${i}`;ch.dataset.id=String(i);ch.textContent=it.def;bank.appendChild(ch)});
+ setupMatch(items,prefix);
+ $('#checkBtn').onclick=()=>{let r=0;$$(`#${prefix}Grid .slot`).forEach(s=>{const ch=$('.chip',s);s.classList.remove('correct','wrong');if(ch){ch.classList.remove('correct','wrong');if(ch.dataset.id===s.dataset.answer){s.classList.add('correct');ch.classList.add('correct');r++}else{s.classList.add('wrong');ch.classList.add('wrong')}}});setScore(`${r} / ${items.length}`);$('#feedback').className='feedback show';$('#feedback').innerHTML=`<span class="scoreline">${r} of ${items.length} correctly matched.</span> Nothing is locked; move answers and re-score.`};
+ $('#shuffleBtn').onclick=()=>{shuffle($$('.chip',bank)).forEach(ch=>bank.appendChild(ch))};
+ currentReset=()=>matchRenderer(items,title,intro,prefix);
+}
+
+function anatomyRenderer(){
+ const host=$('#quizHost');
+ host.innerHTML=`<h2>Rule Anatomy — map the syntax to its role</h2><p class="hint">The visible example stays constant because the purpose is to burn in the canonical header order before harder construction.</p><div class="anatomy-rule"><span class="rule-piece">alert</span><span class="rule-piece">tcp</span><span class="rule-piece">any</span><span class="rule-piece">any</span><span class="rule-piece">-&gt;</span><span class="rule-piece">192.168.1.0/24</span><span class="rule-piece">80</span><span class="rule-piece">(msg...content...sid...rev...)</span></div><div id="anatomyInner"></div>`;
+ const inner=$('#anatomyInner');
+ const savedHost=$('#quizHost');
+ matchRenderer(ANATOMY,'Rule Anatomy — identify every part','Drag each function/meaning onto the matching syntax token. The two “any” tokens are intentionally separated as source IP and source port.','anat');
+ // Reinsert the rule visual above the generated workspace.
+ const generated=savedHost.innerHTML;
+ savedHost.innerHTML=`<h2>Rule Anatomy — map the syntax to its role</h2><p class="hint">The canonical order is action → protocol → source IP → source port → direction → destination IP → destination port → options.</p><div class="anatomy-rule"><span class="rule-piece">alert</span><span class="rule-piece">tcp</span><span class="rule-piece">any</span><span class="rule-piece">any</span><span class="rule-piece">-&gt;</span><span class="rule-piece">192.168.1.0/24</span><span class="rule-piece">80</span><span class="rule-piece">(options)</span></div>${generated.replace(/^<h2>[\s\S]*?<\/p>/,'')}`;
+ // listeners were lost after reinsertion, so rebuild cleanly once without the wrapper trick.
+ renderAnatomyClean();
+}
+function renderAnatomyClean(){
+ const host=$('#quizHost');
+ host.innerHTML=`<h2>Rule Anatomy — map the syntax to its role</h2><p class="hint">The canonical order is action → protocol → source IP → source port → direction → destination IP → destination port → options.</p><div class="anatomy-rule"><span class="rule-piece">alert</span><span class="rule-piece">tcp</span><span class="rule-piece">any</span><span class="rule-piece">any</span><span class="rule-piece">-&gt;</span><span class="rule-piece">192.168.1.0/24</span><span class="rule-piece">80</span><span class="rule-piece">(options)</span></div><div class="drag-workspace"><div class="stage"><div class="match-grid" id="anatGrid"></div><div class="controls"><button class="primary" id="checkBtn">Score / Re-score</button><button id="shuffleBtn">Shuffle Pool</button></div><div class="feedback" id="feedback"></div></div><div class="answer-tray"><div class="tray-title">Function / Meaning Pool</div><div class="tray-help">Drag or click-to-place. The duplicated “any” is intentional: first is source IP, second is source port.</div><div class="pool vertical" id="anatBank"></div></div></div>`;
+ const terms=['alert','tcp','any  (1st)','any  (2nd)','->','192.168.1.0/24','80','(options)'];
+ terms.forEach((t,i)=>{$('#anatGrid').insertAdjacentHTML('beforeend',`<div class="match-row"><div class="match-term mono">${esc(t)}</div><div class="slot" data-answer="${i}"></div></div>`)});
+ shuffle(ANATOMY.map((it,i)=>({it,i}))).forEach(({it,i})=>{const ch=document.createElement('div');ch.className='chip';ch.id=`anatchip${i}`;ch.dataset.id=String(i);ch.textContent=it.def;$('#anatBank').appendChild(ch)});
+ setupMatch(ANATOMY,'anat');
+ $('#checkBtn').onclick=()=>{let r=0;$$('#anatGrid .slot').forEach(s=>{const ch=$('.chip',s);s.classList.remove('correct','wrong');if(ch){ch.classList.remove('correct','wrong');if(ch.dataset.id===s.dataset.answer){s.classList.add('correct');ch.classList.add('correct');r++}else{s.classList.add('wrong');ch.classList.add('wrong')}}});setScore(`${r} / 8`);$('#feedback').className='feedback show';$('#feedback').innerHTML=`<span class="scoreline">${r} of 8 correctly mapped.</span>`};
+ $('#shuffleBtn').onclick=()=>shuffle($$('#anatBank .chip')).forEach(ch=>$('#anatBank').appendChild(ch));
+ currentReset=renderAnatomyClean;
+}
+
+function assembleRenderer(rule=RULES[Math.floor(Math.random()*RULES.length)]){
+ const host=$('#quizHost');
+ host.innerHTML=`<h2>Assemble the SNORT Rule</h2><div class="scenario"><div class="lead">Requirement</div><div class="q">${esc(rule.scenario)}</div></div><div class="drag-workspace"><div class="stage"><div class="order-grid" id="ordGrid"></div><div class="controls"><button class="primary" id="checkBtn">Score / Re-score</button><button id="newBtn">New Rule</button><button id="shuffleBtn">Shuffle Pool</button></div><div class="feedback" id="feedback"></div></div><div class="answer-tray"><div class="tray-title">Rule Pieces</div><div class="tray-help">Place every token in order. Repeated values such as <code>any</code> appear as many times as the rule genuinely requires.</div><div class="pool vertical" id="ordBank"></div></div></div>`;
+ rule.tokens.forEach((tok,i)=>{$('#ordGrid').insertAdjacentHTML('beforeend',`<div class="pos">${i+1}</div><div class="slot" data-answer="${i}"></div>`)});
+ shuffle(rule.tokens.map((tok,i)=>({tok,i}))).forEach(({tok,i})=>{const ch=document.createElement('div');ch.className='chip mono';ch.id=`ordchip${i}`;ch.dataset.id=String(i);ch.textContent=tok;$('#ordBank').appendChild(ch)});
+ setupMatch(rule.tokens.map((x,i)=>({term:String(i),def:x})),'ord');
+ $('#checkBtn').onclick=()=>{let r=0;$$('#ordGrid .slot').forEach(s=>{const ch=$('.chip',s);s.classList.remove('correct','wrong');if(ch){ch.classList.remove('correct','wrong');if(ch.dataset.id===s.dataset.answer){s.classList.add('correct');ch.classList.add('correct');r++}else{s.classList.add('wrong');ch.classList.add('wrong')}}});setScore(`${r} / ${rule.tokens.length}`);$('#feedback').className='feedback show';$('#feedback').innerHTML=`<span class="scoreline">${r} of ${rule.tokens.length} positions correct.</span>${r===rule.tokens.length?`<div class="rule-display">${esc(rule.answer)}</div>`:''}`};
+ $('#newBtn').onclick=()=>assembleRenderer(RULES[Math.floor(Math.random()*RULES.length)]);$('#shuffleBtn').onclick=()=>shuffle($$('#ordBank .chip')).forEach(ch=>$('#ordBank').appendChild(ch));
+ currentReset=()=>assembleRenderer(rule);
+}
+
+function writeRenderer(rule=RULES[Math.floor(Math.random()*RULES.length)]){
+ const host=$('#quizHost');
+ host.innerHTML=`<h2>Write the SNORT Rule — exact syntax</h2><div class="scenario"><div class="lead">Requirement</div><div class="q">${esc(rule.scenario)}</div></div><input id="ruleInput" class="type-input" autocomplete="off" spellcheck="false" placeholder="Type the complete SNORT rule..."><div class="controls"><button class="primary" id="checkBtn">Check</button><button id="newBtn">New Rule</button><button id="clearBtn">Clear</button></div><div class="feedback" id="feedback"></div><div class="callout warn"><b>Hard mode:</b> spaces are normalized, but punctuation, quotes, semicolons, parentheses, keywords, addresses, ports, and direction must be correct.</div>`;
+ const inp=$('#ruleInput');inp.oninput=()=>{inp.classList.remove('correct','wrong');setScore('Not graded')};
+ $('#checkBtn').onclick=()=>{const ok=normalizeRule(inp.value)===normalizeRule(rule.answer);inp.classList.toggle('correct',ok);inp.classList.toggle('wrong',!ok);setScore(ok?'1 / 1':'0 / 1');$('#feedback').className='feedback show';$('#feedback').innerHTML=ok?`<span class="scoreline">Correct.</span> You produced a working canonical rule for this drill.`:`<span class="scoreline">Not exact yet.</span> Compare structure mentally: action → protocol → source → direction → destination → options. The answer is not revealed until you choose “Show Answer.” <div class="controls"><button id="showBtn">Show Answer</button></div>`;if(!ok){$('#showBtn').onclick=()=>{$('#feedback').insertAdjacentHTML('beforeend',`<div class="rule-display">${esc(rule.answer)}</div>`)}}};
+ $('#newBtn').onclick=()=>writeRenderer(RULES[Math.floor(Math.random()*RULES.length)]);$('#clearBtn').onclick=()=>{inp.value='';inp.classList.remove('correct','wrong');setScore('Not graded');inp.focus()};
+ currentReset=()=>writeRenderer(rule);
+}
+
+function readRenderer(rule=RULES[Math.floor(Math.random()*RULES.length)]){
+ const m=rule.meta;
+ const items=[
+  {q:'What action will SNORT take when this rule matches?',opts:[m.action,m.action==='alert'?'drop':'alert','log','pass'],a:0,why:`The first token is the action: ${m.action}.`},
+  {q:'Which protocol does the rule inspect?',opts:[m.protocol,m.protocol==='tcp'?'udp':'tcp','icmp','arp'],a:0,why:`The protocol field is ${m.protocol}.`},
+  {q:'What direction operator does this rule use?',opts:[m.direction,m.direction==='->'?'<>' :'->','==','=>'],a:0,why:`The header uses ${m.direction}.`},
+  {q:'What payload string is content looking for?',opts:[m.content,'The msg text','The SID','The destination IP'],a:0,why:`content is matching the literal string ${m.content}.`},
+  {q:'Which source description matches the rule?',opts:[m.source,'192.0.2.1:443','Only the destination network','The SID and revision'],a:0,why:`The source side is ${m.source}.`},
+  {q:'Which destination description matches the rule?',opts:[m.destination,'any:any','The content string','The generator ID'],a:0,why:`The destination side is ${m.destination}.`}
+ ];
+ const host=$('#quizHost');host.innerHTML=`<h2>Read the Rule — parse before interpreting</h2><div class="rule-display">${esc(rule.answer)}</div><div id="readInner"></div>`;
+ const inner=$('#readInner');
+ // local MCQ batch to keep the rule visible
+ inner.innerHTML=`<p class="hint">Dion’s exam habit: identify action, protocol, direction, and content first; then confirm source/destination context.</p><div class="mcq-list" id="mcqList"></div><div class="controls"><button class="primary" id="checkBtn">Score / Re-score</button><button id="newBtn">New Rule</button></div><div class="feedback" id="feedback"></div>`;
+ items.forEach((q,qi)=>{const card=document.createElement('div');card.className='mcq-card';const opts=shuffle(q.opts.map((t,i)=>({t,c:i===0})));card.innerHTML=`<div class="mcq-q">${qi+1}. ${esc(q.q)}</div><div class="opts"></div><div class="mcq-why">${esc(q.why)}</div>`;opts.forEach(o=>{const b=document.createElement('button');b.className='opt';b.textContent=o.t;b.dataset.correct=o.c?'1':'0';b.onclick=()=>{$$('.opt',card).forEach(x=>x.classList.remove('sel','correct','wrong'));b.classList.add('sel');card.classList.remove('graded');setScore('Not graded')};$('.opts',card).appendChild(b)});$('#mcqList').appendChild(card)});
+ $('#checkBtn').onclick=()=>{let r=0;$$('.mcq-card',$('#mcqList')).forEach(c=>{c.classList.add('graded');const s=$('.opt.sel',c);$$('.opt',c).forEach(o=>o.classList.remove('correct','wrong'));if(s){if(s.dataset.correct==='1'){s.classList.add('correct');r++}else{s.classList.add('wrong');const good=$$('.opt',c).find(o=>o.dataset.correct==='1');if(good)good.classList.add('correct')}}});setScore(`${r} / 6`);$('#feedback').className='feedback show';$('#feedback').innerHTML=`<span class="scoreline">${r} of 6 correct.</span>`};
+ $('#newBtn').onclick=()=>readRenderer(RULES[Math.floor(Math.random()*RULES.length)]);currentReset=()=>readRenderer(rule);
+}
+
+function alertsRenderer(){
+ const host=$('#quizHost');host.innerHTML=`<h2>Read SNORT Alert Output</h2><div class="alert-line">08/25-10:14:33.421555 [**] [1:1000001:1] Suspicious cmd.exe request [**] [Priority: 1] {TCP} 203.0.113.25:51514 -&gt; 192.168.1.50:80</div>`;
+ // use generic matching underneath
+ host.insertAdjacentHTML('beforeend',`<p class="hint">Match each visible alert field to what it represents.</p><div class="drag-workspace"><div class="stage"><div class="match-grid" id="alertGrid"></div><div class="controls"><button class="primary" id="checkBtn">Score / Re-score</button><button id="shuffleBtn">Shuffle Pool</button></div><div class="feedback" id="feedback"></div></div><div class="answer-tray"><div class="tray-title">Field Meanings</div><div class="tray-help">Dion specifically calls out all seven of these alert-output elements.</div><div class="pool vertical" id="alertBank"></div></div></div>`);
+ ALERT_ITEMS.forEach((it,i)=>{$('#alertGrid').insertAdjacentHTML('beforeend',`<div class="match-row"><div class="match-term mono">${esc(it.term)}</div><div class="slot" data-answer="${i}"></div></div>`)});shuffle(ALERT_ITEMS.map((it,i)=>({it,i}))).forEach(({it,i})=>{const ch=document.createElement('div');ch.className='chip';ch.id=`alertchip${i}`;ch.dataset.id=String(i);ch.textContent=it.def;$('#alertBank').appendChild(ch)});setupMatch(ALERT_ITEMS,'alert');
+ $('#checkBtn').onclick=()=>{let r=0;$$('#alertGrid .slot').forEach(s=>{const ch=$('.chip',s);s.classList.remove('correct','wrong');if(ch){ch.classList.remove('correct','wrong');if(ch.dataset.id===s.dataset.answer){r++;s.classList.add('correct');ch.classList.add('correct')}else{s.classList.add('wrong');ch.classList.add('wrong')}}});setScore(`${r} / ${ALERT_ITEMS.length}`);$('#feedback').className='feedback show';$('#feedback').innerHTML=`<span class="scoreline">${r} of ${ALERT_ITEMS.length} correct.</span>`};$('#shuffleBtn').onclick=()=>shuffle($$('#alertBank .chip')).forEach(ch=>$('#alertBank').appendChild(ch));currentReset=alertsRenderer;
+}
+
+function renderQuiz(id){
+ currentQuiz=id;clearSelected();setScore('Not graded');$('#quizDesc').textContent=DESCS[id];
+ if(id==='idsips')mcqRenderer(IDSIPS,'IDS vs IPS — Detect or Block?','Choose the best behavior. The distractors intentionally mix operating modes with IDS/IPS actions.',6);
+ else if(id==='anatomy')renderAnatomyClean();
+ else if(id==='assemble')assembleRenderer();
+ else if(id==='write')writeRenderer();
+ else if(id==='read')readRenderer();
+ else if(id==='options')matchRenderer(OPTION_ITEMS,'Rule Options — msg / content / sid / rev','Drag each definition onto the correct rule-option keyword.','optm');
+ else if(id==='direction')mcqRenderer(DIRECTION_MCQS,'Direction Operators — -> vs <>','Read the arrow before assuming which side is source or destination.',6);
+ else if(id==='alerts')alertsRenderer();
+ else if(id==='modes')matchRenderer(MODE_ITEMS,'SNORT Operating Modes','Keep these separate from IDS vs IPS: sniffer and packet logger are operating modes too.','mode');
+ else if(id==='compare')mcqRenderer(COMPARE,'Snort vs Suricata vs Zeek','A small discrimination drill only; SNORT syntax remains the main trainer focus.',5);
+ else if(id==='mixed')mcqRenderer(MIXED,'Mixed CySA+ SNORT Drill','Rules, modes, alert output, IDS/IPS behavior, direction, and nearby-tool discrimination.',8);
+}
+
+$('#quizSelect').onchange=e=>renderQuiz(e.target.value);
+$('#resetBtn').onclick=()=>currentReset();
+$('#cheatBtn').onclick=()=>{document.body.classList.toggle('hide-cheats');$('#cheatBtn').textContent=document.body.classList.contains('hide-cheats')?'Show Cheats':'Hide Cheats'};
+$('#darkBtn').onclick=()=>{document.body.classList.toggle('dark');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark'};
+renderQuiz('idsips');
+</script>
+</body>
+</html>
