@@ -32,9 +32,22 @@ Click any link above to open the trainer in your browser. Progress is not persis
 
 - Parent repo: [CySA-004](https://github.com/UGL13RTH4NU/CySA-004) — Anki decks and other study assets
 
+
+
+## How I Study & Prepare for the Exam
+
+IMO, these trainers should be used after and as a supplement to doing the following:
+
+1. Reading the study material
+2. Doing the practice labs
+3. Practice Quizzes and Tests
+4. Flashcards
+5. These 'Trainers'
+
+
 ## Disclaimer
 
 Not affiliated with CompTIA or any other organization. These 'trainers' were built for my personal use. Anyone else choosing to use them should check information for accuracy. 
 
-Made in collaboration with ChatGPT and Claude Opus 4.7.
+Made in collaboration with ChatGPT and Claude Opus 4.7. July/August 2026.
 
