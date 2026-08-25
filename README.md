@@ -2,7 +2,7 @@
 
 Personal study materials for the CompTIA Cybersecurity Analyst (CySA+) CS0-004 V4 certification exam.
 
-## Contents
+### Contents
 
 ## Anki Deck
 
