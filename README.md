@@ -16,9 +16,9 @@ All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds
 Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (textbook cards) or domain-hierarchical (quiz cards).
 
 
-## Usage
+#### Usage
 
-### Importing the Anki deck
+#### Importing the Anki deck
 
 1. Download the `.apkg` file from this repo
 2. In Anki desktop: File → Import → select the file
@@ -27,7 +27,7 @@ Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (text
 
 
 
-## Interactive HTML Trainers
+### Interactive HTML Trainers
 
 Web-based practice trainers hosted via GitHub Pages:
 
