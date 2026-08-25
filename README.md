@@ -4,7 +4,7 @@ Personal study materials for the CompTIA Cybersecurity Analyst (CySA+) CS0-004 V
 
 ## Contents
 
-### Anki Deck
+## Anki Deck
 
 Custom Anki deck covering the CS0-004 V4 exam objectives. Cards are built from two parallel workflows:
 
@@ -27,7 +27,7 @@ Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (text
 
 
 
-### Interactive HTML Trainers
+## Interactive HTML Trainers
 
 Web-based practice trainers hosted via GitHub Pages:
 
