@@ -15,6 +15,7 @@ All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds
 
 Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (textbook cards) or domain-hierarchical (quiz cards).
 
+
 ## Usage
 
 ### Importing the Anki deck
@@ -26,7 +27,7 @@ Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (text
 
 
 
-### Interactive HTML Trainers
+## Interactive HTML Trainers
 
 Web-based practice trainers hosted via GitHub Pages:
 
