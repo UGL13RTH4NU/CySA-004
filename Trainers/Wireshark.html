@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CySA+ CS0-004 · Wireshark Trainer</title>
+<style>
+:root{
+  --accent:#1f6fb2;--accent2:#2e8b57;--orange:#c46a13;--purple:#7d4aa8;--warn:#b8322a;
+  --bg:#f3f6fa;--panel:#fff;--panel2:#f8fafc;--border:#d7e0eb;--text:#102132;--muted:#53677b;
+  --chip:#edf2f7;--dash:#c4d0dd;--good:#166534;--goodbg:rgba(34,197,94,.12);--goodbd:rgba(34,197,94,.42);
+  --bad:#991b1b;--badbg:rgba(239,68,68,.11);--badbd:rgba(239,68,68,.42);--neutral:rgba(31,111,178,.08);
+  --selected:rgba(31,111,178,.14);--amberbg:rgba(196,106,19,.10);--shadow:0 1px 2px rgba(0,0,0,.04),0 5px 15px rgba(0,0,0,.045);
+}
+body.dark{
+  --bg:#0c1117;--panel:#121a23;--panel2:#0f1720;--border:#263648;--text:#e7edf4;--muted:#9eb1c4;
+  --chip:#182434;--dash:#34465b;--good:#70e08a;--goodbg:rgba(112,224,138,.11);--goodbd:rgba(112,224,138,.35);
+  --bad:#ff8d8d;--badbg:rgba(255,120,120,.10);--badbd:rgba(255,120,120,.35);--neutral:rgba(92,169,245,.08);
+  --selected:rgba(92,169,245,.14);--amberbg:rgba(230,150,70,.10);--shadow:0 1px 2px rgba(0,0,0,.35),0 5px 15px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.42}
+button,select,input{font:inherit;color:var(--text)}
+button{cursor:pointer;border:1px solid var(--border);background:var(--chip);border-radius:8px;padding:7px 10px}
+button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:#fff}button.danger{color:var(--warn)}
+header{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 15px;background:var(--panel);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+h1{font-size:clamp(1rem,2.2vw,1.28rem);margin:0;color:var(--accent)}h1 .sub{font-size:.79em;font-weight:500;color:var(--muted);margin-left:7px}.spacer{flex:1}
+.pill{padding:4px 9px;border:1px solid var(--border);border-radius:999px;background:var(--chip);font-size:.8rem;color:var(--muted);white-space:nowrap}
+main{max-width:1600px;margin:0 auto;padding:14px;display:grid;grid-template-columns:minmax(0,1fr) 375px;gap:14px;align-items:start}
+body.hide-cheats main{grid-template-columns:minmax(0,1fr)}body.hide-cheats aside{display:none}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow);min-width:0}
+.quiz-picker{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-bottom:11px;border-bottom:1px solid var(--border);margin-bottom:11px}.quiz-picker label{font-weight:750;color:var(--muted);font-size:.86rem}
+select{background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:7px 9px;min-width:285px}.quiz-desc{font-size:.83rem;color:var(--muted);flex:1;min-width:250px}
+h2{font-size:1.04rem;color:var(--accent);margin:2px 0 7px}h3{font-size:.92rem;color:var(--accent2);margin:10px 0 5px}.hint{font-size:.83rem;color:var(--muted);margin:4px 0 10px}
+.badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 7px;background:var(--chip);color:var(--muted);font-size:.72rem;margin-right:4px}.badge.core{color:var(--accent);background:var(--neutral)}.badge.supp{color:var(--orange);background:var(--amberbg)}
+.callout{border-left:3px solid var(--accent);background:var(--neutral);border-radius:7px;padding:8px 10px;margin:8px 0;font-size:.84rem}.callout.warn{border-left-color:var(--orange);background:var(--amberbg)}.callout b{color:var(--accent)}
+.filter-workspace{display:grid;grid-template-columns:minmax(0,1fr) 305px;gap:12px;align-items:start}.stage{min-width:0}.token-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:11px;padding:9px;max-height:calc(100vh - 90px);overflow:auto;box-shadow:var(--shadow)}
+.tray-title{font-weight:800;color:var(--accent);font-size:.88rem}.tray-help{font-size:.75rem;color:var(--muted);margin:3px 0 8px}.token-pool{display:flex;gap:7px;flex-wrap:wrap;min-height:55px;padding:8px;border:1px dashed var(--dash);background:var(--chip);border-radius:9px}
+.token{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--panel);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem;cursor:grab;user-select:none;overflow-wrap:anywhere}.token.selected{outline:2px solid var(--accent);background:var(--selected)}.token.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.token.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.scenario{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:11px;margin-bottom:10px}.scenario .lead{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;margin-bottom:4px}.scenario .q{font-weight:700}.scenario .meta{font-size:.77rem;color:var(--muted);margin-top:6px}
+.filter-line{min-height:74px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);display:flex;align-content:flex-start;align-items:center;gap:7px;flex-wrap:wrap}.filter-line.over,.token-pool.over{border-color:var(--accent);background:var(--neutral)}.filter-line.correct{border-color:var(--goodbd);background:var(--goodbg)}.filter-line.wrong{border-color:var(--badbd);background:var(--badbg)}
+.filter-line .placeholder{color:var(--muted);font-size:.82rem}.filter-preview{margin-top:8px;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--chip);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem;overflow-wrap:anywhere;min-height:40px}.filter-preview b{color:var(--accent)}
+.type-input{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1rem;background:var(--panel);border:2px solid var(--dash);color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.type-input:focus{border-color:var(--accent)}.type-input.correct{border-color:var(--goodbd);background:var(--goodbg)}.type-input.wrong{border-color:var(--badbd);background:var(--badbg)}.type-input.alternate{border-color:var(--orange);background:var(--amberbg)}
+.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{background:rgba(128,128,128,.10);border-radius:4px;padding:1px 4px;color:var(--orange)}
+.mcq-card{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:12px}.mcq-q{font-weight:750;margin-bottom:8px}.mcq-filter{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.96rem;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:9px;margin-bottom:9px;overflow-wrap:anywhere;color:var(--accent)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}.opt{text-align:left;padding:9px;border:1px solid var(--border);border-radius:9px;background:var(--panel);cursor:pointer;font-size:.85rem}.opt:hover{border-color:var(--accent)}.opt.sel{outline:2px solid var(--accent);background:var(--selected)}.opt.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.opt.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.color-layout{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:11px;align-items:start}.color-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:9px}.color-zone{min-height:104px;border:2px dashed var(--dash);border-radius:10px;padding:8px;background:var(--panel);transition:.12s}.color-zone.over{border-color:var(--accent)}.color-zone.correct{border-color:var(--goodbd)}.color-zone.wrong{border-color:var(--badbd)}.swatch{height:50px;border-radius:7px;border:1px solid rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.77rem;letter-spacing:.02em}.color-slot{min-height:38px;margin-top:7px;display:flex;align-items:center}.color-slot .color-chip{width:100%}
+.color-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:9px;max-height:calc(100vh - 90px);overflow:auto}.color-bank{display:grid;gap:7px}.color-chip{padding:7px 8px;border:1px solid var(--border);border-radius:8px;background:var(--chip);cursor:grab;font-size:.82rem;user-select:none}.color-chip.selected{outline:2px solid var(--accent);background:var(--selected)}.color-chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.color-chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mini-card{border:1px solid var(--border);border-radius:9px;background:var(--panel2);padding:9px}.mini-card h3{margin:0 0 5px;color:var(--accent)}
+aside .card{position:sticky;top:74px;max-height:calc(100vh - 90px);overflow:auto}aside h2{font-size:1rem;margin:0 0 7px;color:var(--accent)}aside details{border-top:1px solid var(--border);padding:6px 0 8px}aside details:first-of-type{border-top:0}aside summary{cursor:pointer;color:var(--accent);font-weight:750;font-size:.88rem}.ref-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-top:6px}.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px;vertical-align:top;text-align:left}.ref-table th{background:var(--chip)}aside p,aside li{font-size:.81rem}aside ul{padding-left:18px;margin:6px 0}.small{font-size:.76rem;color:var(--muted)}
+.legend-swatch{display:inline-block;width:22px;height:13px;border:1px solid rgba(0,0,0,.25);border-radius:3px;vertical-align:-2px;margin-right:5px}
+footer{max-width:1600px;margin:0 auto;padding:2px 14px 18px;color:var(--muted);font-size:.76rem;text-align:center}footer a{color:var(--accent);text-decoration:none}
+.hidden{display:none!important}
+@media(max-width:1180px){main{grid-template-columns:1fr}aside .card{position:static;max-height:none}.filter-workspace,.color-layout{grid-template-columns:minmax(0,1fr) 285px}}
+@media(max-width:800px){header{position:static}.filter-workspace,.color-layout{grid-template-columns:1fr}.token-tray,.color-tray{position:sticky;top:auto;bottom:5px;z-index:25;max-height:35vh}.color-grid{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}}
+@media(max-width:520px){main{padding:8px}.card{padding:10px}select{min-width:100%;width:100%}.quiz-picker{align-items:stretch}.color-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>CySA+ CS0-004 · Wireshark Trainer <span class="sub">Filters · Packet Colors · Analysis Recognition</span></h1>
+  <span class="spacer"></span>
+  <span class="pill">Current: <b id="scorePill">Not graded</b></span>
+  <button id="cheatBtn">📚 Hide Cheats</button>
+  <button id="darkBtn">🌙 Dark</button>
+  <button id="resetBtn">Reset Quiz</button>
+</header>
+<main>
+<section><div class="card">
+  <div class="quiz-picker">
+    <label for="quizSelect">Quiz:</label>
+    <select id="quizSelect">
+      <option value="build" selected>1 · Build Display Filter — Drag Assembly</option>
+      <option value="type">2 · Build Display Filter — Type Exact Syntax</option>
+      <option value="recognize">3 · Recognize Display Filters — MCQ</option>
+      <option value="capture">4 · Capture vs Display Filters</option>
+      <option value="colors">5 · Default Packet Colors</option>
+      <option value="features">6 · Wireshark Analysis Features — MCQ</option>
+      <option value="mixed">7 · Mixed CySA+ Wireshark Drill</option>
+    </select>
+    <div class="quiz-desc" id="quizDesc"></div>
+  </div>
+  <div id="quizHost"></div>
+</div></section>
+<aside id="cheats"><div class="card">
+  <h2>Wireshark Cheat Sheet / Reference</h2>
+  <div class="small">Hide this panel for pure recall. Core items are taken directly from Dion's CS0-004 Wireshark notes; clearly marked supplements extend recognition without replacing the source.</div>
+
+  <details open><summary>Core display filters — Dion</summary>
+    <table class="ref-table">
+      <tr><th>Filter</th><th>What it isolates</th></tr>
+      <tr><td><code>ip.addr == [IP]</code></td><td>Packets where the IP is either source or destination.</td></tr>
+      <tr><td><code>tcp.port == [port]</code></td><td>TCP packets where the port is either source or destination.</td></tr>
+      <tr><td><code>http.request</code></td><td>HTTP request packets.</td></tr>
+      <tr><td><code>http.request.method == "POST"</code></td><td>HTTP POST requests.</td></tr>
+      <tr><td><code>dns</code></td><td>DNS traffic.</td></tr>
+      <tr><td><code>tcp.flags.syn == 1 and tcp.flags.ack == 0</code></td><td>Initial SYNs: SYN set, ACK not set.</td></tr>
+    </table>
+    <div class="callout"><b>Exam cue:</b> PBQs may show a filter and ask what it reveals, or give the traffic requirement and ask for the correct filter.</div>
+  </details>
+
+  <details><summary>Useful directional extensions</summary>
+    <table class="ref-table">
+      <tr><th>Field</th><th>Think</th></tr>
+      <tr><td><code>ip.src</code></td><td>IPv4 source only.</td></tr>
+      <tr><td><code>ip.dst</code></td><td>IPv4 destination only.</td></tr>
+      <tr><td><code>tcp.srcport</code></td><td>TCP source port only.</td></tr>
+      <tr><td><code>tcp.dstport</code></td><td>TCP destination port only.</td></tr>
+      <tr><td><code>udp.port</code></td><td>UDP source or destination port.</td></tr>
+    </table>
+    <div class="callout warn"><b>Source note:</b> These are technical Wireshark extensions for directional recognition. Dion's explicitly listed exam-core display filters are in the section above.</div>
+  </details>
+
+  <details open><summary>Capture filter vs display filter</summary>
+    <table class="ref-table">
+      <tr><th></th><th>Capture filter</th><th>Display filter</th></tr>
+      <tr><td><b>When</b></td><td>Before/during collection</td><td>After packets are captured</td></tr>
+      <tr><td><b>Syntax</b></td><td>BPF-style: <code>host</code>, <code>port</code>, <code>tcp</code>, <code>udp</code>, <code>not</code>, <code>and</code>, <code>or</code></td><td>Wireshark fields such as <code>ip.addr</code>, <code>tcp.port</code>, <code>http.request</code></td></tr>
+      <tr><td><b>Risk</b></td><td>Nonmatching packets are never captured.</td><td>Packets remain in the capture; only the view changes.</td></tr>
+    </table>
+    <div class="callout warn"><b>Trap:</b> You cannot recover packets that a capture filter excluded. A display filter is reversible.</div>
+  </details>
+
+  <details><summary>Three panes + investigation features</summary>
+    <ul>
+      <li><b>Packet List:</b> summary rows for each packet.</li>
+      <li><b>Packet Details:</b> per-layer decoded fields.</li>
+      <li><b>Packet Bytes:</b> raw hex + ASCII.</li>
+      <li><b>Follow TCP Stream:</b> reconstructs the full conversation/session content.</li>
+      <li><b>Statistics → Protocol Hierarchy:</b> fast protocol-mix overview.</li>
+      <li><b>Statistics → Conversations:</b> communication-pair overview.</li>
+      <li><b>File → Export Objects:</b> extract transferred HTTP/SMB/FTP files.</li>
+    </ul>
+  </details>
+
+  <details><summary>Dion's packet-analysis tells</summary>
+    <table class="ref-table">
+      <tr><th>Clue</th><th>Meaning / next thought</th></tr>
+      <tr><td>Abnormally high DNS percentage</td><td>Potential DNS tunneling; investigate queries and payload patterns.</td></tr>
+      <tr><td><code>MZ</code> / <code>4d 5a</code></td><td>Windows PE executable signature in packet bytes/file content.</td></tr>
+      <tr><td><code>Content-Type: application/octet-stream</code></td><td>Generic binary data transfer.</td></tr>
+      <tr><td>MITRE ATT&amp;CK <code>T1071</code></td><td>Application Layer Protocol; relevant to C2 hidden in web/DNS traffic.</td></tr>
+    </table>
+  </details>
+
+  <details><summary>Default packet coloring — technical supplement</summary>
+    <div class="small">Wireshark coloring rules are customizable and theme-sensitive. These samples represent the built-in default rule families; learn the pattern, not an exact monitor shade. Rules are evaluated top-down and the first match wins.</div>
+    <table class="ref-table">
+      <tr><th>Sample</th><th>Default rule</th></tr>
+      <tr><td><span class="legend-swatch" style="background:#e7e5ff"></span></td><td>TCP — light lavender</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#daf0ff"></span></td><td>UDP — light blue</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#e4ffc7"></span></td><td>HTTP — light green</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#faf0d7"></span></td><td>ARP — pale tan</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#fce0ff"></span></td><td>ICMP — pale pink/lilac</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#a0a0a0"></span></td><td>TCP SYN/FIN — gray</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#12272e"></span></td><td>Bad TCP / checksum errors — dark warning row with red/pink text</td></tr>
+      <tr><td><span class="legend-swatch" style="background:#a40000"></span></td><td>TCP RST — dark red warning row</td></tr>
+    </table>
+  </details>
+
+  <details><summary>Source notes</summary>
+    <ul>
+      <li><b>Primary project source:</b> Dion Training, CompTIA CySA+ (CS0-004) Course Notes, Section 17 — Wireshark Packet Analysis and adjacent tcpdump capture-filter notes.</li>
+      <li><a href="https://www.wireshark.org/docs/wsug_html_chunked/ChCustColorizationSection.html" target="_blank" rel="noopener noreferrer">Wireshark User's Guide — Packet colorization</a></li>
+      <li><a href="https://gitlab.com/wireshark/wireshark/-/raw/master/resources/share/wireshark/colorfilters" target="_blank" rel="noopener noreferrer">Wireshark built-in default colorfilters file</a></li>
+    </ul>
+  </details>
+
+  <details><summary>Memory hooks / traps</summary>
+    <ul>
+      <li><code>ip.addr</code> / <code>tcp.port</code> = either direction; <code>.src</code>/<code>.dst</code> = one direction.</li>
+      <li><code>http.request</code> and <code>dns</code> are presence filters — no comparison operator required.</li>
+      <li>HTTP method is a string, so <code>"POST"</code> needs quotes.</li>
+      <li>Initial SYN = SYN <code>1</code> AND ACK <code>0</code>.</li>
+      <li>Capture-filter BPF words look very different from Wireshark display-filter fields.</li>
+    </ul>
+  </details>
+</div></aside>
+</main>
+<footer><a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a></footer>
+<script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+
+const CORE_FILTERS=[
+ {id:'dns',tier:'core',desc:'Show DNS traffic.',answer:'dns',tokens:['dns'],why:'A protocol-name presence filter. No comparison operator is needed.'},
+ {id:'http-request',tier:'core',desc:'Show HTTP request packets.',answer:'http.request',tokens:['http.request'],why:'The field itself is used as a presence test for HTTP requests.'},
+ {id:'http-post',tier:'core',desc:'Show only HTTP POST requests.',answer:'http.request.method == "POST"',tokens:['http.request.method','==','"POST"'],why:'The method field is compared to the string POST, so the value is quoted.'},
+ {id:'ip-any',tier:'core',desc:'Show packets where 192.168.1.10 is either the IPv4 source or destination.',answer:'ip.addr == 192.168.1.10',tokens:['ip.addr','==','192.168.1.10'],why:'ip.addr matches either direction. Use ip.src or ip.dst only when direction matters.'},
+ {id:'tcp-port',tier:'core',desc:'Show TCP traffic where port 443 is either the source or destination port.',answer:'tcp.port == 443',tokens:['tcp.port','==','443'],why:'tcp.port is direction-agnostic; it matches source or destination TCP port 443.'},
+ {id:'syn-noack',tier:'core',desc:'Show initial TCP connection attempts: SYN is set and ACK is not set.',answer:'tcp.flags.syn == 1 and tcp.flags.ack == 0',tokens:['tcp.flags.syn','==','1','and','tcp.flags.ack','==','0'],why:'Initial SYN packets have SYN=1 and ACK=0. The repeated == appears twice because two comparisons are required.'}
+];
+const EXT_FILTERS=[
+ {id:'ip-src',tier:'supp',desc:'Show packets sourced from 10.10.10.25 only.',answer:'ip.src == 10.10.10.25',tokens:['ip.src','==','10.10.10.25'],why:'ip.src restricts the match to the IPv4 source address.'},
+ {id:'ip-dst',tier:'supp',desc:'Show packets destined for 203.0.113.50 only.',answer:'ip.dst == 203.0.113.50',tokens:['ip.dst','==','203.0.113.50'],why:'ip.dst restricts the match to the IPv4 destination address.'},
+ {id:'tcp-srcport',tier:'supp',desc:'Show TCP packets whose source port is 51514.',answer:'tcp.srcport == 51514',tokens:['tcp.srcport','==','51514'],why:'tcp.srcport is directional and matches the source port only.'},
+ {id:'tcp-dstport',tier:'supp',desc:'Show TCP packets whose destination port is 8443.',answer:'tcp.dstport == 8443',tokens:['tcp.dstport','==','8443'],why:'tcp.dstport is directional and matches the destination port only.'},
+ {id:'udp-port',tier:'supp',desc:'Show UDP traffic where port 53 is either source or destination.',answer:'udp.port == 53',tokens:['udp.port','==','53'],why:'udp.port works like tcp.port but for UDP.'}
+];
+const ALL_FILTERS=[...CORE_FILTERS,...EXT_FILTERS];
+
+const CAPTURE_MCQS=[
+ {q:'Which statement BEST distinguishes a Wireshark capture filter from a display filter?',opts:['A capture filter decides which packets are collected; a display filter changes which already-captured packets are shown.','A display filter permanently deletes packets that do not match.','Capture filters and display filters use the same field syntax and differ only in color.','A capture filter can only be applied after a PCAP has been closed.'],a:0,why:'Dion explicitly stresses this distinction: capture filters operate at collection time and excluded packets cannot be recovered; display filters only change the view.'},
+ {q:'Which syntax most strongly identifies a capture/BPF filter rather than a Wireshark display filter?',pre:'tcp port 443 and not host 10.0.0.5',opts:['Capture/BPF filter','Wireshark display filter','Snort rule','YARA condition'],a:0,why:'BPF-style words such as host, port, tcp, not, and, and or are the capture-filter family Dion highlights.'},
+ {q:'Which syntax is a Wireshark display filter?',pre:'tcp.port == 443',opts:['Wireshark display filter','BPF capture filter','tcpdump output line','Nmap service selector'],a:0,why:'tcp.port is a Wireshark display-filter field. A BPF equivalent would look more like tcp port 443.'},
+ {q:'You begin a capture with a filter that excludes DNS. Ten minutes later you decide DNS is important. What is the key consequence?',opts:['The excluded DNS packets were never captured and cannot be recovered from that capture.','Remove the display filter and all DNS packets will reappear.','Follow TCP Stream will reconstruct the missing DNS packets.','Protocol Hierarchy automatically re-downloads excluded packets.'],a:0,why:'Capture filters permanently exclude nonmatching traffic from the capture. This is exactly why aggressive capture filtering carries evidence-loss risk.'},
+ {q:'Which option is the safer choice when you already have a complete PCAP and merely want to focus the view on suspicious traffic?',opts:['Apply a display filter.','Apply a new capture filter to the existing PCAP.','Delete nonmatching packets from the PCAP.','Disable protocol dissection.'],a:0,why:'Display filters are reversible and preserve the full packet set.'},
+ {q:'Which pair comes directly from the BPF operator vocabulary Dion associates with Wireshark capture filters?',opts:['host and port','ip.addr and tcp.port','http.request and dns','tcp.flags.syn and tcp.flags.ack'],a:0,why:'host and port are BPF-style capture-filter terms; the other choices are Wireshark display-filter fields.'}
+];
+
+const FEATURE_MCQS=[
+ {q:'Which Wireshark feature reconstructs the content of a TCP conversation in session order?',opts:['Follow TCP Stream','Protocol Hierarchy','Export Objects','Packet Bytes'],a:0,why:'Follow TCP Stream reconstructs the conversation so the analyst can read session content rather than individual raw packets.'},
+ {q:'You open a PCAP and want a fast first-pass view of what protocols dominate the capture. Which menu path is the best fit?',opts:['Statistics → Protocol Hierarchy','File → Export Objects','View → Coloring Rules','Analyze → Follow'],a:0,why:'Dion recommends Protocol Hierarchy as a fast overview before narrowing with filters.'},
+ {q:'Which Wireshark statistics view is best for quickly seeing who is communicating with whom?',opts:['Statistics → Conversations','Packet Bytes','Export Objects','Protocol Preferences'],a:0,why:'Conversations summarizes communicating endpoint pairs and is useful for spotting unusual relationships.'},
+ {q:'A capture has an abnormally high percentage of DNS traffic. What investigative possibility does Dion specifically call out?',opts:['DNS tunneling','ARP poisoning is confirmed','TLS certificate pinning','A failed NTP sync'],a:0,why:'A disproportionate amount of DNS can be a tunneling clue, especially when paired with long/encoded-looking queries or unusual query volume.'},
+ {q:'Which Wireshark feature can extract transferred files from protocols such as HTTP, SMB, or FTP?',opts:['File → Export Objects','Follow TCP Stream only','Statistics → Conversations','Packet Details → Reassemble Header'],a:0,why:'Export Objects extracts transferred files for further analysis, such as VirusTotal or sandbox submission.'},
+ {q:'You see the hex bytes 4d 5a at the beginning of transferred content. What does Dion want you to recognize?',opts:['The MZ signature of a Windows executable','A ZIP local-file header','A DNS message header','An ELF executable signature'],a:0,why:'MZ (hex 4d 5a) is the classic Windows PE executable signature.'},
+ {q:'An HTTP response includes Content-Type: application/octet-stream. What is the best immediate interpretation?',opts:['The transfer contains generic binary data.','The traffic is definitely encrypted TLS.','The payload must be plain-text HTML.','The packet is necessarily malformed.'],a:0,why:'application/octet-stream is a generic binary MIME type. It is a cue to inspect or export the object, not proof of maliciousness by itself.'},
+ {q:'Which Wireshark pane shows the decoded protocol layers and fields for the selected packet?',opts:['Packet Details','Packet List','Packet Bytes','Conversations'],a:0,why:'Packet Details is the per-layer field breakdown. Packet List is the row summary; Packet Bytes is the raw hex/ASCII view.'},
+ {q:'Which pane is most directly associated with raw hex and ASCII?',opts:['Packet Bytes','Packet Details','Packet List','Protocol Hierarchy'],a:0,why:'Packet Bytes displays the raw bytes, commonly in hex alongside ASCII.'},
+ {q:'Dion connects Wireshark hunting for C2 hidden in web or DNS traffic most directly with which MITRE ATT&CK technique?',opts:['T1071 — Application Layer Protocol','T1059 — Command and Scripting Interpreter','T1027 — Obfuscated Files or Information','T1070 — Indicator Removal'],a:0,why:'His Wireshark exam note explicitly associates this use case with T1071 Application Layer Protocol.'}
+];
+
+const FILTER_RECOGNITION=CORE_FILTERS.map(f=>{
+ const distractors={
+  dns:['Show all DNS traffic.','Show only TCP port 53 traffic.','Show HTTP requests containing the word dns.','Capture only DNS before collection begins.'],
+  'http-request':['Show HTTP request packets.','Show all packets on TCP port 80, including non-HTTP traffic.','Show only HTTP responses.','Show only POST requests.'],
+  'http-post':['Show HTTP POST requests.','Show every HTTP request regardless of method.','Show packets whose payload merely contains the text POST.','Show DNS POST records.'],
+  'ip-any':['Show packets where 192.168.1.10 is source or destination.','Show packets sourced from 192.168.1.10 only.','Show packets destined to 192.168.1.10 only.','Capture traffic before collection using BPF host syntax.'],
+  'tcp-port':['Show TCP packets where 443 is source or destination port.','Show destination TCP port 443 only.','Show UDP port 443.','Show all IP traffic to host 443.'],
+  'syn-noack':['Show initial TCP SYNs where SYN=1 and ACK=0.','Show SYN-ACK replies.','Show every packet with the ACK flag set.','Show TCP resets only.']
+ };
+ return {q:'What does this Wireshark display filter isolate?',pre:f.answer,opts:distractors[f.id],a:0,why:f.why};
+});
+
+const MIXED_MCQS=[
+ ...FILTER_RECOGNITION,
+ ...CAPTURE_MCQS,
+ ...FEATURE_MCQS,
+ {q:'Which tool is the BEST fit when you need interactive GUI-based deep inspection of an existing PCAP and want to follow streams?',opts:['Wireshark','tcpdump','tshark','Zeek'],a:0,why:'Wireshark is the GUI deep-analysis choice. tcpdump is the headless/CLI capture choice, tshark is command-line Wireshark, and Zeek emphasizes structured network metadata/logging.'},
+ {q:'A headless Linux server needs a lightweight command-line packet capture that will later be opened in Wireshark. Which tool?',opts:['tcpdump','Wireshark GUI','Maltego','Nessus'],a:0,why:'Dion gives the workflow directly: capture remotely with tcpdump, transfer the PCAP, then analyze it in Wireshark.'}
+];
+
+const COLOR_RULES=[
+ {id:'tcp',name:'TCP',bg:'#e7e5ff',fg:'#12272e',meaning:'General TCP traffic — light lavender/purple default family.'},
+ {id:'udp',name:'UDP',bg:'#daf0ff',fg:'#12272e',meaning:'General UDP traffic — light blue default family.'},
+ {id:'http',name:'HTTP',bg:'#e4ffc7',fg:'#12272e',meaning:'HTTP-family traffic (the built-in rule also includes TCP port 80) — light green default family.'},
+ {id:'arp',name:'ARP',bg:'#faf0d7',fg:'#12272e',meaning:'ARP traffic — pale tan/yellow default family.'},
+ {id:'icmp',name:'ICMP / ICMPv6',bg:'#fce0ff',fg:'#12272e',meaning:'ICMP traffic — pale pink/lilac default family.'},
+ {id:'synfin',name:'TCP SYN/FIN',bg:'#a0a0a0',fg:'#12272e',meaning:'Packets matching the default TCP SYN/FIN rule — gray family.'},
+ {id:'badtcp',name:'Bad TCP / Checksum Errors',bg:'#12272e',fg:'#f78787',meaning:'Diagnostic/error rule family — dark row with red/pink warning text.'},
+ {id:'rst',name:'TCP RST',bg:'#a40000',fg:'#fffc9c',meaning:'TCP reset packets — dark red warning family with contrasting text.'}
+];
+
+const DESCS={
+ build:'Assemble the filter in the correct order. The token pool contains every required word/value/operator, but not the answer order.',
+ type:'Harder recall: type the working filter yourself. The shuffled token pool acts as a limited cheat sheet without showing the order.',
+ recognize:'Read a Wireshark display filter and identify exactly what traffic it isolates.',
+ capture:'Burn in the high-value distinction between BPF capture filters and Wireshark display filters.',
+ colors:'Match major built-in default coloring-rule families to their packet colors. Exact shades can change with theme/profile; rules are customizable.',
+ features:'Dion-derived Wireshark workflow and packet-analysis recognition: panes, streams, statistics, exported objects, and packet clues.',
+ mixed:'Mixed exam-style recognition across filters, workflow, capture/display distinctions, and Wireshark analysis cues.'
+};
+
+let currentQuiz='build';
+let filterCycle=[];let filterPos=0;let currentFilter=null;let assembled=[];let poolTokens=[];let draggedTokenId=null;let selectedTokenId=null;
+let mcqCycle=[];let mcqPos=0;let currentMcq=null;let selectedOpt=null;
+let colorSelectedId=null;let colorDraggedId=null;
+
+function setScore(text){$('#scorePill').textContent=text;}
+function tierBadge(f){return f.tier==='core'?'<span class="badge core">Dion core</span>':'<span class="badge supp">Useful supplement</span>';}
+function refillFilterCycle(){filterCycle=[...shuffle([...CORE_FILTERS]),...shuffle([...EXT_FILTERS])];filterPos=0;}
+function nextFilter(){if(!filterCycle.length||filterPos>=filterCycle.length)refillFilterCycle();currentFilter=filterCycle[filterPos++];assembled=[];selectedTokenId=null;poolTokens=shuffle(currentFilter.tokens.map((t,i)=>({id:currentFilter.id+'-'+i+'-'+Math.random().toString(36).slice(2),text:t})));}
+function normalizedCanonical(s){return String(s).trim().replace(/\s+/g,' ').replace(/\s*==\s*/g,' == ').trim();}
+function alternateNormalize(s){return String(s).trim().replace(/\s+/g,' ').replace(/\beq\b/gi,'==').replace(/&&/g,'and').replace(/\s*==\s*/g,' == ').trim();}
+function tokenTextById(id){const t=[...poolTokens,...assembled].find(x=>x.id===id);return t?t.text:'';}
+
+function render(){
+ currentQuiz=$('#quizSelect').value;$('#quizDesc').textContent=DESCS[currentQuiz];setScore('Not graded');
+ if(currentQuiz==='build')renderBuild(true);
+ else if(currentQuiz==='type')renderType(true);
+ else if(currentQuiz==='recognize')renderMcqMode(FILTER_RECOGNITION,'Display-filter recognition');
+ else if(currentQuiz==='capture')renderMcqMode(CAPTURE_MCQS,'Capture vs display filters');
+ else if(currentQuiz==='colors')renderColors();
+ else if(currentQuiz==='features')renderMcqMode(FEATURE_MCQS,'Wireshark analysis features');
+ else renderMcqMode(MIXED_MCQS,'Mixed CySA+ Wireshark drill');
+}
+
+function renderBuild(newQuestion=false){
+ if(newQuestion||!currentFilter)nextFilter();
+ $('#quizHost').innerHTML=`
+ <div class="filter-workspace">
+  <div class="stage">
+   <h2>Build the display filter</h2>
+   <p class="hint">Drag or click tokens into the filter line in the order Wireshark expects. Click a placed token to return it. You may grade, correct, and re-grade without resetting.</p>
+   <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)} The pool contains one of each required item, except a token appears more than once when the filter actually repeats it.</div></div>
+   <div class="filter-line" id="filterLine" aria-label="assembled filter"></div>
+   <div class="filter-preview" id="filterPreview"><b>Current:</b> <span></span></div>
+   <div class="controls"><button class="primary" id="buildCheck">Score / Re-score</button><button id="buildNew">New Filter</button><button id="buildClear">Clear Line</button><button id="buildShuffle">Shuffle Pool</button></div>
+   <div class="feedback" id="buildFeedback"></div>
+  </div>
+  <div class="token-tray"><div class="tray-title">Filter Token Pool</div><div class="tray-help">Shuffled on purpose. Click to append, or drag into the line. This is the “cheat sheet without the answer.”</div><div class="token-pool" id="tokenPool"></div></div>
+ </div>`;
+ renderBuildState();bindBuild();
+}
+function renderBuildState(){
+ const line=$('#filterLine'),pool=$('#tokenPool');if(!line||!pool)return;
+ line.innerHTML=assembled.length?assembled.map(t=>`<div class="token" draggable="true" data-id="${t.id}" data-home="line" title="Click to return to pool">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">Drop/click tokens here in filter order…</span>';
+ pool.innerHTML=poolTokens.length?poolTokens.map(t=>`<div class="token${selectedTokenId===t.id?' selected':''}" draggable="true" data-id="${t.id}" data-home="pool">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">All tokens are in the filter line.</span>';
+ $('#filterPreview span').textContent=assembled.map(x=>x.text).join(' ');
+ bindBuildTokens();
+}
+function moveToLine(id,beforeId=null){
+ let idx=poolTokens.findIndex(x=>x.id===id);let item;
+ if(idx>=0)item=poolTokens.splice(idx,1)[0];else{idx=assembled.findIndex(x=>x.id===id);if(idx<0)return;item=assembled.splice(idx,1)[0];}
+ if(beforeId){const b=assembled.findIndex(x=>x.id===beforeId);b>=0?assembled.splice(b,0,item):assembled.push(item);}else assembled.push(item);
+ clearBuildGrade();renderBuildState();
+}
+function moveToPool(id){const idx=assembled.findIndex(x=>x.id===id);if(idx<0)return;poolTokens.push(assembled.splice(idx,1)[0]);selectedTokenId=null;clearBuildGrade();renderBuildState();}
+function bindBuildTokens(){
+ $$('.token','#quizHost').forEach(el=>{
+  el.addEventListener('dragstart',e=>{draggedTokenId=el.dataset.id;e.dataTransfer.setData('text/plain',draggedTokenId);});
+  el.addEventListener('click',()=>{if(el.dataset.home==='line')moveToPool(el.dataset.id);else moveToLine(el.dataset.id);});
+  if(el.dataset.home==='line'){
+   el.addEventListener('dragover',e=>{e.preventDefault();});
+   el.addEventListener('drop',e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id&&id!==el.dataset.id)moveToLine(id,el.dataset.id);});
+  }
+ });
+}
+function bindBuild(){
+ const line=$('#filterLine'),pool=$('#tokenPool');
+ line.addEventListener('dragover',e=>{e.preventDefault();line.classList.add('over')});line.addEventListener('dragleave',()=>line.classList.remove('over'));line.addEventListener('drop',e=>{e.preventDefault();line.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id)moveToLine(id);});
+ pool.addEventListener('dragover',e=>{e.preventDefault();pool.classList.add('over')});pool.addEventListener('dragleave',()=>pool.classList.remove('over'));pool.addEventListener('drop',e=>{e.preventDefault();pool.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id)moveToPool(id);});
+ $('#buildCheck').onclick=gradeBuild;$('#buildNew').onclick=()=>{nextFilter();renderBuild(false)};$('#buildClear').onclick=()=>{poolTokens=shuffle([...poolTokens,...assembled]);assembled=[];clearBuildGrade();renderBuildState()};$('#buildShuffle').onclick=()=>{poolTokens=shuffle(poolTokens);renderBuildState()};
+}
+function clearBuildGrade(){const l=$('#filterLine'),f=$('#buildFeedback');if(l)l.classList.remove('correct','wrong');if(f)f.classList.remove('show');setScore('Not graded');}
+function gradeBuild(){
+ const got=normalizedCanonical(assembled.map(x=>x.text).join(' '));const want=normalizedCanonical(currentFilter.answer);const ok=got===want;const line=$('#filterLine');line.classList.remove('correct','wrong');line.classList.add(ok?'correct':'wrong');
+ const f=$('#buildFeedback');f.classList.add('show');f.innerHTML=ok?`<div class="scoreline">✓ Correct</div>${escapeHtml(currentFilter.why)}`:`<div class="scoreline">Not yet.</div>Your current line is <code>${escapeHtml(got||'(empty)')}</code>. Keep rearranging it and re-score. The answer is not revealed until you choose the write-in feedback route or consult the cheat panel.`;setScore(ok?'1 / 1':'0 / 1');
+}
+
+function renderType(newQuestion=false){
+ if(newQuestion||!currentFilter)nextFilter();
+ $('#quizHost').innerHTML=`
+ <div class="filter-workspace">
+  <div class="stage">
+   <h2>Type the working Wireshark display filter</h2>
+   <p class="hint">Use the pool as a syntax cheat sheet, but type the filter yourself. Canonical Dion syntax earns full credit; technically valid common aliases are flagged separately rather than called wrong.</p>
+   <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)}</div></div>
+   <input class="type-input" id="filterInput" type="text" spellcheck="false" autocomplete="off" placeholder="Type Wireshark display filter…">
+   <div class="controls"><button class="primary" id="typeCheck">Score / Re-score</button><button id="typeNew">New Filter</button><button id="typeClear">Clear</button></div>
+   <div class="feedback" id="typeFeedback"></div>
+  </div>
+  <div class="token-tray"><div class="tray-title">Filter Token Pool</div><div class="tray-help">Every item required for this answer is present, shuffled. Repeated syntax appears only when the answer repeats it.</div><div class="token-pool">${shuffle(currentFilter.tokens).map((t,i)=>`<div class="token" style="cursor:default" data-static="1">${escapeHtml(t)}</div>`).join('')}</div></div>
+ </div>`;
+ $('#typeCheck').onclick=gradeType;$('#typeNew').onclick=()=>{nextFilter();renderType(false)};$('#typeClear').onclick=()=>{const i=$('#filterInput');i.value='';i.className='type-input';$('#typeFeedback').classList.remove('show');setScore('Not graded');i.focus()};$('#filterInput').addEventListener('keydown',e=>{if(e.key==='Enter')gradeType()});$('#filterInput').focus();
+}
+function gradeType(){
+ const input=$('#filterInput'),raw=input.value,got=normalizedCanonical(raw),want=normalizedCanonical(currentFilter.answer);input.className='type-input';const f=$('#typeFeedback');f.classList.add('show');
+ if(got===want){input.classList.add('correct');f.innerHTML=`<div class="scoreline">✓ Canonical answer correct</div><code>${escapeHtml(currentFilter.answer)}</code><br>${escapeHtml(currentFilter.why)}`;setScore('1 / 1');return;}
+ if(alternateNormalize(raw)===want){input.classList.add('alternate');f.innerHTML=`<div class="scoreline">Technically valid/common equivalent, but not the canonical Dion form.</div>Your entry should work as an equivalent expression. For exam recall, burn in: <code>${escapeHtml(currentFilter.answer)}</code>`;setScore('Valid alt.');return;}
+ input.classList.add('wrong');f.innerHTML=`<div class="scoreline">✗ Not a match</div>Canonical filter: <code>${escapeHtml(currentFilter.answer)}</code><br>${escapeHtml(currentFilter.why)}`;setScore('0 / 1');
+}
+
+function renderMcqMode(bank,label){
+ mcqCycle=shuffle(bank.map((q,i)=>({...q,_id:i})));mcqPos=0;currentMcq=null;selectedOpt=null;
+ $('#quizHost').innerHTML=`<h2>${escapeHtml(label)}</h2><p class="hint">Answer, grade, read the discriminator, then move on. Options are shuffled to prevent position memorization.</p><div id="mcqHost"></div>`;nextMcq();
+}
+function nextMcq(){if(mcqPos>=mcqCycle.length){mcqCycle=shuffle(mcqCycle);mcqPos=0;}currentMcq=mcqCycle[mcqPos++];selectedOpt=null;renderMcqQuestion();}
+function renderMcqQuestion(){
+ const indexed=currentMcq.opts.map((text,i)=>({text,correct:i===currentMcq.a}));const opts=shuffle(indexed);
+ $('#mcqHost').innerHTML=`<div class="mcq-card"><div class="mcq-q">${escapeHtml(currentMcq.q)}</div>${currentMcq.pre?`<div class="mcq-filter">${escapeHtml(currentMcq.pre)}</div>`:''}<div class="opts">${opts.map((o,i)=>`<button class="opt" data-correct="${o.correct?'1':'0'}" data-index="${i}">${escapeHtml(o.text)}</button>`).join('')}</div><div class="controls"><button class="primary" id="mcqCheck">Score / Re-score</button><button id="mcqNext">New Question</button></div><div class="feedback" id="mcqFeedback"></div></div>`;
+ $$('.opt','#mcqHost').forEach(o=>o.onclick=()=>{selectedOpt=o;$$('.opt','#mcqHost').forEach(x=>x.classList.remove('sel','wrong','correct'));o.classList.add('sel');$('#mcqFeedback').classList.remove('show');setScore('Not graded')});$('#mcqCheck').onclick=gradeMcq;$('#mcqNext').onclick=nextMcq;
+}
+function gradeMcq(){
+ if(!selectedOpt){const f=$('#mcqFeedback');f.classList.add('show');f.innerHTML='Select an answer first.';return;}
+ $$('.opt','#mcqHost').forEach(o=>{o.classList.remove('wrong','correct');if(o.dataset.correct==='1')o.classList.add('correct')});const ok=selectedOpt.dataset.correct==='1';if(!ok)selectedOpt.classList.add('wrong');const f=$('#mcqFeedback');f.classList.add('show');f.innerHTML=`<div class="scoreline">${ok?'✓ Correct':'✗ Incorrect'}</div>${escapeHtml(currentMcq.why)}`;setScore(ok?'1 / 1':'0 / 1');
+}
+
+function renderColors(){
+ colorSelectedId=null;
+ $('#quizHost').innerHTML=`<h2>Match the default Wireshark color family to the rule</h2><p class="hint">These are built-in default-rule colors, not immutable protocol laws. Profiles, themes, and Coloring Rules can change them. Drag a label onto a swatch, or click a label then click a swatch.</p><div class="callout warn"><b>Important:</b> Wireshark evaluates coloring rules top-down; the first matching rule wins. A packet can match multiple filters but display using the first applicable coloring rule.</div><div class="color-layout"><div class="color-grid" id="colorGrid"></div><div class="color-tray"><div class="tray-title">Rule Labels</div><div class="tray-help">Shuffled. Click a placed label to return it to the bank.</div><div class="color-bank" id="colorBank"></div></div></div><div class="controls"><button class="primary" id="colorCheck">Score / Re-score</button><button id="colorReset">Reset Placements</button><button id="colorShuffle">Shuffle Labels</button></div><div class="feedback" id="colorFeedback"></div>`;
+ renderColorState(COLOR_RULES.map(x=>x.id));bindColorButtons();
+}
+let colorPool=[];let colorPlacements={};
+function renderColorState(resetIds=null){
+ if(resetIds){colorPool=shuffle([...resetIds]);colorPlacements={};}
+ const grid=$('#colorGrid'),bank=$('#colorBank');
+ grid.innerHTML=COLOR_RULES.map(r=>`<div class="color-zone" data-target="${r.id}"><div class="swatch" style="background:${r.bg};color:${r.fg}">default-rule sample</div><div class="color-slot">${colorPlacements[r.id]?colorChipHtml(colorPlacements[r.id],true):'<span class="small">Drop rule label here</span>'}</div></div>`).join('');
+ bank.innerHTML=colorPool.map(id=>colorChipHtml(id,false)).join('');bindColorDnD();
+}
+function colorChipHtml(id,placed){const r=COLOR_RULES.find(x=>x.id===id);return `<div class="color-chip${colorSelectedId===id?' selected':''}" draggable="true" data-id="${id}" data-placed="${placed?'1':'0'}">${escapeHtml(r.name)}</div>`;}
+function removeColorPlacement(id){const target=Object.keys(colorPlacements).find(k=>colorPlacements[k]===id);if(target){delete colorPlacements[target];colorPool.push(id);}colorSelectedId=null;clearColorGrade();renderColorState();}
+function placeColor(id,target){
+ const oldTarget=Object.keys(colorPlacements).find(k=>colorPlacements[k]===id);if(oldTarget)delete colorPlacements[oldTarget];else colorPool=colorPool.filter(x=>x!==id);
+ if(colorPlacements[target])colorPool.push(colorPlacements[target]);colorPlacements[target]=id;colorSelectedId=null;clearColorGrade();renderColorState();
+}
+function bindColorDnD(){
+ $$('.color-chip','#quizHost').forEach(c=>{c.addEventListener('dragstart',e=>{colorDraggedId=c.dataset.id;e.dataTransfer.setData('text/plain',c.dataset.id)});c.addEventListener('click',()=>{if(c.dataset.placed==='1')removeColorPlacement(c.dataset.id);else{colorSelectedId=colorSelectedId===c.dataset.id?null:c.dataset.id;renderColorState()}})});
+ $$('.color-zone','#quizHost').forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||colorDraggedId;if(id)placeColor(id,z.dataset.target)});z.addEventListener('click',e=>{if(colorSelectedId&&!e.target.closest('.color-chip'))placeColor(colorSelectedId,z.dataset.target)})});
+}
+function bindColorButtons(){$('#colorCheck').onclick=gradeColors;$('#colorReset').onclick=()=>renderColorState(COLOR_RULES.map(x=>x.id));$('#colorShuffle').onclick=()=>{colorPool=shuffle(colorPool);renderColorState()};}
+function clearColorGrade(){$$('.color-zone','#quizHost').forEach(z=>z.classList.remove('correct','wrong'));$('#colorFeedback')?.classList.remove('show');setScore('Not graded');}
+function gradeColors(){let correct=0;COLOR_RULES.forEach(r=>{const z=$(`.color-zone[data-target="${r.id}"]`);z.classList.remove('correct','wrong');if(colorPlacements[r.id]===r.id){z.classList.add('correct');correct++;}else if(colorPlacements[r.id])z.classList.add('wrong')});const f=$('#colorFeedback');f.classList.add('show');f.innerHTML=`<div class="scoreline">${correct} of ${COLOR_RULES.length} correctly matched.</div>${correct===COLOR_RULES.length?'Excellent. Remember: the colors are defaults and can be changed.':'Move any incorrect labels and re-score; the board remains editable.'}`;setScore(`${correct} / ${COLOR_RULES.length}`);}
+
+$('#quizSelect').addEventListener('change',()=>{currentFilter=null;render()});
+$('#cheatBtn').onclick=()=>{document.body.classList.toggle('hide-cheats');$('#cheatBtn').textContent=document.body.classList.contains('hide-cheats')?'📚 Show Cheats':'📚 Hide Cheats'};
+$('#darkBtn').onclick=()=>{document.body.classList.toggle('dark');localStorage.setItem('cysa-wireshark-dark',document.body.classList.contains('dark')?'1':'0');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark'};
+$('#resetBtn').onclick=()=>{currentFilter=null;setScore('Not graded');render()};
+if(localStorage.getItem('cysa-wireshark-dark')==='1'){document.body.classList.add('dark');$('#darkBtn').textContent='☀️ Light';}
+render();
+</script>
+</body>
+</html>
