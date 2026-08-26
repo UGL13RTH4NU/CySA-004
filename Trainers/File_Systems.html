@@ -49,6 +49,11 @@ button.danger{border-color:rgba(192,57,43,.45);color:var(--bad)}
 @media(max-width:760px){.quiz-picker{grid-template-columns:1fr}.quiz-picker label{display:none}}
 .topline{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px}
 .progress-wrap{display:flex;gap:6px;flex-wrap:wrap}
+.direction-control{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 10px;padding:8px 10px;background:var(--neutral);border:1px solid var(--border);border-radius:9px}
+.direction-control label{font-weight:700;color:var(--accent);font-size:.86rem}
+.direction-control select{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 9px;min-width:190px}
+.direction-control .direction-note{font-size:.8rem;color:var(--muted);flex:1;min-width:220px}
+.dropzone.reverse-target .z-title{color:var(--text);font-weight:600;line-height:1.34}
 .hint{font-size:.86rem;color:var(--muted);margin:5px 0 10px}
 .callout{background:var(--neutral);border-left:3px solid var(--accent);border-radius:6px;padding:8px 10px;font-size:.86rem;margin:8px 0}
 .callout.warn{background:var(--warnbg);border-left-color:var(--orange)}
@@ -127,9 +132,18 @@ code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;backgr
       </div>
     </div>
 
+    <div class="direction-control" id="directionControl">
+      <label for="directionSelect">Direction:</label>
+      <select id="directionSelect">
+        <option value="forward" selected>Definition → Term</option>
+        <option value="reverse">Term → Definition</option>
+      </select>
+      <span class="direction-note" id="directionNote">Definitions are the movable answers; terms are the destinations.</span>
+    </div>
+
     <div id="matchQuiz">
-      <h2 id="matchPrompt">Drag each definition onto the correct term.</h2>
-      <p class="hint">Each drop zone accepts one definition. Drag normally, or tap/click a definition once to select it and then tap/click its destination. Tap/click a placed chip to return it to the pool. You may score at any time, then keep changing answers and score again.</p>
+      <h2 id="matchPrompt">Place each definition onto the correct term.</h2>
+      <p class="hint" id="matchHint">Each destination accepts one definition. Drag normally, or tap/click a definition once to select it and then tap/click its destination. Tap/click a placed chip to return it to the pool. You may score at any time, then keep changing answers and score again.</p>
       <div class="match-grid" id="matchZones"></div>
       <div class="chipbank" id="matchBank"><div class="bank-label">Definition pool</div></div>
       <div class="controls">
@@ -407,25 +421,37 @@ function buildBucketItems(){
 const BUCKET_ITEMS=buildBucketItems();
 const BUCKET_SET={section:'Mixed',title:'Cross-Platform Classification Buckets',batch:8,desc:'Classify terms by the Module 3 section/category in which they are taught. Visible buckets always have at least one correct match.',items:BUCKET_ITEMS};
 
-const state={quiz:'winfs',current:[],checks:0,lastScore:0,lastTotal:0};
+const state={quiz:'winfs',direction:'forward',current:[],checks:0,lastScore:0,lastTotal:0};
 const STORAGE_KEY='cysa004-m3-filesystems-progress-v1';
 let progress=loadProgress();
 let selectedChip=null;
 
 function validIds(quiz){const set=quiz==='buckets'?BUCKET_SET:SETS[quiz];return new Set(set.items.map(x=>x.id));}
+function progressKey(quiz=state.quiz,direction=state.direction){
+  if(quiz==='buckets') return 'buckets';
+  return direction==='reverse'?`${quiz}-reverse`:quiz; // forward retains the original key so existing coverage is preserved
+}
 function loadProgress(){
   try{
     const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
     const clean={};
-    for(const q of [...Object.keys(SETS),'buckets']){
-      const valid=validIds(q); clean[q]=(Array.isArray(raw[q])?raw[q]:[]).filter(id=>valid.has(id));
+    for(const q of Object.keys(SETS)){
+      const valid=validIds(q);
+      clean[q]=(Array.isArray(raw[q])?raw[q]:[]).filter(id=>valid.has(id));
+      clean[`${q}-reverse`]=(Array.isArray(raw[`${q}-reverse`])?raw[`${q}-reverse`]:[]).filter(id=>valid.has(id));
     }
+    const bucketValid=validIds('buckets');
+    clean.buckets=(Array.isArray(raw.buckets)?raw.buckets:[]).filter(id=>bucketValid.has(id));
     return clean;
-  }catch(e){return Object.fromEntries([...Object.keys(SETS),'buckets'].map(q=>[q,[]]));}
+  }catch(e){
+    const clean={buckets:[]};
+    for(const q of Object.keys(SETS)){clean[q]=[];clean[`${q}-reverse`]=[];}
+    return clean;
+  }
 }
 function saveProgress(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(progress));}catch(e){/* local file browsers may restrict storage */}}
 function currentSetDef(){return state.quiz==='buckets'?BUCKET_SET:SETS[state.quiz];}
-function currentSeen(){return new Set(progress[state.quiz]||[]);}
+function currentSeen(){return new Set(progress[progressKey()]||[]);}
 
 function chooseDiverse(items,n,keyFn){
   if(items.length<=n) return shuffle(items);
@@ -456,11 +482,11 @@ function nextSetItems(){
     chosen=shuffle(chosen);
   }
   for(const x of chosen) seen.add(x.id);
-  progress[state.quiz]=[...seen]; saveProgress();
+  progress[progressKey()]=[...seen]; saveProgress();
   return chosen;
 }
 
-function resetCoverage(){progress[state.quiz]=[];saveProgress();state.current=[];state.lastScore=0;state.lastTotal=0;updateHeader();newSet();}
+function resetCoverage(){progress[progressKey()]=[];saveProgress();state.current=[];state.lastScore=0;state.lastTotal=0;updateHeader();newSet();}
 function resetCheckCounter(){state.checks=0;state.lastScore=0;state.lastTotal=0;updateHeader();}
 function updateHeader(){
   const set=currentSetDef(), seen=currentSeen();
@@ -471,6 +497,15 @@ function updateHeader(){
   $('#sectionBadge').textContent=set.section==='Mixed'?'Mixed drill':`Section ${set.section}`;
   $('#quizTitle').textContent=set.title;
   $('#quizDesc').textContent=set.desc;
+}
+function updateDirectionUI(){
+  const reverse=state.direction==='reverse';
+  $('#directionSelect').value=state.direction;
+  $('#directionNote').textContent=reverse?'Terms are the movable answers; definitions are the destinations.':'Definitions are the movable answers; terms are the destinations.';
+  $('#matchPrompt').textContent=reverse?'Place each term onto the correct definition.':'Place each definition onto the correct term.';
+  $('#matchHint').textContent=reverse
+    ?'Each destination accepts one term. Drag normally, or tap/click a term once to select it and then tap/click its definition. Tap/click a placed chip to return it to the pool. You may score at any time, then keep changing answers and score again.'
+    :'Each destination accepts one definition. Drag normally, or tap/click a definition once to select it and then tap/click its term. Tap/click a placed chip to return it to the pool. You may score at any time, then keep changing answers and score again.';
 }
 
 function getBank(mode){return mode==='match'?$('#matchBank'):$('#bucketBank');}
@@ -565,13 +600,20 @@ function bindBucket(bucket){
 }
 
 function buildMatch(items){
-  const zones=$('#matchZones'),bank=$('#matchBank'); zones.innerHTML=''; bank.innerHTML='<div class="bank-label">Definition pool</div>';
+  const reverse=state.direction==='reverse';
+  const zones=$('#matchZones'),bank=$('#matchBank');
+  zones.innerHTML='';
+  bank.innerHTML=`<div class="bank-label">${reverse?'Term pool':'Definition pool'}</div>`;
   for(const it of items){
-    const z=document.createElement('div');z.className='dropzone';z.dataset.answer=it.id;
-    z.innerHTML=`<div class="z-title"><span>${escapeHtml(it.term)}</span><small>drop / tap here</small></div>`;
+    const z=document.createElement('div');z.className='dropzone'+(reverse?' reverse-target':'');z.dataset.answer=it.id;
+    const targetText=reverse?it.def:it.term;
+    z.innerHTML=`<div class="z-title"><span>${escapeHtml(targetText)}</span><small>drop / tap here</small></div>`;
     bindMatchZone(z);zones.appendChild(z);
   }
-  for(const it of shuffle(items)) bank.appendChild(mkChip({text:it.def,itemId:it.id,answer:it.id,mode:'match',extraClass:'def-chip'}));
+  for(const it of shuffle(items)){
+    const chipText=reverse?it.term:it.def;
+    bank.appendChild(mkChip({text:chipText,itemId:it.id,answer:it.id,mode:'match',extraClass:reverse?'':'def-chip'}));
+  }
   $('#matchFeedback').classList.remove('show');
 }
 function buildBuckets(items){
@@ -595,7 +637,7 @@ function scoreMatch(){
   $$('#matchZones .dropzone').forEach(z=>{
     const chip=z.querySelector('.chip'); if(!chip)return; placed++;
     const ok=chip.dataset.answer===z.dataset.answer;chip.classList.toggle('correct',ok);chip.classList.toggle('wrong',!ok);
-    if(ok) right++; else wrong.push(z.querySelector('.z-title span').textContent);
+    if(ok) right++; else wrong.push(state.direction==='reverse'?chip.textContent:z.querySelector('.z-title span').textContent);
   });
   $$('#matchBank .chip').forEach(c=>c.classList.remove('correct','wrong'));
   state.checks++;state.lastScore=right;state.lastTotal=state.current.length;updateHeader();
@@ -623,12 +665,20 @@ function setCheatFocus(q){
 }
 function switchQuiz(q){
   state.quiz=q;state.current=[];state.lastScore=0;state.lastTotal=0;
-  const bucket=q==='buckets';$('#matchQuiz').classList.toggle('hidden',bucket);$('#bucketQuiz').classList.toggle('hidden',!bucket);
-  setCheatFocus(q);newSet();
+  const bucket=q==='buckets';
+  $('#matchQuiz').classList.toggle('hidden',bucket);$('#bucketQuiz').classList.toggle('hidden',!bucket);
+  $('#directionControl').classList.toggle('hidden',bucket);
+  updateDirectionUI();setCheatFocus(q);newSet();
+}
+function switchDirection(direction){
+  if(!['forward','reverse'].includes(direction)||state.quiz==='buckets')return;
+  clearSelection();state.direction=direction;state.current=[];state.lastScore=0;state.lastTotal=0;
+  updateDirectionUI();newSet();
 }
 
 bindBank($('#matchBank'),'match');bindBank($('#bucketBank'),'bucket');
 $('#quizSelect').addEventListener('change',e=>switchQuiz(e.target.value));
+$('#directionSelect').addEventListener('change',e=>switchDirection(e.target.value));
 $('#matchCheck').addEventListener('click',scoreMatch);$('#bucketCheck').addEventListener('click',scoreBuckets);
 $('#matchNew').addEventListener('click',newSet);$('#bucketNew').addEventListener('click',newSet);
 $('#matchShuffle').addEventListener('click',()=>shuffleBank($('#matchBank')));$('#bucketShuffle').addEventListener('click',()=>shuffleBank($('#bucketBank')));
