@@ -56,16 +56,16 @@ button.danger{border-color:rgba(192,57,43,.45);color:var(--bad)}
 .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:10px}
 .dropzone,.bucket{min-height:92px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);transition:background .15s ease,border-color .15s ease}
-.dropzone.over,.bucket.over,.chipbank.over{background:var(--neutral);border-color:var(--accent)}
+.dropzone.over,.bucket.over,.chipbank.over,.dropzone.tap-ready,.bucket.tap-ready{background:var(--neutral);border-color:var(--accent)}
 .z-title,.bucket-title{font-weight:700;color:var(--accent);font-size:.9rem;display:flex;gap:8px;justify-content:space-between;align-items:flex-start;margin-bottom:6px;min-width:0}
 .z-title span,.bucket-title span{min-width:0;overflow-wrap:anywhere}
 .z-title small,.bucket-title small{font-weight:400;color:var(--muted);font-size:.75rem}
 .bucket-title{color:var(--purple)}
 .chipbank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:var(--chip);border:1px dashed var(--dash);border-radius:10px;min-height:64px;margin-top:12px;transition:background .15s ease,border-color .15s ease}
 .bank-label{width:100%;font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.055em;margin-bottom:2px}
-.chip{padding:7px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--border);cursor:grab;user-select:none;font-size:.87rem;max-width:100%;overflow-wrap:anywhere}
+.chip{padding:7px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--border);cursor:grab;user-select:none;font-size:.87rem;max-width:100%;overflow-wrap:anywhere;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .chip.def-chip{border-radius:9px;line-height:1.34}
-.chip:active{cursor:grabbing}.chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}
+.chip:active{cursor:grabbing}.chip.selected{outline:2px solid var(--accent);outline-offset:1px;background:var(--neutral);cursor:pointer}.chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}
 .chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
 .feedback{display:none;margin-top:12px;padding:11px;border-radius:9px;background:var(--neutral);border:1px solid var(--border);font-size:.9rem}
 .feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}
@@ -129,7 +129,7 @@ code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;backgr
 
     <div id="matchQuiz">
       <h2 id="matchPrompt">Drag each definition onto the correct term.</h2>
-      <p class="hint">Each drop zone accepts one definition. Click a placed chip to return it to the pool, or drag it directly to another term. You may score at any time, then keep changing answers and score again.</p>
+      <p class="hint">Each drop zone accepts one definition. Drag normally, or tap/click a definition once to select it and then tap/click its destination. Tap/click a placed chip to return it to the pool. You may score at any time, then keep changing answers and score again.</p>
       <div class="match-grid" id="matchZones"></div>
       <div class="chipbank" id="matchBank"><div class="bank-label">Definition pool</div></div>
       <div class="controls">
@@ -143,7 +143,7 @@ code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;backgr
 
     <div id="bucketQuiz" class="hidden">
       <h2>Drag each term into its correct source-aligned bucket.</h2>
-      <p class="hint">Only buckets with at least one correct match in the current set are shown. This intentionally avoids empty “decoy” buckets while preserving classification practice.</p>
+      <p class="hint">Only buckets with at least one correct match in the current set are shown. This intentionally avoids empty “decoy” buckets while preserving classification practice. Drag normally, or tap/click a term once to select it and then tap/click its bucket. Tap/click a placed term to return it to the pool.</p>
       <div class="bucket-grid" id="bucketGrid"></div>
       <div class="chipbank" id="bucketBank"><div class="bank-label">Term pool</div></div>
       <div class="controls">
@@ -410,6 +410,7 @@ const BUCKET_SET={section:'Mixed',title:'Cross-Platform Classification Buckets',
 const state={quiz:'winfs',current:[],checks:0,lastScore:0,lastTotal:0};
 const STORAGE_KEY='cysa004-m3-filesystems-progress-v1';
 let progress=loadProgress();
+let selectedChip=null;
 
 function validIds(quiz){const set=quiz==='buckets'?BUCKET_SET:SETS[quiz];return new Set(set.items.map(x=>x.id));}
 function loadProgress(){
@@ -472,63 +473,102 @@ function updateHeader(){
   $('#quizDesc').textContent=set.desc;
 }
 
-function mkChip({text,itemId,answer,mode,extraClass=''}){
-  const chip=document.createElement('div');
-  chip.className='chip '+extraClass; chip.draggable=true; chip.textContent=text;
-  chip.dataset.itemId=itemId; chip.dataset.answer=answer; chip.dataset.mode=mode;
-  chip.id='chip-'+itemId+'-'+Math.random().toString(36).slice(2,7);
-  chip.addEventListener('dragstart',e=>{
-    e.dataTransfer.setData('text/id',chip.id); e.dataTransfer.setData('text/mode',mode); chip.style.opacity='.5';
-  });
-  chip.addEventListener('dragend',()=>chip.style.opacity='1');
-  chip.addEventListener('click',()=>{
-    const parent=chip.parentElement;
-    if(parent && (parent.classList.contains('dropzone')||parent.classList.contains('bucket'))){
-      getBank(mode).appendChild(chip); chip.classList.remove('correct','wrong'); clearFeedback(mode);
-    }
-  });
-  return chip;
-}
 function getBank(mode){return mode==='match'?$('#matchBank'):$('#bucketBank');}
 function clearFeedback(mode){
   const el=mode==='match'?$('#matchFeedback'):$('#bucketFeedback');
   el.classList.remove('show');
 }
+function cleanChip(chip){chip.classList.remove('correct','wrong');}
+function clearSelection(){
+  if(selectedChip){selectedChip.classList.remove('selected');selectedChip.setAttribute('aria-pressed','false');}
+  selectedChip=null;
+  $$('.dropzone.tap-ready,.bucket.tap-ready').forEach(x=>x.classList.remove('tap-ready'));
+}
+function selectChip(chip){
+  if(selectedChip===chip){clearSelection();return;}
+  clearSelection();
+  selectedChip=chip;chip.classList.add('selected');chip.setAttribute('aria-pressed','true');
+  const selector=chip.dataset.mode==='match'?'.dropzone':'.bucket';
+  $$(selector).forEach(x=>x.classList.add('tap-ready'));
+}
+function returnChipHome(chip){
+  const mode=chip.dataset.mode;
+  getBank(mode).appendChild(chip);cleanChip(chip);clearFeedback(mode);clearSelection();
+}
+function placeMatchChip(zone,chip){
+  if(!chip||chip.dataset.mode!=='match')return;
+  const existing=zone.querySelector('.chip');
+  if(existing&&existing!==chip){$('#matchBank').appendChild(existing);cleanChip(existing);}
+  zone.appendChild(chip);cleanChip(chip);clearFeedback('match');clearSelection();
+}
+function placeBucketChip(bucket,chip){
+  if(!chip||chip.dataset.mode!=='bucket')return;
+  bucket.appendChild(chip);cleanChip(chip);clearFeedback('bucket');clearSelection();
+}
+function mkChip({text,itemId,answer,mode,extraClass=''}){
+  const chip=document.createElement('div');
+  chip.className='chip '+extraClass;chip.draggable=true;chip.textContent=text;
+  chip.dataset.itemId=itemId;chip.dataset.answer=answer;chip.dataset.mode=mode;
+  chip.id='chip-'+itemId+'-'+Math.random().toString(36).slice(2,7);
+  chip.setAttribute('role','button');chip.setAttribute('tabindex','0');chip.setAttribute('aria-pressed','false');
+  chip.addEventListener('dragstart',e=>{
+    clearSelection();e.dataTransfer.setData('text/id',chip.id);e.dataTransfer.setData('text/mode',mode);chip.style.opacity='.5';
+  });
+  chip.addEventListener('dragend',()=>chip.style.opacity='1');
+  chip.addEventListener('click',e=>{
+    e.stopPropagation();
+    const parent=chip.parentElement;
+    if(parent&&(parent.classList.contains('dropzone')||parent.classList.contains('bucket'))){
+      if(selectedChip&&selectedChip!==chip&&selectedChip.dataset.mode===mode){
+        parent.classList.contains('dropzone')?placeMatchChip(parent,selectedChip):placeBucketChip(parent,selectedChip);
+      }else{returnChipHome(chip);}
+      return;
+    }
+    if(parent&&parent.classList.contains('chipbank'))selectChip(chip);
+  });
+  chip.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();chip.click();}
+  });
+  return chip;
+}
 function bindBank(bank,mode){
   bank.addEventListener('dragover',e=>{e.preventDefault();bank.classList.add('over');});
   bank.addEventListener('dragleave',()=>bank.classList.remove('over'));
   bank.addEventListener('drop',e=>{
-    e.preventDefault();bank.classList.remove('over'); if(e.dataTransfer.getData('text/mode')!==mode)return;
-    const chip=document.getElementById(e.dataTransfer.getData('text/id')); if(!chip)return;
-    bank.appendChild(chip);chip.classList.remove('correct','wrong');clearFeedback(mode);
+    e.preventDefault();bank.classList.remove('over');if(e.dataTransfer.getData('text/mode')!==mode)return;
+    const chip=document.getElementById(e.dataTransfer.getData('text/id'));if(!chip)return;
+    bank.appendChild(chip);cleanChip(chip);clearFeedback(mode);clearSelection();
   });
+  bank.addEventListener('click',e=>{if(e.target===bank||e.target.classList.contains('bank-label'))clearSelection();});
 }
 function bindMatchZone(zone){
+  zone.setAttribute('role','button');zone.setAttribute('tabindex','0');
   zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
   zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
   zone.addEventListener('drop',e=>{
     e.preventDefault();zone.classList.remove('over');if(e.dataTransfer.getData('text/mode')!=='match')return;
-    const chip=document.getElementById(e.dataTransfer.getData('text/id'));if(!chip)return;
-    const existing=zone.querySelector('.chip');
-    if(existing && existing!==chip){$('#matchBank').appendChild(existing);existing.classList.remove('correct','wrong');}
-    zone.appendChild(chip);chip.classList.remove('correct','wrong');clearFeedback('match');
+    placeMatchChip(zone,document.getElementById(e.dataTransfer.getData('text/id')));
   });
+  zone.addEventListener('click',()=>{if(selectedChip&&selectedChip.dataset.mode==='match')placeMatchChip(zone,selectedChip);});
+  zone.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&selectedChip&&selectedChip.dataset.mode==='match'){e.preventDefault();placeMatchChip(zone,selectedChip);}});
 }
 function bindBucket(bucket){
+  bucket.setAttribute('role','button');bucket.setAttribute('tabindex','0');
   bucket.addEventListener('dragover',e=>{e.preventDefault();bucket.classList.add('over');});
   bucket.addEventListener('dragleave',()=>bucket.classList.remove('over'));
   bucket.addEventListener('drop',e=>{
     e.preventDefault();bucket.classList.remove('over');if(e.dataTransfer.getData('text/mode')!=='bucket')return;
-    const chip=document.getElementById(e.dataTransfer.getData('text/id'));if(!chip)return;
-    bucket.appendChild(chip);chip.classList.remove('correct','wrong');clearFeedback('bucket');
+    placeBucketChip(bucket,document.getElementById(e.dataTransfer.getData('text/id')));
   });
+  bucket.addEventListener('click',()=>{if(selectedChip&&selectedChip.dataset.mode==='bucket')placeBucketChip(bucket,selectedChip);});
+  bucket.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&selectedChip&&selectedChip.dataset.mode==='bucket'){e.preventDefault();placeBucketChip(bucket,selectedChip);}});
 }
 
 function buildMatch(items){
   const zones=$('#matchZones'),bank=$('#matchBank'); zones.innerHTML=''; bank.innerHTML='<div class="bank-label">Definition pool</div>';
   for(const it of items){
     const z=document.createElement('div');z.className='dropzone';z.dataset.answer=it.id;
-    z.innerHTML=`<div class="z-title"><span>${escapeHtml(it.term)}</span><small>drop here</small></div>`;
+    z.innerHTML=`<div class="z-title"><span>${escapeHtml(it.term)}</span><small>drop / tap here</small></div>`;
     bindMatchZone(z);zones.appendChild(z);
   }
   for(const it of shuffle(items)) bank.appendChild(mkChip({text:it.def,itemId:it.id,answer:it.id,mode:'match',extraClass:'def-chip'}));
@@ -545,10 +585,12 @@ function buildBuckets(items){
   $('#bucketFeedback').classList.remove('show');
 }
 function newSet(){
+  clearSelection();
   state.current=nextSetItems();state.lastScore=0;state.lastTotal=state.current.length;updateHeader();
   if(state.quiz==='buckets') buildBuckets(state.current); else buildMatch(state.current);
 }
 function scoreMatch(){
+  clearSelection();
   let right=0,placed=0;const wrong=[];
   $$('#matchZones .dropzone').forEach(z=>{
     const chip=z.querySelector('.chip'); if(!chip)return; placed++;
@@ -562,6 +604,7 @@ function scoreMatch(){
   fb.innerHTML=`<div class="scoreline">${right} of ${state.current.length} correct.${extra}</div><div style="margin-top:5px">Green = correct. Red = wrong. Move or return any chip and use <b>Score / Re-score</b> again.</div>${wrong.length?`<div style="margin-top:5px;color:var(--muted)">Revisit: ${wrong.map(escapeHtml).join(', ')}</div>`:''}`;
 }
 function scoreBuckets(){
+  clearSelection();
   let right=0,placed=0;const wrong=[];
   $$('#bucketGrid .bucket').forEach(b=>{
     b.querySelectorAll('.chip').forEach(chip=>{placed++;const ok=chip.dataset.answer===b.dataset.bucket;chip.classList.toggle('correct',ok);chip.classList.toggle('wrong',!ok);if(ok)right++;else wrong.push(chip.textContent);});
@@ -572,7 +615,7 @@ function scoreBuckets(){
   const extra=placed<state.current.length?` ${state.current.length-placed} term(s) are still in the pool.`:'';
   fb.innerHTML=`<div class="scoreline">${right} of ${state.current.length} correctly classified.${extra}</div><div style="margin-top:5px">You can drag red items directly to another bucket, or click them to return them to the pool, then re-score.</div>${wrong.length?`<div style="margin-top:5px;color:var(--muted)">Revisit: ${wrong.map(escapeHtml).join(', ')}</div>`:''}`;
 }
-function shuffleBank(bank){const chips=shuffle($$('.chip',bank));for(const c of chips)bank.appendChild(c);}
+function shuffleBank(bank){clearSelection();const chips=shuffle($$('.chip',bank));for(const c of chips)bank.appendChild(c);}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
 function setCheatFocus(q){
   const key=q==='buckets'?null:q;
@@ -599,6 +642,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){(state.quiz==='buckets'?$('#bucketCheck'):$('#matchCheck')).click();}
   else if(e.key==='n'||e.key==='N') newSet();
   else if(e.key==='s'||e.key==='S') shuffleBank(state.quiz==='buckets'?$('#bucketBank'):$('#matchBank'));
+  else if(e.key==='Escape') clearSelection();
 });
 
 // Initialize the requested default quiz.
