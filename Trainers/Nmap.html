@@ -95,6 +95,8 @@ code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mo
 .builder-zone{min-height:110px;border:2px dashed var(--dash);border-radius:10px;padding:10px}.builder-zone.over,.builder-zone.tap-ready{background:var(--neutral);border-color:var(--accent)}.builder-zone.use{background:rgba(46,139,87,.035)}.builder-zone.omit{background:rgba(192,57,43,.025)}
 .builder-zone .zonehead{font-weight:800;font-size:.87rem;margin-bottom:6px}.builder-zone.use .zonehead{color:var(--accent2)}.builder-zone.omit .zonehead{color:var(--muted)}
 .command-preview{margin-top:10px;padding:10px;border:1px solid var(--border);background:var(--chip);border-radius:8px;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem}.command-preview b{color:var(--accent)}
+.typed-meta{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.typed-shell{display:flex;align-items:stretch;margin-top:10px;border:1px solid var(--border);border-radius:10px;background:var(--panel);overflow:hidden}.typed-prompt{display:flex;align-items:center;padding:0 10px;background:var(--chip);border-right:1px solid var(--border);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:800;color:var(--accent);user-select:none}.typed-input{min-width:0;flex:1;border:0;outline:0;background:var(--panel);color:var(--text);padding:12px;font:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.93rem}.typed-shell:focus-within{outline:2px solid var(--accent);outline-offset:1px}.typed-answer{display:none;margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:9px;background:var(--chip);font-size:.86rem}.typed-answer.show{display:block}.typed-answer code{display:block;margin-top:5px;padding:7px 8px;overflow-wrap:anywhere}.typed-feedback .diff{margin-top:6px;color:var(--muted)}.typed-feedback .missing{color:var(--bad)}.typed-feedback .extra{color:var(--orange)}
+@media(max-width:560px){.typed-shell{display:block}.typed-prompt{border-right:0;border-bottom:1px solid var(--border);padding:7px 10px}.typed-input{width:100%}}
 aside .card{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto}aside details{margin-bottom:8px}aside summary{cursor:pointer;font-weight:700;color:var(--accent);padding:4px 0}aside p{font-size:.86rem}.ref-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:6px}.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px 6px;text-align:left;vertical-align:top}.ref-table th{background:var(--chip)}aside ul{margin:6px 0 8px 18px;padding:0}aside li{font-size:.83rem;margin-bottom:4px}
 .keyline{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(--border);background:var(--chip);padding:1px 5px;border-radius:4px;font-size:.72rem}
 .source-note{font-size:.74rem;color:var(--muted);margin-top:5px}
@@ -125,6 +127,10 @@ aside .card{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto
         <option value="timing">Extended · Timing, Evasion & Spoofing</option>
         <option value="buckets">Mixed · Classify Nmap Options by Function</option>
         <option value="builder">Applied · Build the Nmap Command</option>
+        <optgroup label="Typed CLI Practice">
+          <option value="typed-core">CLI Practice · Core Commands</option>
+          <option value="typed-mixed">CLI Practice · Combined Scans &amp; Options</option>
+        </optgroup>
         <option value="scenario">Applied · CySA+ Scenario MCQ</option>
         <option value="output">Applied · Read the Nmap Output</option>
       </select>
@@ -186,6 +192,28 @@ aside .card{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto
       <div class="feedback" id="builderFeedback"></div>
     </div>
 
+    <div id="typedQuiz" class="hidden">
+      <h2>Type the complete Nmap command.</h2>
+      <p class="hint">Read the analyst objective, then type the command yourself. Option order does not matter when the command is semantically equivalent. You may check repeatedly and edit immediately. <b>Show Answer</b> is available whenever you want it.</p>
+      <div class="scenario" id="typedScenario"></div>
+      <div class="typed-meta">
+        <span class="pill">Challenge attempts: <b id="typedAttempts">0</b></span>
+        <span class="pill" id="typedScopePill">Core command form</span>
+      </div>
+      <div class="typed-shell">
+        <div class="typed-prompt">$</div>
+        <input id="typedInput" class="typed-input" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Type the complete Nmap command" placeholder="nmap ...">
+      </div>
+      <div class="controls">
+        <button class="primary" id="typedCheck">Check / Re-check</button>
+        <button id="typedAnswerBtn">Show Answer</button>
+        <button id="typedNew">Next Challenge</button>
+        <button class="danger" id="typedResetProgress">Reset Coverage</button>
+      </div>
+      <div class="typed-answer" id="typedAnswer"></div>
+      <div class="feedback typed-feedback" id="typedFeedback"></div>
+    </div>
+
     <div id="mcqQuiz" class="hidden">
       <h2 id="mcqHeading">Which answer best fits?</h2>
       <div class="scenario" id="mcqScenario"></div>
@@ -198,7 +226,7 @@ aside .card{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto
       <div class="feedback" id="mcqFeedback"></div>
     </div>
 
-    <div class="callout" id="progressExplainer"><b>Touch / click:</b> select an answer once, then tap/click its destination; selected answers are outlined in blue. <b>Progression logic:</b> each quiz favors unseen items until every item has appeared once. If the final first-pass batch is smaller than the normal screen-sized set, previously seen items fill the remaining spaces. After full coverage, new sets are fully random. <b>Reset Coverage</b> starts that quiz's sequence over.</div>
+    <div class="callout" id="progressExplainer"><b>Touch / click:</b> select an answer once, then tap/click its destination; selected answers are outlined in blue. <b>Progression logic:</b> each quiz—including each typed CLI bank—favors unseen items until every item has appeared once. If the final first-pass batch is smaller than the normal screen-sized set, previously seen items fill the remaining spaces. After full coverage, new sets are fully random. <b>Reset Coverage</b> starts that quiz's sequence over.</div>
   </div>
 </section>
 
@@ -206,6 +234,18 @@ aside .card{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto
 <div class="card">
   <h2>Nmap Cheat Sheet</h2>
   <div class="source-note">Priority guide: <span class="priority core">CORE</span> = directly emphasized in CertMaster/Sybex for CySA+; <span class="priority ext">EXTENDED</span> = valid Nmap knowledge retained from the prior trainer / reference sheet and useful for recognition.</div>
+
+  <details data-cheat="typed">
+    <summary>Typed CLI practice — how answers are checked</summary>
+    <ul>
+      <li>Type the full command beginning with <code>nmap</code>; optional leading <code>sudo</code> is accepted.</li>
+      <li>Equivalent option order is accepted. For example, the target may appear before or after the options.</li>
+      <li><code>-p 22,443</code> and <code>-p22,443</code> are treated the same; numeric comma-list order is ignored.</li>
+      <li><code>--script vuln</code> and <code>--script=vuln</code> are treated the same.</li>
+      <li>Unrequested extra flags are marked as extra rather than silently accepted; the exercise trains the smallest command that meets the stated conditions.</li>
+    </ul>
+    <div class="callout"><b>Scope:</b> the core typed bank follows Dion's CySA+ high-yield Nmap flags. A few additional command forms come from options already taught elsewhere in this trainer.</div>
+  </details>
 
   <details open data-cheat="core">
     <summary>CySA+ high-yield Nmap core</summary>
@@ -500,6 +540,64 @@ const BUILDERS=[
 ];
 const BUILDER_SET={section:'Applied',title:'Build the Nmap Command',batch:1,desc:'Translate an analyst objective into the smallest set of required Nmap options. Flags are classified as required vs. unnecessary because option order is usually not the learning objective.',items:BUILDERS};
 
+const TYPED_TARGETS={
+  hosts:['192.0.2.17','192.0.2.44','198.51.100.28','198.51.100.73','203.0.113.19','203.0.113.86'],
+  ranges:['10.20.5.0/24','192.168.50.0/24','198.51.100.0/28','203.0.113.0/24'],
+  ports:['22','53','80','443','445','3389','8080'],
+  portLists:[['22','443'],['80','443'],['22','80','443'],['53','161'],['445','3389']],
+  portRanges:['1-1024','20-25','80-443','8000-8100'],
+  basenames:['baseline','audit','quarterly','inventory']
+};
+function pickOne(a){return a[Math.floor(Math.random()*a.length)]}
+function pickHost(){return pickOne(TYPED_TARGETS.hosts)}
+function pickRange(){return pickOne(TYPED_TARGETS.ranges)}
+function pickPorts(){return pickOne(TYPED_TARGETS.portLists).slice()}
+function typedCase(t){
+  const target=t.range?pickRange():pickHost(); const ports=t.ports==='one'?[pickOne(TYPED_TARGETS.ports)]:t.ports==='list'?pickPorts():null;
+  const portRange=t.ports==='range'?pickOne(TYPED_TARGETS.portRanges):null; const basename=t.output?pickOne(TYPED_TARGETS.basenames):null;
+  const parts=t.parts({target,ports,portRange,basename});
+  return {...t,target,ports,portRange,basename,parts,answer:'nmap '+parts.concat([target]).join(' '),prompt:t.prompt({target,ports,portRange,basename})};
+}
+const TYPED_CORE=[
+  {id:'tc-syn',source:'Dion high-yield',prompt:x=>`Perform a TCP SYN / half-open scan against ${x.target}.`,parts:()=>['-sS']},
+  {id:'tc-connect',source:'Dion high-yield',prompt:x=>`Perform a full TCP Connect scan against ${x.target}.`,parts:()=>['-sT']},
+  {id:'tc-udp',source:'Dion high-yield',prompt:x=>`Perform a UDP port scan against ${x.target}.`,parts:()=>['-sU']},
+  {id:'tc-version',source:'Dion high-yield',prompt:x=>`Probe ${x.target} to identify service and application versions.`,parts:()=>['-sV']},
+  {id:'tc-os',source:'Dion high-yield',prompt:x=>`Attempt operating-system fingerprinting against ${x.target}.`,parts:()=>['-O']},
+  {id:'tc-aggressive',source:'Dion high-yield',prompt:x=>`Run Nmap's aggressive detection bundle against ${x.target}.`,parts:()=>['-A']},
+  {id:'tc-t4',source:'Dion high-yield',prompt:x=>`Scan ${x.target} using Nmap's aggressive T4 timing template.`,parts:()=>['-T4']},
+  {id:'tc-oneport',source:'Dion high-yield',ports:'one',prompt:x=>`Scan only port ${x.ports[0]} on ${x.target}.`,parts:x=>['-p '+x.ports[0]]},
+  {id:'tc-portlist',source:'Dion high-yield',ports:'list',prompt:x=>`Scan only ports ${x.ports.join(', ')} on ${x.target}.`,parts:x=>['-p '+x.ports.join(',')]},
+  {id:'tc-portrange',source:'Dion high-yield',ports:'range',prompt:x=>`Scan only the port range ${x.portRange} on ${x.target}.`,parts:x=>['-p '+x.portRange]},
+  {id:'tc-output',source:'Dion high-yield',output:true,prompt:x=>`Scan ${x.target} and save normal, XML, and grepable results with the basename "${x.basename}".`,parts:x=>['-oA '+x.basename]},
+  {id:'tc-vuln',source:'Dion high-yield',prompt:x=>`Run NSE scripts in the vulnerability category against ${x.target}.`,parts:()=>['--script vuln']},
+  {id:'tc-allports',source:'Existing trainer extension',prompt:x=>`Scan all TCP ports (1 through 65,535) on ${x.target}.`,parts:()=>['-p-']},
+  {id:'tc-live',source:'Existing trainer extension',range:true,prompt:x=>`Identify live hosts in ${x.target} without performing a port scan.`,parts:()=>['-sn']},
+  {id:'tc-pn',source:'Existing trainer extension',prompt:x=>`Perform a SYN scan against ${x.target} even if normal host-discovery probes are blocked.`,parts:()=>['-Pn','-sS']},
+  {id:'tc-defaultscripts',source:'Existing trainer extension',prompt:x=>`Run Nmap's default NSE script set against ${x.target}.`,parts:()=>['-sC']},
+  {id:'tc-fast',source:'Existing trainer extension',prompt:x=>`Scan Nmap's reduced fast set of common ports on ${x.target}.`,parts:()=>['-F']}
+];
+const TYPED_MIXED=[
+  {id:'tm-synver',source:'Combined practice',prompt:x=>`Perform a TCP SYN scan against ${x.target} and identify service/application versions.`,parts:()=>['-sS','-sV']},
+  {id:'tm-synports',source:'Combined practice',ports:'list',prompt:x=>`Perform a TCP SYN scan against ${x.target}, limited to ports ${x.ports.join(', ')}.`,parts:x=>['-sS','-p '+x.ports.join(',')]},
+  {id:'tm-udpports',source:'Combined practice',ports:'list',prompt:x=>`Perform a UDP scan against ${x.target}, limited to ports ${x.ports.join(', ')}.`,parts:x=>['-sU','-p '+x.ports.join(',')]},
+  {id:'tm-webver',source:'Combined practice',range:true,prompt:x=>`Across ${x.target}, scan only TCP ports 80 and 443 and identify service/application versions.`,parts:()=>['-sV','-p 80,443']},
+  {id:'tm-pnports',source:'Combined practice',ports:'list',prompt:x=>`Perform a SYN scan of ports ${x.ports.join(', ')} on ${x.target} even if host-discovery probes are blocked.`,parts:x=>['-Pn','-sS','-p '+x.ports.join(',')]},
+  {id:'tm-a-t4',source:'Combined practice',prompt:x=>`Run aggressive detection against ${x.target} and use the aggressive T4 timing template.`,parts:()=>['-A','-T4']},
+  {id:'tm-synall',source:'Combined practice',prompt:x=>`Perform a TCP SYN scan against all 65,535 ports on ${x.target}.`,parts:()=>['-sS','-p-']},
+  {id:'tm-full',source:'CertMaster-style combined pattern',prompt:x=>`Perform a SYN scan against ${x.target}; use T4 timing, detect the OS, detect service versions, and scan all ports.`,parts:()=>['-sS','-T4','-O','-sV','-p-']},
+  {id:'tm-vulnweb',source:'Combined practice',prompt:x=>`Run NSE vulnerability-category scripts against only ports 80 and 443 on ${x.target}.`,parts:()=>['--script vuln','-p 80,443']},
+  {id:'tm-scsv',source:'Combined practice',prompt:x=>`Run the default NSE script set and service/version detection against ${x.target}.`,parts:()=>['-sC','-sV']},
+  {id:'tm-svoa',source:'Combined practice',output:true,prompt:x=>`Identify service versions on ${x.target} and save all standard output formats using basename "${x.basename}".`,parts:x=>['-sV','-oA '+x.basename]},
+  {id:'tm-synrange',source:'Combined practice',range:true,ports:'range',prompt:x=>`Perform a TCP SYN scan across ${x.target}, limited to ports ${x.portRange}, using T4 timing.`,parts:x=>['-sS','-p '+x.portRange,'-T4']},
+  {id:'tm-pnversion',source:'Combined practice',ports:'one',prompt:x=>`Assume ${x.target} is up even if discovery fails; probe only port ${x.ports[0]} for service/version information.`,parts:x=>['-Pn','-sV','-p '+x.ports[0]]},
+  {id:'tm-udpversion',source:'Combined practice',prompt:x=>`Perform a UDP scan of ports 53 and 161 on ${x.target} and probe discovered services for version information.`,parts:()=>['-sU','-sV','-p 53,161']}
+];
+const TYPED_SETS={
+  'typed-core':{section:'CLI',title:'Type Core Nmap Commands',batch:1,desc:'Write complete Nmap commands from analyst objectives. Core flags follow Dion\'s CySA+ high-yield scope, with a small extension from options already taught in this trainer.',items:TYPED_CORE},
+  'typed-mixed':{section:'CLI',title:'Type Combined Scans & Options',batch:1,desc:'Combine the same exam-relevant building blocks into complete commands. Targets, ports, and output names vary so the drill tests syntax rather than memorized strings.',items:TYPED_MIXED}
+};
+
 function mkOpts(correct,...wrong){return [correct,...wrong].map((label,i)=>({key:String.fromCharCode(65+i),label}));}
 const SCENARIO_MCQ=[
   {id:'q-tool-depth',q:'An analyst needs one tool to discover hosts, enumerate ports, identify service versions, fingerprint operating systems, and optionally run scripts for deeper checks. Which tool is the best fit?',opts:mkOpts('Nmap','Masscan','Angry IP Scanner','Netcat'),correct:'A',why:'Nmap is the depth/flexibility choice: discovery, port scans, service/version detection, OS fingerprinting, and NSE.'},
@@ -549,14 +647,15 @@ const OUTPUT_MCQ=[
 const MCQ_SETS={scenario:{section:'Applied',title:'CySA+ Scenario MCQ',desc:'Choose the best Nmap option/tool for an analyst objective. Questions are not locked after grading, so you can change the answer and re-score.',items:SCENARIO_MCQ},output:{section:'Applied',title:'Read the Nmap Output',desc:'Interpret synthetic Nmap-style output the way a CySA+ question may require: port states, versions, scope, and what the command actually proves.',items:OUTPUT_MCQ}};
 
 const PROGRESS_KEY='cysa004-nmap-trainer-progress-v3';
-const ALL_KEYS=[...Object.keys(MATCH_SETS),'buckets','builder','scenario','output'];
-const state={quiz:'core',current:[],checks:0,lastScore:0,lastTotal:0,mcqPick:null,builder:null};
+const ALL_KEYS=[...Object.keys(MATCH_SETS),'buckets','builder',...Object.keys(TYPED_SETS),'scenario','output'];
+const state={quiz:'core',current:[],checks:0,lastScore:0,lastTotal:0,mcqPick:null,builder:null,typedRuntime:null,typedAttempts:0};
 let selectedChip=null;
 
 function validIds(q){
   if(MATCH_SETS[q]) return new Set(MATCH_SETS[q].items.map(x=>x.id));
   if(q==='buckets') return new Set(BUCKET_ITEMS.map(x=>x.id));
   if(q==='builder') return new Set(BUILDERS.map(x=>x.id));
+  if(TYPED_SETS[q]) return new Set(TYPED_SETS[q].items.map(x=>x.id));
   return new Set(MCQ_SETS[q].items.map(x=>x.id));
 }
 function loadProgress(){
@@ -565,7 +664,7 @@ function loadProgress(){
 }
 let progress=loadProgress();
 function saveProgress(){try{localStorage.setItem(PROGRESS_KEY,JSON.stringify(progress))}catch(e){}}
-function currentDef(){if(MATCH_SETS[state.quiz])return MATCH_SETS[state.quiz];if(state.quiz==='buckets')return BUCKET_SET;if(state.quiz==='builder')return BUILDER_SET;return MCQ_SETS[state.quiz];}
+function currentDef(){if(MATCH_SETS[state.quiz])return MATCH_SETS[state.quiz];if(state.quiz==='buckets')return BUCKET_SET;if(state.quiz==='builder')return BUILDER_SET;if(TYPED_SETS[state.quiz])return TYPED_SETS[state.quiz];return MCQ_SETS[state.quiz];}
 function currentSeen(){return new Set(progress[state.quiz]||[])}
 function chooseDiverse(items,n,keyFn){
   const groups={}; for(const x of shuffle(items)){const k=keyFn(x);(groups[k]??=[]).push(x)}
@@ -670,13 +769,65 @@ function buildBuilder(item){state.builder=item;$('#builderScenario').innerHTML=`
 function updateCommandPreview(){if(!state.builder)return;const used=$$('#builderUse .chip').map(c=>c.textContent);$('#commandPreview').innerHTML=`<b>Command preview:</b> nmap ${used.map(escapeHtml).join(' ')} ${escapeHtml(state.builder.target)}`;}
 function scoreBuilder(){let right=0,placed=0;const wrong=[];$$('.builder-zone').forEach(z=>z.querySelectorAll('.chip').forEach(c=>{placed++;const ok=c.dataset.answer===z.dataset.answer;c.classList.toggle('correct',ok);c.classList.toggle('wrong',!ok);if(ok)right++;else wrong.push(c.textContent)}));$$('#builderBank .chip').forEach(c=>c.classList.remove('correct','wrong'));const total=state.builder.candidates.length;state.checks++;state.lastScore=right;state.lastTotal=total;updateHeader();const fb=$('#builderFeedback');fb.classList.add('show');fb.innerHTML=`<div class="scoreline">${right} of ${total} options correctly classified.${placed<total?' '+(total-placed)+' option(s) still unplaced.':''}</div><div style="margin-top:6px">${state.builder.why}</div>${wrong.length?`<div style="margin-top:5px;color:var(--muted)">Revisit: ${wrong.map(escapeHtml).join(', ')}</div>`:''}`;}
 
+function canonicalPorts(spec){
+  const parts=String(spec).split(',').map(x=>x.trim()).filter(Boolean);
+  const parsed=parts.map(x=>{const m=x.match(/^(\d+)(?:-(\d+))?$/);return m?{raw:m[2]?`${Number(m[1])}-${Number(m[2])}`:`${Number(m[1])}`,n:Number(m[1])}:{raw:x,n:999999}});
+  return parsed.sort((a,b)=>a.n-b.n||a.raw.localeCompare(b.raw)).map(x=>x.raw).join(',');
+}
+function commandAtoms(input,target){
+  let raw=String(input||'').trim(); if(!raw)return {atoms:[],issues:['No command entered.'],command:false};
+  let toks=raw.split(/\s+/); const issues=[]; if(toks[0]&&toks[0].toLowerCase()==='sudo')toks.shift();
+  if(!toks.length||toks[0].toLowerCase()!=='nmap')return {atoms:[],issues:['Begin the command with nmap.'],command:false};
+  toks.shift(); const atoms=[];
+  for(let i=0;i<toks.length;i++){
+    const t=toks[i];
+    if(t===target){atoms.push('TARGET:'+target);continue}
+    if(t==='-p'){if(i+1>=toks.length){issues.push('-p is missing its port specification.');continue}atoms.push('-p:'+canonicalPorts(toks[++i]));continue}
+    if(/^\-p(?![nNRASTUV])(.*)$/.test(t)&&t!=='-p-'){const v=t.slice(2);if(v)atoms.push('-p:'+canonicalPorts(v));else issues.push('-p is missing its port specification.');continue}
+    if(t==='-oA'){if(i+1>=toks.length){issues.push('-oA is missing its basename.');continue}atoms.push('-oA:'+toks[++i]);continue}
+    if(t==='--script'){if(i+1>=toks.length){issues.push('--script is missing its script/category value.');continue}atoms.push('--script:'+toks[++i]);continue}
+    if(t.startsWith('--script=')){atoms.push('--script:'+t.slice(9));continue}
+    atoms.push(t);
+  }
+  return {atoms,issues,command:true};
+}
+function expectedAtoms(item){
+  const out=['TARGET:'+item.target];
+  for(const p of item.parts){
+    if(p.startsWith('-p '))out.push('-p:'+canonicalPorts(p.slice(3)));
+    else if(p.startsWith('-oA '))out.push('-oA:'+p.slice(4));
+    else if(p.startsWith('--script '))out.push('--script:'+p.slice(9));
+    else out.push(p);
+  }
+  return out;
+}
+function multisetDiff(a,b){const m=new Map();for(const x of b)m.set(x,(m.get(x)||0)+1);const extra=[];for(const x of a){const n=m.get(x)||0;if(n)m.set(x,n-1);else extra.push(x)}const missing=[];for(const [x,n] of m)for(let i=0;i<n;i++)missing.push(x);return {missing,extra}}
+function prettyAtom(x){if(x.startsWith('TARGET:'))return 'target '+x.slice(7);if(x.startsWith('-p:'))return '-p '+x.slice(3);if(x.startsWith('-oA:'))return '-oA '+x.slice(4);if(x.startsWith('--script:'))return '--script '+x.slice(9);return x}
+function buildTyped(template){
+  const item=typedCase(template);state.typedRuntime=item;state.typedAttempts=0;$('#typedAttempts').textContent='0';$('#typedScopePill').textContent=item.source;
+  $('#typedScenario').innerHTML=`<div class="lead">Analyst objective</div>${escapeHtml(item.prompt)}<div class="source-note">Type the smallest complete command that satisfies every stated condition. Targets and option values vary between presentations.</div>`;
+  $('#typedInput').value='';$('#typedAnswer').classList.remove('show');$('#typedAnswer').innerHTML='';$('#typedAnswerBtn').textContent='Show Answer';clearFeedback('typed');setTimeout(()=>$('#typedInput').focus(),0);
+}
+function scoreTyped(){
+  const item=state.typedRuntime;if(!item)return;state.typedAttempts++;$('#typedAttempts').textContent=state.typedAttempts;
+  const got=commandAtoms($('#typedInput').value,item.target),want=expectedAtoms(item),diff=multisetDiff(got.atoms,want);const ok=got.command&&got.issues.length===0&&diff.missing.length===0&&diff.extra.length===0;
+  state.checks++;state.lastScore=ok?1:0;state.lastTotal=1;updateHeader();const fb=$('#typedFeedback');fb.classList.add('show');
+  if(ok){fb.innerHTML=`<div class="scoreline">✅ Correct.</div><div style="margin-top:6px">That command satisfies the requested scan conditions. Option order is not being graded.</div><div class="diff">Canonical answer: <code>${escapeHtml(item.answer)}</code></div>`;return}
+  let body='<div class="scoreline">❌ Not yet.</div><div style="margin-top:6px">Edit the same command and check it again.</div>';
+  if(got.issues.length)body+=`<div class="diff missing"><b>Syntax:</b> ${got.issues.map(escapeHtml).join(' ')}</div>`;
+  if(diff.missing.length)body+=`<div class="diff missing"><b>Missing / incorrect:</b> ${diff.missing.map(x=>escapeHtml(prettyAtom(x))).join(', ')}</div>`;
+  if(diff.extra.length)body+=`<div class="diff extra"><b>Extra / not requested:</b> ${diff.extra.map(x=>escapeHtml(prettyAtom(x))).join(', ')}</div>`;
+  body+='<div class="diff">The target and required behavior must match the scenario, but equivalent option order is accepted.</div>';fb.innerHTML=body;
+}
+function toggleTypedAnswer(){const item=state.typedRuntime;if(!item)return;const box=$('#typedAnswer'),show=!box.classList.contains('show');box.classList.toggle('show',show);$('#typedAnswerBtn').textContent=show?'Hide Answer':'Show Answer';if(show)box.innerHTML=`<b>Canonical answer</b><code>${escapeHtml(item.answer)}</code><div class="source-note">You can still type or correct your command and use Check / Re-check.</div>`;}
+
 function buildMcq(item){state.mcqPick=null;$('#mcqHeading').textContent=state.quiz==='output'?'Interpret the scan output.':'Choose the best answer.';$('#mcqScenario').innerHTML=`<div class="lead">${state.quiz==='output'?'Nmap output / command':'Scenario'}</div>${escapeHtml(item.q)}${item.pre?`<pre>${escapeHtml(item.pre)}</pre>`:''}`;const box=$('#mcqOpts');box.innerHTML='';for(const o of shuffle(item.opts)){const d=document.createElement('div');d.className='opt';d.dataset.key=o.key;d.textContent=o.label;d.addEventListener('click',()=>{state.mcqPick=o.key;$$('#mcqOpts .opt').forEach(x=>x.classList.remove('sel','correct','wrong'));d.classList.add('sel');clearFeedback('mcq')});box.appendChild(d)}clearFeedback('mcq')}
 function scoreMcq(){const item=state.current[0];if(!state.mcqPick){const fb=$('#mcqFeedback');fb.classList.add('show');fb.innerHTML='<div class="scoreline">Select an answer first.</div>';return}const ok=state.mcqPick===item.correct;$$('#mcqOpts .opt').forEach(o=>{o.classList.remove('correct','wrong');if(o.dataset.key===item.correct)o.classList.add('correct');else if(o.dataset.key===state.mcqPick)o.classList.add('wrong')});state.checks++;state.lastScore=ok?1:0;state.lastTotal=1;updateHeader();const fb=$('#mcqFeedback');fb.classList.add('show');fb.innerHTML=`<div class="scoreline">${ok?'✅ Correct.':'❌ Not quite.'}</div><div style="margin-top:6px">${item.why}</div><div style="margin-top:5px;color:var(--muted)">You may change the answer and re-score; the question is not locked.</div>`;}
 
-function setCheatFocus(q){$$('aside details[data-cheat]').forEach(d=>{if(MATCH_SETS[q])d.open=d.dataset.cheat===q;else if(q==='output')d.open=d.dataset.cheat==='states';else if(q==='builder'||q==='scenario'){}else if(q==='buckets'){} });}
-function showMode(q){$('#matchQuiz').classList.toggle('hidden',!MATCH_SETS[q]);$('#bucketQuiz').classList.toggle('hidden',q!=='buckets');$('#builderQuiz').classList.toggle('hidden',q!=='builder');$('#mcqQuiz').classList.toggle('hidden',!(q==='scenario'||q==='output'));}
-function newSet(){clearSelection();state.current=nextItems();state.lastScore=0;state.lastTotal=state.current.length;updateHeader();if(MATCH_SETS[state.quiz])buildMatch(state.current);else if(state.quiz==='buckets')buildBuckets(state.current);else if(state.quiz==='builder')buildBuilder(state.current[0]);else buildMcq(state.current[0]);}
-function switchQuiz(q){state.quiz=q;state.current=[];state.mcqPick=null;state.lastScore=0;state.lastTotal=0;showMode(q);setCheatFocus(q);newSet();}
+function setCheatFocus(q){$$('aside details[data-cheat]').forEach(d=>{if(MATCH_SETS[q])d.open=d.dataset.cheat===q;else if(TYPED_SETS[q])d.open=d.dataset.cheat==='typed';else if(q==='output')d.open=d.dataset.cheat==='states';else if(q==='builder'||q==='scenario'){}else if(q==='buckets'){} });}
+function showMode(q){$('#matchQuiz').classList.toggle('hidden',!MATCH_SETS[q]);$('#bucketQuiz').classList.toggle('hidden',q!=='buckets');$('#builderQuiz').classList.toggle('hidden',q!=='builder');$('#typedQuiz').classList.toggle('hidden',!TYPED_SETS[q]);$('#mcqQuiz').classList.toggle('hidden',!(q==='scenario'||q==='output'));}
+function newSet(){clearSelection();state.current=nextItems();state.lastScore=0;state.lastTotal=state.current.length;updateHeader();if(MATCH_SETS[state.quiz])buildMatch(state.current);else if(state.quiz==='buckets')buildBuckets(state.current);else if(state.quiz==='builder')buildBuilder(state.current[0]);else if(TYPED_SETS[state.quiz])buildTyped(state.current[0]);else buildMcq(state.current[0]);}
+function switchQuiz(q){state.quiz=q;state.current=[];state.mcqPick=null;state.typedRuntime=null;state.typedAttempts=0;state.lastScore=0;state.lastTotal=0;showMode(q);setCheatFocus(q);newSet();}
 function shuffleBank(bank){for(const c of shuffle($$('.chip',bank)))bank.appendChild(c)}
 
 bindBank($('#matchBank'),'match');bindBank($('#bucketBank'),'bucket');bindBank($('#builderBank'),'builder');bindMultiZone($('#builderUse'),'builder');bindMultiZone($('#builderOmit'),'builder');
@@ -684,11 +835,12 @@ $('#quizSelect').addEventListener('change',e=>switchQuiz(e.target.value));
 $('#matchCheck').addEventListener('click',scoreMatch);$('#matchNew').addEventListener('click',newSet);$('#matchShuffle').addEventListener('click',()=>shuffleBank($('#matchBank')));$('#matchResetProgress').addEventListener('click',resetCoverage);
 $('#bucketCheck').addEventListener('click',scoreBuckets);$('#bucketNew').addEventListener('click',newSet);$('#bucketShuffle').addEventListener('click',()=>shuffleBank($('#bucketBank')));$('#bucketResetProgress').addEventListener('click',resetCoverage);
 $('#builderCheck').addEventListener('click',scoreBuilder);$('#builderNew').addEventListener('click',newSet);$('#builderShuffle').addEventListener('click',()=>shuffleBank($('#builderBank')));$('#builderResetProgress').addEventListener('click',resetCoverage);
+$('#typedCheck').addEventListener('click',scoreTyped);$('#typedNew').addEventListener('click',newSet);$('#typedAnswerBtn').addEventListener('click',toggleTypedAnswer);$('#typedResetProgress').addEventListener('click',resetCoverage);$('#typedInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();scoreTyped()}});
 $('#mcqCheck').addEventListener('click',scoreMcq);$('#mcqNew').addEventListener('click',newSet);$('#mcqResetProgress').addEventListener('click',resetCoverage);
 $('#resetScoreBtn').addEventListener('click',resetScore);
 $('#darkBtn').addEventListener('click',()=>{document.body.classList.toggle('dark');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark'});
 $('#cheatBtn').addEventListener('click',()=>{document.body.classList.toggle('cheats-collapsed');$('#cheatBtn').textContent=document.body.classList.contains('cheats-collapsed')?'📚 Show Cheats':'📚 Hide Cheats'});
-document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(e.key==='Enter'){if(MATCH_SETS[state.quiz])scoreMatch();else if(state.quiz==='buckets')scoreBuckets();else if(state.quiz==='builder')scoreBuilder();else scoreMcq()}else if(e.key==='n'||e.key==='N')newSet();else if(e.key==='s'||e.key==='S'){if(MATCH_SETS[state.quiz])shuffleBank($('#matchBank'));else if(state.quiz==='buckets')shuffleBank($('#bucketBank'));else if(state.quiz==='builder')shuffleBank($('#builderBank'));}});
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))return;if(e.key==='Enter'){if(MATCH_SETS[state.quiz])scoreMatch();else if(state.quiz==='buckets')scoreBuckets();else if(state.quiz==='builder')scoreBuilder();else if(TYPED_SETS[state.quiz])scoreTyped();else scoreMcq()}else if(e.key==='n'||e.key==='N')newSet();else if(e.key==='s'||e.key==='S'){if(MATCH_SETS[state.quiz])shuffleBank($('#matchBank'));else if(state.quiz==='buckets')shuffleBank($('#bucketBank'));else if(state.quiz==='builder')shuffleBank($('#builderBank'));}});
 switchQuiz('core');
 </script>
 </body>
