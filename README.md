@@ -67,7 +67,7 @@ These trainers emphasize pattern recognition and active recall, using repeated m
   - also - shout out to newly discovered favorite tools from this course (looking at you SysinternalsSuite)
 
 
-**If you live in the Northern Virginia area I highly recommend NVCC Workforce programs. Their instructors have all been top notch and the program and material it provides is excellent.**
+**If you live in the Northern Virginia area I highly recommend NVCC Workforce program. Their instructors have all been top notch; the program and material it provides is excellent.**
 
 ---
 
