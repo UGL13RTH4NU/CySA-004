@@ -25,7 +25,7 @@ Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (text
 3. Sync to AnkiWeb if you use AnkiMobile or AnkiDroid
 
 
-
+---
 
 ## Interactive HTML Trainers
 
