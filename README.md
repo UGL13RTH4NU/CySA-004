@@ -60,9 +60,14 @@ These trainers emphasize pattern recognition and active recall, using repeated m
     - CertMaster Perform Textbook
     - A shit-ton of labs, PBQ's, and Practice Quizzes and Practice Exam
 - I created my own Anki flashcards from the CertMaster Perform material
-- Jason Dion's video course for CySA+ 004 on UDEMY (which I think was a good supplement to the Instructor lead content from NVCC)
+- Jason Dion's video course for CySA+ 004 on UDEMY (which I think was a good supplement/ 2nd review of all the prior material)
 - I created the trainers and used them to help shore up perceived weak areas in my knowledge base
+- Finally, I downloaded several of the tools and used them on my own system
+  - it  helps that I already use several of the tools on a semi-regular basis that the course goes over
+  - also - shout out to newly discovered favorite tools from this course (looking at you SysinternalsSuite)
 
+
+**If you live in the Northern Virginia area I highly recommend NVCC Workforce programs. Their instructors have all been top notch and the program and material it provides is excellent.**
 
 ---
 
