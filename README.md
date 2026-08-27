@@ -49,6 +49,22 @@ Web-based practice trainers hosted via GitHub Pages:
 
 These trainers emphasize pattern recognition and active recall, using repeated matching and categorization to build familiarity with how related concepts, tools, processes, and system artifacts fit together.
 
+---
+
+## My Study Path
+
+(how I studied for the exam, in approximate order)
+
+- I started with Northern Virginia Community College's (NVCC) Workforce CySA+ 004 offering, which included:
+  - Approximately 30 hours of instructor lead teaching using the CertMaster Perform material from CompTIA, which itself included:
+    - CertMaster Perform Textbook
+    - A shit-ton of labs, PBQ's, and Practice Quizzes and Practice Exam
+- I created my own Anki flashcards from the CertMaster Perform material
+- Jason Dion's video course for CySA+ 004 on UDEMY (which I think was a good supplement to the Instructor lead content from NVCC)
+- I created the trainers and used them to help shore up perceived weak areas in my knowledge base
+
+
+---
 
 ## Disclaimer
 
