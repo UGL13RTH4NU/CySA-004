@@ -75,11 +75,11 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 
 - Instructor lead training (CySA+ 004) - NVCC Workforce (grants available for reduced tuition)
 - CertMaster Perform (CySA+ 004) - obtained through NVCC Workforce program, but purchasable directly from CompTIA
- - course textbook
- - labs
- - PBQ's
- - Practice Quizzes for each module
- - Mock Exam
+  - course textbook
+  - labs
+  - PBQ's
+  - Practice Quizzes for each module
+  - Mock Exam
 - CertMaster Practice (CySA+ 003) - obtained from WGU, but purchasable directly from CompTIA
 - Udemy, Jason Dion (CySA+ 004) - obtained through WGU, but purchasable directly from Udemy
 - Anki flashcards, free for desktop and Android - created by me, for me
