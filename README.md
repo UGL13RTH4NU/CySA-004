@@ -2,9 +2,9 @@
 
 Personal study materials for the CompTIA Cybersecurity Analyst (CySA+) CS0-004 V4 certification exam.
 
-### Contents
+## Contents
 
-## Anki Deck
+### Anki Deck
 
 Custom Anki deck covering the CS0-004 V4 exam objectives. Cards are built from two parallel workflows:
 
@@ -16,9 +16,9 @@ All cards use custom HTML styling with dark-mode-compatible `rgba()` backgrounds
 Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (textbook cards) or domain-hierarchical (quiz cards).
 
 
-#### Usage
+##### Usage
 
-#### Importing the Anki deck
+**Importing the Anki deck**
 
 1. Download the `.apkg` file from this repo
 2. In Anki desktop: File → Import → select the file
@@ -27,7 +27,7 @@ Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (text
 
 ---
 
-## Interactive HTML Trainers
+### Interactive HTML Trainers
 
 Web-based practice trainers hosted via GitHub Pages:
 
@@ -58,13 +58,13 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 - I started with Northern Virginia Community College's (NVCC) Workforce CySA+ 004 offering, which included:
   - Approximately 30 hours of instructor lead teaching using the CertMaster Perform material from CompTIA, which itself included:
     - CertMaster Perform Textbook
-    - A shit-ton of labs, PBQ's, and Practice Quizzes and Practice Exam
+    - A lot of labs, PBQ's, and Practice Quizzes and Practice Exam
 - I created my own Anki flashcards from the CertMaster Perform material
 - Jason Dion's video course for CySA+ 004 on UDEMY (which I think was a good supplement/ 2nd review of all the prior material)
 - I created the trainers and used them to help shore up perceived weak areas in my knowledge base
-- Finally, I downloaded several of the tools and used them on my own system
-  - it  helps that I already use several of the tools on a semi-regular basis that the course goes over
-  - also - shout out to newly discovered favorite tools from this course (looking at you SysinternalsSuite)
+- I downloaded several of the tools and used them on my own system
+  - it  helps that I already use several of the tools on a semi-regular basis that the course goes over (shout out to newly discovered favorite tools from this course (looking at you SysinternalsSuite))
+- Once I've completed my primary ingestion of information I've found Quizzes and Practice Tests are my best way of learning. Wrong answers are my favorite. They force me to examine my thought process for the answer I chose. I often find myself arguing with AI over wrong answers. Arguing helps identify flawed questions (and there are a few, IMO, in CertMaster). More importantly though, it helps me to properly rationalize things (in the manner of a CompTIA Question maker - which is often enough what you need to be able to do to answer a question correctly where there is more than one plausible answer. I do wish I was able to argue directly with some of the question maker's themselves sometimes; most questions are good, but there's a handful that need corrections, IMO.
 
 
 **If you live in the Northern Virginia area I highly recommend NVCC Workforce program. Their instructors have all been top notch; the program and material it provides is excellent.**
@@ -76,3 +76,5 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 These are personal study materials created for my own exam prep. Content is derived from the CompTIA CS0-004 and was produced in collaboration with Claude Opus 4.7 and ChatGPT. All information in this repo should be verified by the user for accuracy.
 
 Original creation date July/August 2026
+
+---
