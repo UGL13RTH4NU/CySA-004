@@ -73,7 +73,8 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 
 ## Resources I Used:
 
-- Instructor lead training (CySA+ 004) - NVCC Workforce (grants available for reduced tuition)
+- Instructor lead training (CySA+ 004) - NVCC Workforce (grants available for reduced tuition) [Workforce](https://www.nvcc.edu/academics/workforce/index.html)
+  - If you choose to go this route, look for classes conducted by Professor Nick Pierce - he's one of the best in-person instructors I've had for Tech/ Cybersecurity related classes 
 - CertMaster Perform (CySA+ 004) - obtained through NVCC Workforce program, but purchasable directly from CompTIA
   - course textbook
   - labs
