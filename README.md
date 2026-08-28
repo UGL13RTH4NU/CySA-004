@@ -51,30 +51,10 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 
 ---
 
-## My Study Path
-
-(how I studied for the exam, in approximate order)
-
-- I started with Northern Virginia Community College's (NVCC) Workforce CySA+ 004 offering, which included:
-  - Approximately 30 hours of instructor lead teaching using the CertMaster Perform material from CompTIA, which itself included:
-    - CertMaster Perform Textbook
-    - A lot of labs, PBQ's, and Practice Quizzes and Practice Exam
-- I created my own Anki flashcards from the CertMaster Perform material
-- Jason Dion's video course for CySA+ 004 on UDEMY (which I think was a good supplement/ 2nd review of all the prior material)
-- I created the trainers and used them to help shore up perceived weak areas in my knowledge base
-- I downloaded several of the tools and used them on my own system
-  - it  helps that I already use several of the tools on a semi-regular basis that the course goes over (shout out to newly discovered favorite tools from this course (looking at you SysinternalsSuite))
-- Once I've completed my primary ingestion of information I've found Quizzes and Practice Tests are my best way of learning. Wrong answers are my favorite. They force me to examine my thought process for the answer I chose. I often find myself arguing with AI over wrong answers. Arguing helps identify flawed questions (and there are a few, IMO, in CertMaster & Sybex). More importantly though, it helps me to properly rationalize things (in the manner of a CompTIA Question maker - which is often enough what you need to be able to do to answer a question correctly where there is more than one plausible answer. I do wish I was able to argue directly with some of the question maker's themselves sometimes; most questions are good, but there's a handful that need corrections, IMO.
-
-
-**If you live in the Northern Virginia area I highly recommend NVCC Workforce program. Their instructors have all been top notch; the program and material it provides is excellent.**
-
----
-
 ## Resources I Used:
 
 - Instructor lead training (CySA+ 004) - NVCC Workforce (grants available for reduced tuition) [Workforce](https://www.nvcc.edu/academics/workforce/index.html)
-  - If you choose to go this route, look for classes conducted by Professor Nick Pierce - he's one of the best in-person instructors I've had for Tech/ Cybersecurity related classes 
+  - If you choose to go this route, look for classes conducted by Professor Nick Pierce - he's one of the best in-person (vis-a-vis Zoom) instructors I've had for Tech/ Cybersecurity related classes 
 - CertMaster Perform (CySA+ 004) - obtained through NVCC Workforce program, but purchasable directly from CompTIA
   - course textbook
   - labs
@@ -88,11 +68,15 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 - ChatGPT & Claude - $20 subscription model
 - Sybex Study Guide (CySA+ 004) - Amazon
 
+**If you live in the Northern Virginia area I highly recommend NVCC Workforce program. Their instructors have all been top notch; the program and material it provides is excellent.**
+
 ---
 
 ## Disclaimer
 
 These are personal study materials created for my own exam prep. Content is derived from the CompTIA CS0-004 and was produced in collaboration with Claude Opus 4.7 and ChatGPT. All information in this repo should be verified by the user for accuracy.
+
+As with everything on the internet, information eventually goes stale and potentially bad. If you come upon this Repo at a future date and the CySA+ 004 exam is no longer available, you should probably move on to fresher, more relevant resources.
 
 Original creation date July/August 2026
 
