@@ -80,8 +80,8 @@ These trainers emphasize pattern recognition and active recall, using repeated m
   - PBQ's
   - Practice Quizzes for each module
   - Mock Exam
-- CertMaster Practice (CySA+ 003) - obtained from WGU, but purchasable directly from CompTIA
-- Udemy, Jason Dion (CySA+ 004) - obtained through WGU, but purchasable directly from Udemy
+- CertMaster Practice (CySA+ 003) - obtained via WGU BSCSIA, but purchasable directly from CompTIA
+- Udemy, Jason Dion (CySA+ 004) - obtained via WGU BSCSIA, but purchasable directly from Udemy
 - Anki flashcards, free for desktop and Android - created by me, for me
 - HTML based Trainers, free - created by me, for me
 - ChatGPT & Claude - $20 subscription model
