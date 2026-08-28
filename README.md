@@ -64,10 +64,28 @@ These trainers emphasize pattern recognition and active recall, using repeated m
 - I created the trainers and used them to help shore up perceived weak areas in my knowledge base
 - I downloaded several of the tools and used them on my own system
   - it  helps that I already use several of the tools on a semi-regular basis that the course goes over (shout out to newly discovered favorite tools from this course (looking at you SysinternalsSuite))
-- Once I've completed my primary ingestion of information I've found Quizzes and Practice Tests are my best way of learning. Wrong answers are my favorite. They force me to examine my thought process for the answer I chose. I often find myself arguing with AI over wrong answers. Arguing helps identify flawed questions (and there are a few, IMO, in CertMaster). More importantly though, it helps me to properly rationalize things (in the manner of a CompTIA Question maker - which is often enough what you need to be able to do to answer a question correctly where there is more than one plausible answer. I do wish I was able to argue directly with some of the question maker's themselves sometimes; most questions are good, but there's a handful that need corrections, IMO.
+- Once I've completed my primary ingestion of information I've found Quizzes and Practice Tests are my best way of learning. Wrong answers are my favorite. They force me to examine my thought process for the answer I chose. I often find myself arguing with AI over wrong answers. Arguing helps identify flawed questions (and there are a few, IMO, in CertMaster & Sybex). More importantly though, it helps me to properly rationalize things (in the manner of a CompTIA Question maker - which is often enough what you need to be able to do to answer a question correctly where there is more than one plausible answer. I do wish I was able to argue directly with some of the question maker's themselves sometimes; most questions are good, but there's a handful that need corrections, IMO.
 
 
 **If you live in the Northern Virginia area I highly recommend NVCC Workforce program. Their instructors have all been top notch; the program and material it provides is excellent.**
+
+---
+
+## Resources I Used:
+
+- Instructor lead training (CySA+ 004) - NVCC Workforce (grants available for reduced tuition)
+- CertMaster Perform (CySA+ 004) - obtained through NVCC Workforce program, but purchasable directly from CompTIA
+ - course textbook
+ - labs
+ - PBQ's
+ - Practice Quizzes for each module
+ - Mock Exam
+- CertMaster Practice (CySA+ 003) - obtained from WGU, but purchasable directly from CompTIA
+- Udemy, Jason Dion (CySA+ 004) - obtained through WGU, but purchasable directly from Udemy
+- Anki flashcards, free for desktop and Android - created by me, for me
+- HTML based Trainers, free - created by me, for me
+- ChatGPT & Claude - $20 subscription model
+- Sybex Study Guide (CySA+ 004) - Amazon
 
 ---
 
