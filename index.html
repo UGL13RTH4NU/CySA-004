@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>CySA+ CS0-004 Study Materials</title>
+<meta
+  name="description"
+  content="Interactive CySA+ CS0-004 trainers, Anki flashcards, and visual study references for active recall and pattern recognition."
+>
+
+<style>
+:root {
+  --accent: #1f6fb2;
+  --accent2: #2e8b57;
+  --orange: #c46a13;
+  --purple: #7d4aa8;
+
+  --bg: #f3f6fa;
+  --panel: #ffffff;
+  --panel2: #f8fafc;
+  --border: #d7e0eb;
+  --text: #102132;
+  --muted: #53677b;
+  --chip: #edf2f7;
+
+  --neutral: rgba(31, 111, 178, .08);
+  --greenbg: rgba(46, 139, 87, .10);
+  --orangebg: rgba(196, 106, 19, .10);
+
+  --shadow:
+    0 1px 2px rgba(0,0,0,.04),
+    0 5px 15px rgba(0,0,0,.045);
+}
+
+body.dark {
+  --bg: #0c1117;
+  --panel: #121a23;
+  --panel2: #0f1720;
+  --border: #263648;
+  --text: #e7edf4;
+  --muted: #9eb1c4;
+  --chip: #182434;
+
+  --neutral: rgba(92, 169, 245, .08);
+  --greenbg: rgba(80, 190, 110, .10);
+  --orangebg: rgba(230, 150, 70, .10);
+
+  --shadow:
+    0 1px 2px rgba(0,0,0,.35),
+    0 5px 15px rgba(0,0,0,.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Ubuntu,
+    Cantarell,
+    Arial,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--accent);
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.site-title {
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.spacer {
+  flex: 1;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 7px 11px;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 18px 48px;
+}
+
+/* ---------- HERO ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: clamp(28px, 5vw, 60px);
+  box-shadow: var(--shadow);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  right: -150px;
+  top: -170px;
+  border-radius: 50%;
+  background: var(--neutral);
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  line-height: 1.05;
+  color: var(--accent);
+}
+
+.hero p {
+  position: relative;
+  z-index: 1;
+  max-width: 820px;
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: var(--muted);
+}
+
+.hero-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 15px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--chip);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn.green {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* ---------- SECTIONS ---------- */
+
+section {
+  margin-top: 38px;
+}
+
+.section-head {
+  margin-bottom: 15px;
+}
+
+.section-head h2 {
+  margin: 0 0 4px;
+  font-size: 1.55rem;
+  color: var(--accent);
+}
+
+.section-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- INTRO / STATS ---------- */
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 14px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.panel h2,
+.panel h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+.panel p:last-child {
+  margin-bottom: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+}
+
+.stat {
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel2);
+}
+
+.stat strong {
+  display: block;
+  font-size: 1.65rem;
+  color: var(--accent);
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+/* ---------- TRAINERS ---------- */
+
+.trainer-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+#trainerSearch {
+  width: min(480px, 100%);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+
+#trainerSearch:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.trainer-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(285px, 1fr));
+  gap: 13px;
+}
+
+.trainer-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 235px;
+  padding: 17px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  box-shadow: var(--shadow);
+  transition:
+    transform .12s ease,
+    border-color .12s ease;
+}
+
+.trainer-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.badge.module {
+  color: var(--accent);
+  background: var(--neutral);
+}
+
+.badge.cross {
+  color: var(--accent2);
+  background: var(--greenbg);
+}
+
+.trainer-card h3 {
+  margin: 0 0 7px;
+  color: var(--accent);
+  font-size: 1.15rem;
+}
+
+.trainer-card p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: .89rem;
+}
+
+.trainer-card .launch {
+  margin-top: auto;
+}
+
+.launch a {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.launch a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- ANKI ---------- */
+
+.anki {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(270px, .6fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.feature-list {
+  padding-left: 20px;
+}
+
+.feature-list li {
+  margin-bottom: 7px;
+}
+
+.download-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--greenbg);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 22px;
+}
+
+.download-box h3 {
+  margin: 0 0 7px;
+  color: var(--accent2);
+}
+
+.download-box p {
+  color: var(--muted);
+}
+
+/* ---------- VISUALS ---------- */
+
+.visual-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.visual-card {
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.visual-card a {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.visual-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--panel2);
+}
+
+.visual-card div {
+  padding: 10px 12px;
+  font-weight: 700;
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 18px 32px;
+  color: var(--muted);
+  font-size: .82rem;
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 760px) {
+  .intro-grid,
+  .anki {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    position: static;
+  }
+
+  .hero {
+    padding: 28px 20px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="site-title">CySA+ CS0-004</div>
+  <div class="spacer"></div>
+
+  <a
+    class="btn"
+    href="https://github.com/UGL13RTH4NU/CySA-004"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    GitHub
+  </a>
+
+  <button id="darkBtn" type="button">🌙 Dark</button>
+</header>
+
+<main>
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+  <span class="eyebrow">
+    CompTIA Cybersecurity Analyst
+  </span>
+
+  <h1>
+    CySA+ CS0-004 V4
+    Study Materials
+  </h1>
+
+  <p>
+    Interactive browser-based trainers, Anki flashcards,
+    and visual study references built around active recall,
+    pattern recognition, and practical exam preparation.
+  </p>
+
+  <div class="hero-actions">
+
+    <a class="btn primary" href="#trainers">
+      ▶ Start a Trainer
+    </a>
+
+    <a
+      class="btn green"
+      href="ScottsFreshDeckCySA-004.apkg"
+      download
+    >
+      ↓ Download Anki Deck
+    </a>
+
+    <a
+      class="btn"
+      href="https://github.com/UGL13RTH4NU/CySA-004"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      View Repository ↗
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     WHY THESE EXIST
+========================================================= -->
+
+<section>
+
+  <div class="intro-grid">
+
+    <div class="panel">
+
+      <h2>Why I Built These</h2>
+
+      <p>
+        I built these materials while studying for the
+        CompTIA CySA+ CS0-004 exam, particularly for areas
+        where recognizing relationships, syntax, tools,
+        processes, and indicators needed to become more
+        automatic.
+      </p>
+
+      <p>
+        The interactive trainers are intended to create a
+        kind of <strong>muscle memory</strong>: repeated active
+        recall that helps correlate concepts and burn away
+        the unfamiliarity that comes from learning material
+        without years of SOC or vulnerability-analysis
+        experience behind it.
+      </p>
+
+      <p>
+        Everything here is provided as personal study
+        material. Verify information independently before
+        relying on it for an exam or production environment.
+      </p>
+
+    </div>
+
+    <div class="panel">
+
+      <h2>Study Collection</h2>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong>11</strong>
+          <span>Interactive trainers</span>
+        </div>
+
+        <div class="stat">
+          <strong>1</strong>
+          <span>Custom Anki deck</span>
+        </div>
+
+        <div class="stat">
+          <strong>0</strong>
+          <span>Trainer installs required</span>
+        </div>
+
+        <div class="stat">
+          <strong>Local</strong>
+          <span>Trainer data stays in browser</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRAINERS
+========================================================= -->
+
+<section id="trainers">
+
+  <div class="section-head">
+    <h2>Interactive Trainers</h2>
+    <p>
+      Standalone browser-based drills for high-yield
+      CySA+ concepts. Open a trainer in a new tab and start
+      practicing.
+    </p>
+  </div>
+
+  <div class="trainer-tools">
+    <input
+      id="trainerSearch"
+      type="search"
+      placeholder="Search trainers or topics…"
+      aria-label="Search trainers"
+    >
+  </div>
+
+  <div class="trainer-grid" id="trainerGrid">
+
+
+    <!-- SOC ROLES -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 1</span>
+        <span class="badge">SOC</span>
+      </div>
+
+      <h3>SOC Roles</h3>
+
+      <p>
+        SOC job roles and the six-step SOC incident
+        lifecycle.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Soc_Roles.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- FILE SYSTEMS -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 3</span>
+        <span class="badge">Windows</span>
+        <span class="badge">Linux</span>
+      </div>
+
+      <h3>File Systems</h3>
+
+      <p>
+        Windows and Linux file systems, registry keys and
+        hives, system directories, processes, and
+        cross-platform classification.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/File_Systems.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- NMAP -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 3</span>
+        <span class="badge">Scanning</span>
+        <span class="badge">CLI</span>
+      </div>
+
+      <h3>Nmap</h3>
+
+      <p>
+        Scan techniques, host discovery, target
+        specification, service and OS detection, NSE,
+        port states, timing, evasion, output interpretation,
+        and typed command practice.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Nmap.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- PROCESSES -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 3</span>
+        <span class="badge">Processes</span>
+        <span class="badge">Triage</span>
+      </div>
+
+      <h3>Processes</h3>
+
+      <p>
+        Expected Windows and Linux process lineage,
+        suspicious parent/child relationships, LOLBin
+        abuse, path anomalies, masquerading, Event 4688,
+        and Sysmon Event 1.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Processes.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- OT -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Lesson 4C</span>
+        <span class="badge">OT / ICS</span>
+        <span class="badge">IIoT</span>
+      </div>
+
+      <h3>OT / ICS / IIoT</h3>
+
+      <p>
+        Industrial protocols, ICS components,
+        SCADA vs. DCS, vendor and system relationships,
+        and OT security platforms including Dragos,
+        Nozomi, and Claroty.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/OT.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- CVSS -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 7</span>
+        <span class="badge">CVSS 4.0</span>
+        <span class="badge">Vulnerability</span>
+      </div>
+
+      <h3>CVSS 4.0</h3>
+
+      <p>
+        Base, Threat, Environmental, and Supplemental
+        metrics; vector ordering; exploitability vs.
+        impact; CVSS nomenclature; vector reading;
+        CVSS vs. EPSS; and severity bands.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/CVSS_4-0.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- WIRESHARK -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 10</span>
+        <span class="badge">Packets</span>
+        <span class="badge">Filters</span>
+      </div>
+
+      <h3>Wireshark</h3>
+
+      <p>
+        Build and recognize display filters, type exact
+        filter syntax, distinguish capture from display
+        filters, recognize default packet colors, and
+        identify analysis features.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Wireshark.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- SNORT -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge module">Module 10</span>
+        <span class="badge">IDS / IPS</span>
+        <span class="badge">Rules</span>
+      </div>
+
+      <h3>SNORT</h3>
+
+      <p>
+        IDS vs. IPS behavior, rule anatomy, rule
+        construction and reading, rule options, direction,
+        alert output, operating modes, and comparison with
+        Suricata and Zeek.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/SNORT.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- FRAMEWORKS -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge cross">Cross-module</span>
+        <span class="badge">Frameworks</span>
+      </div>
+
+      <h3>Frameworks</h3>
+
+      <p>
+        Cyber Kill Chain, Diamond Model,
+        Pyramid of Pain, STRIDE, and STIX/TAXII through
+        matching, ordering, recognition, and
+        scenario questions.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Frameworks.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- LOGGING -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge cross">Cross-module</span>
+        <span class="badge">Event IDs</span>
+        <span class="badge">Logs</span>
+      </div>
+
+      <h3>Logging</h3>
+
+      <p>
+        Windows Event IDs, logon types, CertMaster
+        severity levels, Syslog/Cisco severity,
+        Windows event levels, logging concepts, and
+        event-correlation scenarios.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Logging.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+    <!-- TOOLS -->
+
+    <article class="trainer-card">
+
+      <div class="badge-row">
+        <span class="badge cross">Cross-module</span>
+        <span class="badge">Tools</span>
+      </div>
+
+      <h3>External Tools</h3>
+
+      <p>
+        Security tool, service, and software recognition
+        with function-based classification and
+        scenario-to-tool matching.
+      </p>
+
+      <div class="launch">
+        <a
+          href="Trainers/Tools.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Launch Trainer ↗
+        </a>
+      </div>
+
+    </article>
+
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     ANKI
+========================================================= -->
+
+<section id="anki">
+
+  <div class="section-head">
+    <h2>Anki Flashcards</h2>
+    <p>
+      A custom CySA+ CS0-004 study deck designed to
+      complement the interactive trainers.
+    </p>
+  </div>
+
+  <div class="anki">
+
+    <div class="panel">
+
+      <h3>Scott's CySA+ CS0-004 Deck</h3>
+
+      <p>
+        The deck combines two complementary card styles:
+      </p>
+
+      <ul class="feature-list">
+
+        <li>
+          <strong>Textbook cards</strong> — broad concept
+          coverage based on CertMaster Perform material,
+          including definitions, frameworks, tools,
+          logs, and indicators.
+        </li>
+
+        <li>
+          <strong>Quiz cards</strong> — practice questions
+          with additional notes and reasoning.
+        </li>
+
+        <li>
+          Hierarchical <code>CySA004</code> tags for
+          organizing the material.
+        </li>
+
+        <li>
+          Custom HTML card styling designed to remain
+          usable in dark mode.
+        </li>
+
+      </ul>
+
+    </div>
+
+    <div class="download-box">
+
+      <h3>Download the Deck</h3>
+
+      <p>
+        Import the <code>.apkg</code> file into Anki
+        Desktop and sync through AnkiWeb if you also use
+        AnkiMobile or AnkiDroid.
+      </p>
+
+      <a
+        class="btn green"
+        href="ScottsFreshDeckCySA-004.apkg"
+        download
+      >
+        ↓ Download .apkg
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     REFERENCE VISUALS
+========================================================= -->
+
+<section id="visuals">
+
+  <div class="section-head">
+    <h2>Visual Study References</h2>
+    <p>
+      Selected reference graphics from the study
+      materials. Click an image to open the full-size
+      version in a new tab.
+    </p>
+  </div>
+
+  <div class="visual-grid">
+
+    <article class="visual-card">
+      <a
+        href="images/cyber-kill-chain.webp"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="images/cyber-kill-chain.webp"
+          alt="Cyber Kill Chain reference"
+          loading="lazy"
+        >
+        <div>Cyber Kill Chain</div>
+      </a>
+    </article>
+
+    <article class="visual-card">
+      <a
+        href="images/diamond-model.webp"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="images/diamond-model.webp"
+          alt="Diamond Model reference"
+          loading="lazy"
+        >
+        <div>Diamond Model</div>
+      </a>
+    </article>
+
+    <article class="visual-card">
+      <a
+        href="images/pyramid-of-pain.webp"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="images/pyramid-of-pain.webp"
+          alt="Pyramid of Pain reference"
+          loading="lazy"
+        >
+        <div>Pyramid of Pain</div>
+      </a>
+    </article>
+
+    <article class="visual-card">
+      <a
+        href="images/stride_v4.webp"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="images/stride_v4.webp"
+          alt="STRIDE framework reference"
+          loading="lazy"
+        >
+        <div>STRIDE</div>
+      </a>
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     RESOURCES / PROJECT
+========================================================= -->
+
+<section>
+
+  <div class="panel">
+
+    <h2>About the Project</h2>
+
+    <p>
+      These are personal study materials created during
+      preparation for CompTIA CySA+ CS0-004. They were
+      developed using material from sources including
+      CompTIA CertMaster, instructor-led training,
+      Jason Dion's CySA+ course, Sybex material, and
+      additional study work performed with AI tools.
+    </p>
+
+    <p>
+      This project is not affiliated with or endorsed by
+      CompTIA. Study material can become outdated or
+      contain errors, so information should be independently
+      verified.
+    </p>
+
+    <p>
+
+      <a
+        href="https://github.com/UGL13RTH4NU/CySA-004"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub Repository ↗
+      </a>
+
+      &nbsp; · &nbsp;
+
+      <a
+        href="https://github.com/UGL13RTH4NU/CySA-004/blob/main/README.md"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Full README / Resources ↗
+      </a>
+
+    </p>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  Personal CySA+ CS0-004 study materials ·
+  Original collection created July/August 2026 ·
+  <a
+    href="https://github.com/UGL13RTH4NU/CySA-004"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    UGL13RTH4NU/CySA-004
+  </a>
+
+</footer>
+
+
+<script>
+/* ============================================================
+   DARK MODE
+============================================================ */
+
+const darkBtn = document.getElementById("darkBtn");
+
+function updateDarkButton() {
+  darkBtn.textContent =
+    document.body.classList.contains("dark")
+      ? "☀️ Light"
+      : "🌙 Dark";
+}
+
+const storedTheme = localStorage.getItem("cysa-theme");
+
+if (storedTheme === "dark") {
+  document.body.classList.add("dark");
+}
+
+updateDarkButton();
+
+darkBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "cysa-theme",
+    document.body.classList.contains("dark")
+      ? "dark"
+      : "light"
+  );
+
+  updateDarkButton();
+});
+
+
+/* ============================================================
+   TRAINER SEARCH
+============================================================ */
+
+const search = document.getElementById("trainerSearch");
+const cards = document.querySelectorAll(".trainer-card");
+
+search.addEventListener("input", () => {
+
+  const query = search.value
+    .trim()
+    .toLowerCase();
+
+  cards.forEach(card => {
+
+    const match =
+      card.textContent
+        .toLowerCase()
+        .includes(query);
+
+    card.style.display =
+      match ? "" : "none";
+
+  });
+
+});
+</script>
+
+</body>
+</html>
