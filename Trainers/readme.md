@@ -1,6 +1,6 @@
 # CySA+ CS0-004 Interactive Trainers
 
-Standalone browser-based study trainers for the CompTIA Cybersecurity Analyst (CySA+) CS0-004 V4 exam. Each is a single self-contained HTML file — no install, no dependencies, no data leaves the browser. Open directly via the links below, or clone the repo to run locally.
+Standalone browser-based study trainers for the CompTIA Cybersecurity Analyst (CySA+) CS0-004 V4 exam. Each is a single self-contained HTML file — no install, no dependencies, no data leaves the browser. Open directly via the links below, or clone the repo to run locally. Web-based practice trainers hosted via GitHub Pages. These work best on laptop/desktop. Most also work with iPad/tablet using tap touch to select and place. Does **not** work well with mobile phone size devices.
 
 I built these to help in my weak areas. They're meant to help build a 'muscle-memory' type effect. As a person who does **not** have the multi-year experience that the exam objectives state the desired candidate should have ("4 years of hands-on experience in a SOC analyst (level 2) or a vulnerability analyst role"), I needed something to get my hands and brain to recognize certain terms and patterns and how they fit together. For me, these help me correlate these things and burn away the unfamiliarity.
 
@@ -26,24 +26,13 @@ I built these to help in my weak areas. They're meant to help build a 'muscle-me
 
 Click any link above to open the trainer in your browser. Progress is not persisted between sessions — closing the tab resets state.
 
-
+---
 
 ## Related
 
 - Parent repo: [CySA-004](https://github.com/UGL13RTH4NU/CySA-004) — Anki decks and other study assets
 
-
-
-## How I Study & Prepare for the Exam
-
-IMO, these trainers should be used after and as a supplement to doing the following:
-
-1. Reading the study material
-2. Doing the practice labs
-3. Practice Quizzes and Tests
-4. Flashcards
-5. These 'Trainers'
-
+---
 
 ## Disclaimer
 
