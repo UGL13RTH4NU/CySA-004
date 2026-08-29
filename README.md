@@ -29,7 +29,7 @@ Tag hierarchy: All cards prefixed with `CySA004`, then module-hierarchical (text
 
 ### Interactive HTML Trainers
 
-Web-based practice trainers hosted via GitHub Pages. These work best on laptop/desktop. Most also work with iPad/tablet using tap touch to select and place.
+Web-based practice trainers hosted via GitHub Pages. These work best on laptop/desktop. Most also work with iPad/tablet using tap touch to select and place. Does **not** work well with mobile phone size devices.
 
 
 | Module / Lesson | Trainer | Coverage |
