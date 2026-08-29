@@ -7,7 +7,7 @@
 <title>CySA+ CS0-004 Study Materials</title>
 <meta
   name="description"
-  content="Interactive CySA+ CS0-004 trainers, Anki flashcards, and visual study references for active recall and pattern recognition."
+  content="Interactive CySA+ CS0-004 trainers and visual study references for active recall and pattern recognition."
 >
 
 <style>
@@ -52,13 +52,9 @@ body.dark {
     0 5px 15px rgba(0,0,0,.25);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -76,9 +72,7 @@ body {
   line-height: 1.5;
 }
 
-a {
-  color: var(--accent);
-}
+a { color: var(--accent); }
 
 header {
   position: sticky;
@@ -98,9 +92,7 @@ header {
   color: var(--accent);
 }
 
-.spacer {
-  flex: 1;
-}
+.spacer { flex: 1; }
 
 button {
   font: inherit;
@@ -112,9 +104,7 @@ button {
   padding: 7px 11px;
 }
 
-button:hover {
-  border-color: var(--accent);
-}
+button:hover { border-color: var(--accent); }
 
 main {
   max-width: 1280px;
@@ -201,9 +191,7 @@ main {
   font-weight: 700;
 }
 
-.btn:hover {
-  border-color: var(--accent);
-}
+.btn:hover { border-color: var(--accent); }
 
 .btn.primary {
   background: var(--accent);
@@ -211,21 +199,11 @@ main {
   color: white;
 }
 
-.btn.green {
-  background: var(--accent2);
-  border-color: var(--accent2);
-  color: white;
-}
-
 /* ---------- SECTIONS ---------- */
 
-section {
-  margin-top: 38px;
-}
+section { margin-top: 38px; }
 
-.section-head {
-  margin-bottom: 15px;
-}
+.section-head { margin-bottom: 15px; }
 
 .section-head h2 {
   margin: 0 0 4px;
@@ -260,9 +238,7 @@ section {
   color: var(--accent);
 }
 
-.panel p:last-child {
-  margin-bottom: 0;
-}
+.panel p:last-child { margin-bottom: 0; }
 
 .stats {
   display: grid;
@@ -314,8 +290,7 @@ section {
 
 .trainer-grid {
   display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(285px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
   gap: 13px;
 }
 
@@ -378,9 +353,7 @@ section {
   font-size: .89rem;
 }
 
-.trainer-card .launch {
-  margin-top: auto;
-}
+.trainer-card .launch { margin-top: auto; }
 
 .launch a {
   display: inline-block;
@@ -388,52 +361,26 @@ section {
   font-weight: 800;
 }
 
-.launch a:hover {
-  text-decoration: underline;
-}
+.launch a:hover { text-decoration: underline; }
 
 /* ---------- ANKI ---------- */
 
-.anki {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(270px, .6fr);
-  gap: 14px;
-  align-items: stretch;
+.feature-list { padding-left: 20px; }
+
+.feature-list li { margin-bottom: 7px; }
+
+#anki .panel h3 a {
+  color: var(--accent);
+  text-decoration: none;
 }
 
-.feature-list {
-  padding-left: 20px;
-}
-
-.feature-list li {
-  margin-bottom: 7px;
-}
-
-.download-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: var(--greenbg);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 22px;
-}
-
-.download-box h3 {
-  margin: 0 0 7px;
-  color: var(--accent2);
-}
-
-.download-box p {
-  color: var(--muted);
-}
+#anki .panel h3 a:hover { text-decoration: underline; }
 
 /* ---------- VISUALS ---------- */
 
 .visual-grid {
   display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
 }
 
@@ -474,29 +421,18 @@ footer {
   text-align: center;
 }
 
-footer a {
-  text-decoration: none;
-}
+footer a { text-decoration: none; }
 
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 760px) {
-  .intro-grid,
-  .anki {
-    grid-template-columns: 1fr;
-  }
+  .intro-grid { grid-template-columns: 1fr; }
 
-  header {
-    position: static;
-  }
+  header { position: static; }
 
-  .hero {
-    padding: 28px 20px;
-  }
+  .hero { padding: 28px 20px; }
 
-  .hero-actions .btn {
-    width: 100%;
-  }
+  .hero-actions .btn { width: 100%; }
 }
 
 @media (max-width: 420px) {
@@ -505,9 +441,7 @@ footer a {
     padding-right: 10px;
   }
 
-  .stats {
-    grid-template-columns: 1fr;
-  }
+  .stats { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -548,23 +482,15 @@ footer a {
   </h1>
 
   <p>
-    Interactive browser-based trainers, Anki flashcards,
-    and visual study references built around active recall,
-    pattern recognition, and practical exam preparation.
+    Interactive browser-based trainers and visual study
+    references built around active recall, pattern recognition,
+    and practical exam preparation.
   </p>
 
   <div class="hero-actions">
 
     <a class="btn primary" href="#trainers">
       ▶ Start a Trainer
-    </a>
-
-    <a
-      class="btn green"
-      href="ScottsFreshDeckCySA-004.apkg"
-      download
-    >
-      ↓ Download Anki Deck
     </a>
 
     <a
@@ -579,7 +505,6 @@ footer a {
   </div>
 
 </section>
-
 
 <!-- =========================================================
      WHY THESE EXIST
@@ -630,8 +555,8 @@ footer a {
         </div>
 
         <div class="stat">
-          <strong>1</strong>
-          <span>Custom Anki deck</span>
+          <strong>Browser</strong>
+          <span>Standalone HTML practice</span>
         </div>
 
         <div class="stat">
@@ -651,7 +576,6 @@ footer a {
   </div>
 
 </section>
-
 
 <!-- =========================================================
      TRAINERS
@@ -679,356 +603,149 @@ footer a {
 
   <div class="trainer-grid" id="trainerGrid">
 
-
-    <!-- SOC ROLES -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 1</span>
         <span class="badge">SOC</span>
       </div>
-
       <h3>SOC Roles</h3>
-
-      <p>
-        SOC job roles and the six-step SOC incident
-        lifecycle.
-      </p>
-
+      <p>SOC job roles and the six-step SOC incident lifecycle.</p>
       <div class="launch">
-        <a
-          href="Trainers/Soc_Roles.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Soc_Roles.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- FILE SYSTEMS -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 3</span>
         <span class="badge">Windows</span>
         <span class="badge">Linux</span>
       </div>
-
       <h3>File Systems</h3>
-
-      <p>
-        Windows and Linux file systems, registry keys and
-        hives, system directories, processes, and
-        cross-platform classification.
-      </p>
-
+      <p>Windows and Linux file systems, registry keys and hives, system directories, processes, and cross-platform classification.</p>
       <div class="launch">
-        <a
-          href="Trainers/File_Systems.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/File_Systems.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- NMAP -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 3</span>
         <span class="badge">Scanning</span>
         <span class="badge">CLI</span>
       </div>
-
       <h3>Nmap</h3>
-
-      <p>
-        Scan techniques, host discovery, target
-        specification, service and OS detection, NSE,
-        port states, timing, evasion, output interpretation,
-        and typed command practice.
-      </p>
-
+      <p>Scan techniques, host discovery, target specification, service and OS detection, NSE, port states, timing, evasion, output interpretation, and typed command practice.</p>
       <div class="launch">
-        <a
-          href="Trainers/Nmap.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Nmap.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- PROCESSES -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 3</span>
         <span class="badge">Processes</span>
         <span class="badge">Triage</span>
       </div>
-
       <h3>Processes</h3>
-
-      <p>
-        Expected Windows and Linux process lineage,
-        suspicious parent/child relationships, LOLBin
-        abuse, path anomalies, masquerading, Event 4688,
-        and Sysmon Event 1.
-      </p>
-
+      <p>Expected Windows and Linux process lineage, suspicious parent/child relationships, LOLBin abuse, path anomalies, masquerading, Event 4688, and Sysmon Event 1.</p>
       <div class="launch">
-        <a
-          href="Trainers/Processes.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Processes.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- OT -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Lesson 4C</span>
         <span class="badge">OT / ICS</span>
         <span class="badge">IIoT</span>
       </div>
-
       <h3>OT / ICS / IIoT</h3>
-
-      <p>
-        Industrial protocols, ICS components,
-        SCADA vs. DCS, vendor and system relationships,
-        and OT security platforms including Dragos,
-        Nozomi, and Claroty.
-      </p>
-
+      <p>Industrial protocols, ICS components, SCADA vs. DCS, vendor and system relationships, and OT security platforms including Dragos, Nozomi, and Claroty.</p>
       <div class="launch">
-        <a
-          href="Trainers/OT.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/OT.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- CVSS -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 7</span>
         <span class="badge">CVSS 4.0</span>
         <span class="badge">Vulnerability</span>
       </div>
-
       <h3>CVSS 4.0</h3>
-
-      <p>
-        Base, Threat, Environmental, and Supplemental
-        metrics; vector ordering; exploitability vs.
-        impact; CVSS nomenclature; vector reading;
-        CVSS vs. EPSS; and severity bands.
-      </p>
-
+      <p>Base, Threat, Environmental, and Supplemental metrics; vector ordering; exploitability vs. impact; CVSS nomenclature; vector reading; CVSS vs. EPSS; and severity bands.</p>
       <div class="launch">
-        <a
-          href="Trainers/CVSS_4-0.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/CVSS_4-0.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- WIRESHARK -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 10</span>
         <span class="badge">Packets</span>
         <span class="badge">Filters</span>
       </div>
-
       <h3>Wireshark</h3>
-
-      <p>
-        Build and recognize display filters, type exact
-        filter syntax, distinguish capture from display
-        filters, recognize default packet colors, and
-        identify analysis features.
-      </p>
-
+      <p>Build and recognize display filters, type exact filter syntax, distinguish capture from display filters, recognize default packet colors, and identify analysis features.</p>
       <div class="launch">
-        <a
-          href="Trainers/Wireshark.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Wireshark.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- SNORT -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge module">Module 10</span>
         <span class="badge">IDS / IPS</span>
         <span class="badge">Rules</span>
       </div>
-
       <h3>SNORT</h3>
-
-      <p>
-        IDS vs. IPS behavior, rule anatomy, rule
-        construction and reading, rule options, direction,
-        alert output, operating modes, and comparison with
-        Suricata and Zeek.
-      </p>
-
+      <p>IDS vs. IPS behavior, rule anatomy, rule construction and reading, rule options, direction, alert output, operating modes, and comparison with Suricata and Zeek.</p>
       <div class="launch">
-        <a
-          href="Trainers/SNORT.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/SNORT.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- FRAMEWORKS -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge cross">Cross-module</span>
         <span class="badge">Frameworks</span>
       </div>
-
       <h3>Frameworks</h3>
-
-      <p>
-        Cyber Kill Chain, Diamond Model,
-        Pyramid of Pain, STRIDE, and STIX/TAXII through
-        matching, ordering, recognition, and
-        scenario questions.
-      </p>
-
+      <p>Cyber Kill Chain, Diamond Model, Pyramid of Pain, STRIDE, and STIX/TAXII through matching, ordering, recognition, and scenario questions.</p>
       <div class="launch">
-        <a
-          href="Trainers/Frameworks.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Frameworks.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- LOGGING -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge cross">Cross-module</span>
         <span class="badge">Event IDs</span>
         <span class="badge">Logs</span>
       </div>
-
       <h3>Logging</h3>
-
-      <p>
-        Windows Event IDs, logon types, CertMaster
-        severity levels, Syslog/Cisco severity,
-        Windows event levels, logging concepts, and
-        event-correlation scenarios.
-      </p>
-
+      <p>Windows Event IDs, logon types, CertMaster severity levels, Syslog/Cisco severity, Windows event levels, logging concepts, and event-correlation scenarios.</p>
       <div class="launch">
-        <a
-          href="Trainers/Logging.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Logging.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
 
-
-    <!-- TOOLS -->
-
     <article class="trainer-card">
-
       <div class="badge-row">
         <span class="badge cross">Cross-module</span>
         <span class="badge">Tools</span>
       </div>
-
       <h3>External Tools</h3>
-
-      <p>
-        Security tool, service, and software recognition
-        with function-based classification and
-        scenario-to-tool matching.
-      </p>
-
+      <p>Security tool, service, and software recognition with function-based classification and scenario-to-tool matching.</p>
       <div class="launch">
-        <a
-          href="Trainers/Tools.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Launch Trainer ↗
-        </a>
+        <a href="Trainers/Tools.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
-
     </article>
-
 
   </div>
 
 </section>
-
 
 <!-- =========================================================
      ANKI
@@ -1044,68 +761,45 @@ footer a {
     </p>
   </div>
 
-  <div class="anki">
+  <div class="panel">
 
-    <div class="panel">
-
-      <h3>Scott's CySA+ CS0-004 Deck</h3>
-
-      <p>
-        The deck combines two complementary card styles:
-      </p>
-
-      <ul class="feature-list">
-
-        <li>
-          <strong>Textbook cards</strong> — broad concept
-          coverage based on CertMaster Perform material,
-          including definitions, frameworks, tools,
-          logs, and indicators.
-        </li>
-
-        <li>
-          <strong>Quiz cards</strong> — practice questions
-          with additional notes and reasoning.
-        </li>
-
-        <li>
-          Hierarchical <code>CySA004</code> tags for
-          organizing the material.
-        </li>
-
-        <li>
-          Custom HTML card styling designed to remain
-          usable in dark mode.
-        </li>
-
-      </ul>
-
-    </div>
-
-    <div class="download-box">
-
-      <h3>Download the Deck</h3>
-
-      <p>
-        Import the <code>.apkg</code> file into Anki
-        Desktop and sync through AnkiWeb if you also use
-        AnkiMobile or AnkiDroid.
-      </p>
-
+    <h3>
       <a
-        class="btn green"
-        href="ScottsFreshDeckCySA-004.apkg"
-        download
+        href="https://github.com/UGL13RTH4NU/CySA-004/blob/main/ScottsFreshDeckCySA-004.apkg"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        ↓ Download .apkg
+        Scott's CySA+ CS0-004 Deck ↗
       </a>
+    </h3>
 
-    </div>
+    <p>
+      Custom Anki deck I've been using while studying for
+      the CS0-004 V4 exam.
+    </p>
+
+    <ul class="feature-list">
+
+      <li>
+        Hierarchical <code>CySA004</code> tags for
+        organizing the material.
+      </li>
+
+      <li>
+        Custom HTML card styling designed to remain
+        usable in dark mode.
+      </li>
+
+    </ul>
+
+    <p>
+      Created by me, for me, based on the areas where I
+      wanted additional exposure and repetition while studying.
+    </p>
 
   </div>
 
 </section>
-
 
 <!-- =========================================================
      REFERENCE VISUALS
@@ -1125,61 +819,29 @@ footer a {
   <div class="visual-grid">
 
     <article class="visual-card">
-      <a
-        href="images/cyber-kill-chain.webp"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="images/cyber-kill-chain.webp"
-          alt="Cyber Kill Chain reference"
-          loading="lazy"
-        >
+      <a href="images/cyber-kill-chain.webp" target="_blank" rel="noopener noreferrer">
+        <img src="images/cyber-kill-chain.webp" alt="Cyber Kill Chain reference" loading="lazy">
         <div>Cyber Kill Chain</div>
       </a>
     </article>
 
     <article class="visual-card">
-      <a
-        href="images/diamond-model.webp"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="images/diamond-model.webp"
-          alt="Diamond Model reference"
-          loading="lazy"
-        >
+      <a href="images/diamond-model.webp" target="_blank" rel="noopener noreferrer">
+        <img src="images/diamond-model.webp" alt="Diamond Model reference" loading="lazy">
         <div>Diamond Model</div>
       </a>
     </article>
 
     <article class="visual-card">
-      <a
-        href="images/pyramid-of-pain.webp"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="images/pyramid-of-pain.webp"
-          alt="Pyramid of Pain reference"
-          loading="lazy"
-        >
+      <a href="images/pyramid-of-pain.webp" target="_blank" rel="noopener noreferrer">
+        <img src="images/pyramid-of-pain.webp" alt="Pyramid of Pain reference" loading="lazy">
         <div>Pyramid of Pain</div>
       </a>
     </article>
 
     <article class="visual-card">
-      <a
-        href="images/stride_v4.webp"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="images/stride_v4.webp"
-          alt="STRIDE framework reference"
-          loading="lazy"
-        >
+      <a href="images/stride_v4.webp" target="_blank" rel="noopener noreferrer">
+        <img src="images/stride_v4.webp" alt="STRIDE framework reference" loading="lazy">
         <div>STRIDE</div>
       </a>
     </article>
@@ -1187,7 +849,6 @@ footer a {
   </div>
 
 </section>
-
 
 <!-- =========================================================
      RESOURCES / PROJECT
@@ -1216,7 +877,6 @@ footer a {
     </p>
 
     <p>
-
       <a
         href="https://github.com/UGL13RTH4NU/CySA-004"
         target="_blank"
@@ -1234,7 +894,6 @@ footer a {
       >
         Full README / Resources ↗
       </a>
-
     </p>
 
   </div>
@@ -1243,9 +902,7 @@ footer a {
 
 </main>
 
-
 <footer>
-
   Personal CySA+ CS0-004 study materials ·
   Original collection created July/August 2026 ·
   <a
@@ -1255,9 +912,7 @@ footer a {
   >
     UGL13RTH4NU/CySA-004
   </a>
-
 </footer>
-
 
 <script>
 /* ============================================================
@@ -1294,7 +949,6 @@ darkBtn.addEventListener("click", () => {
   updateDarkButton();
 });
 
-
 /* ============================================================
    TRAINER SEARCH
 ============================================================ */
@@ -1303,23 +957,12 @@ const search = document.getElementById("trainerSearch");
 const cards = document.querySelectorAll(".trainer-card");
 
 search.addEventListener("input", () => {
-
-  const query = search.value
-    .trim()
-    .toLowerCase();
+  const query = search.value.trim().toLowerCase();
 
   cards.forEach(card => {
-
-    const match =
-      card.textContent
-        .toLowerCase()
-        .includes(query);
-
-    card.style.display =
-      match ? "" : "none";
-
+    const match = card.textContent.toLowerCase().includes(query);
+    card.style.display = match ? "" : "none";
   });
-
 });
 </script>
 
