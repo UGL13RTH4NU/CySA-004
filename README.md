@@ -11,7 +11,6 @@ I originally built all of this for myself while studying for the exam. I'm makin
 The GitHub Pages site is now the easiest way to get to everything in this repo. From there you can:
 
 * Launch any of the interactive HTML trainers
-* Download the Anki deck
 * Browse some of the visual study references
 * Search the available trainers by topic
 
@@ -53,18 +52,9 @@ Rather than duplicate every launch link here, the current trainers can be opened
 
 ## Anki Deck
 
-The repo also contains my custom CySA+ CS0-004 Anki deck:
+The repo contains my custom CySA+ CS0-004 Anki deck:
 
 **`ScottsFreshDeckCySA-004.apkg`**
-
-The cards come from two parallel workflows:
-
-* **Textbook cards** — broad concept coverage from CompTIA CertMaster Perform courseware: definitions, framework structures, tool identification, log interpretation, indicator recognition, etc.
-* **Quiz cards** — quiz questions with additional notes and reasoning added during review
-
-All cards use custom HTML styling with dark-mode-compatible backgrounds for AnkiMobile.
-
-The tag hierarchy begins with `CySA004`, then branches into module-hierarchical tags for textbook cards and domain-hierarchical tags for quiz cards.
 
 ### Importing the deck
 
@@ -98,44 +88,22 @@ Some of these are also displayed directly on the main study site.
 
 ## Resources I Used
 
-This repo isn't based on one single source. I have been studying the material from several different directions:
+Below our the primary resources I used to study for the CySA+ 004 certification exam:
 
-* **Instructor-led CySA+ 004 training — NOVA Workforce**
-
-  * Grants may be available that significantly reduce tuition
-  * If you choose to go this route, look for classes conducted by **Professor Nick Pierce**. He's one of the best instructors I've had for tech/cybersecurity-related classes, even though the classes I've taken with him were conducted through Zoom rather than physically in a classroom.
-
-* **CompTIA CertMaster Perform — CySA+ 004**
-
-  * Course textbook
-  * Labs
-  * PBQs
-  * Practice quizzes for each module
-  * Mock exam
-
-* **CompTIA CertMaster Practice**
-
-  * Obtained through my WGU cybersecurity program
-
-* **Jason Dion — CySA+ 004 on Udemy**
-
-  * Also available to me through WGU
-
-* **Sybex CySA+ CS0-004 Study Guide**
-
-* **Anki**
-
-  * Flashcards created by me, for me
-
-* **HTML Trainers**
-
-  * Created by me, for me
-
-* **ChatGPT and Claude**
-
-  * Used extensively in developing, reviewing, arguing about, correcting, and expanding the study material
-
-**If you live in the Northern Virginia area, I highly recommend the NOVA Workforce program. Their instructors have all been top notch, and the program and material it provides have been excellent.**
+- **Instructor lead training (CySA+ 004)** - NVCC Workforce (grants available for reduced tuition) Workforce
+   - If you choose to go this route, look for classes conducted by Professor Nick Pierce - he's one of the best in-person (vis-a-vis Zoom) instructors I've had for Tech/ Cybersecurity related classes
+- **CertMaster Perform (CySA+ 004)** - obtained through NVCC Workforce program, but purchasable directly from CompTIA
+course textbook
+   - labs
+   - PBQ's
+   - Practice Quizzes for each module
+   - Mock Exam
+- **CertMaster Practice (CySA+ 003)** - obtained via WGU BSCSIA, but purchasable directly from CompTIA
+- **Udemy**, Jason Dion (CySA+ 004) - obtained via WGU BSCSIA, but purchasable directly from Udemy
+- **Anki flashcards**, free for desktop and Android - created by me, for me
+- **HTML based Trainers**, free - created by me, for me
+- **ChatGPT** & **Claude** - $20 subscription model
+- **Sybex Study Guide** (CySA+ 004) - Amazon
 
 ---
 
