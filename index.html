@@ -297,6 +297,7 @@ section { margin-top: 38px; }
 }
 
 .trainer-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 235px;
@@ -305,6 +306,7 @@ section { margin-top: 38px; }
   border: 1px solid var(--border);
   border-radius: 13px;
   box-shadow: var(--shadow);
+  cursor: pointer;
   transition:
     transform .12s ease,
     border-color .12s ease;
@@ -361,6 +363,19 @@ section { margin-top: 38px; }
   display: inline-block;
   text-decoration: none;
   font-weight: 800;
+}
+
+/* The card already highlights as a single object, so make that entire object
+   activate its existing trainer link instead of limiting clicks to the text. */
+.trainer-card .launch a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 13px;
+}
+
+.trainer-card:focus-within {
+  border-color: var(--accent);
 }
 
 .launch a:hover { text-decoration: underline; }
@@ -552,7 +567,7 @@ footer a { text-decoration: none; }
       <div class="stats">
 
         <div class="stat">
-          <strong>11</strong>
+          <strong>12</strong>
           <span>Interactive trainers</span>
         </div>
 
@@ -653,6 +668,19 @@ footer a { text-decoration: none; }
       <p>Expected Windows and Linux process lineage, suspicious parent/child relationships, LOLBin abuse, path anomalies, masquerading, Event 4688, and Sysmon Event 1.</p>
       <div class="launch">
         <a href="Trainers/Processes.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
+      </div>
+    </article>
+
+    <article class="trainer-card">
+      <div class="badge-row">
+        <span class="badge module">Module 3</span>
+        <span class="badge">LOLBins</span>
+        <span class="badge">ATT&amp;CK</span>
+      </div>
+      <h3>LOLBins</h3>
+      <p>Recognize high-yield Windows and Linux living-off-the-land binaries, match them to abuse patterns, separate Dion's exam-oriented platform buckets, and correlate common behaviors with MITRE ATT&amp;CK techniques.</p>
+      <div class="launch">
+        <a href="Trainers/LOLBins.html" target="_blank" rel="noopener noreferrer">Launch Trainer ↗</a>
       </div>
     </article>
 
