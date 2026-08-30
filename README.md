@@ -46,7 +46,7 @@ Current trainers include:
 * **Logging** — Windows Event IDs, logon types, Syslog/Cisco severity, Windows event levels, logging concepts, and correlation scenarios
 * **External Tools** — recognition of external cybersecurity tools, services, and software and what they are actually used for
 
-Rather than duplicate every launch link here, the current trainers can be opened from the **[main study site](https://ugl13rth4nu.github.io/CySA-004/)**.
+The current trainers can be opened from the **[main study site](https://ugl13rth4nu.github.io/CySA-004/)**.
 
 ---
 
