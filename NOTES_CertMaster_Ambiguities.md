@@ -109,14 +109,14 @@ NIST's two compound phases, and Module 1's combined Eradication and Recovery ste
     <tr>
       <td>Get ready</td>
       <td>Preparation</td>
-      <td>&mdash;</td>
+      <td></td>
       <td>Preparation</td>
     </tr>
     <tr>
       <td>Find it</td>
-      <td rowspan="3" align="center">Detection &amp; Analysis</td>
+      <td rowspan="3" align="left" valign="middle">Detection &amp; Analysis</td>
       <td>Detection</td>
-      <td rowspan="2" align="center">Detection</td>
+      <td rowspan="2" align="left" valign="middle">Detection</td>
     </tr>
     <tr>
       <td>Validate / prioritize</td>
@@ -129,13 +129,13 @@ NIST's two compound phases, and Module 1's combined Eradication and Recovery ste
     </tr>
     <tr>
       <td>Stop the spread</td>
-      <td rowspan="3" align="center">Containment,<br>Eradication &amp; Recovery</td>
+      <td rowspan="3" align="left" valign="middle">Containment,<br>Eradication &amp; Recovery</td>
       <td><b>Response</b></td>
       <td>Containment</td>
     </tr>
     <tr>
       <td>Remove it</td>
-      <td rowspan="2" align="center">Eradication and Recovery</td>
+      <td rowspan="2" align="left" valign="middle">Eradication and Recovery</td>
       <td>Eradication</td>
     </tr>
     <tr>
@@ -151,8 +151,8 @@ NIST's two compound phases, and Module 1's combined Eradication and Recovery ste
   </tbody>
 </table>
 
-*Module 1's SOC model has no explicit Preparation stage (&mdash;); readiness is assumed standing. In
-the 7-stage model, validate/prioritize falls within Detection, so that cell is merged upward.*
+*Module 1's SOC model has no explicit Preparation stage; readiness is assumed standing. In the
+7-stage model, validate/prioritize falls within Detection, so that cell is merged upward.*
 
 ### Exam takeaways
 
