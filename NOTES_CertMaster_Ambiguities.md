@@ -1,6 +1,6 @@
 # CertMaster Perform (CS0-004 V4) — Terminology Clarifications
 
-Two areas of CompTIA CertMaster Perform where the material is internally inconsistent or uses one
+Areas of CompTIA CertMaster Perform where the material is internally inconsistent or uses one
 term at different levels of detail across modules. Each entry states what the source actually says,
 cites the module, and gives the exam-relevant takeaway. Verified against CySA+ CertMaster Perform
 V4, the CompTIA CS0-004 V4 Exam Objectives v2.0, and NIST SP 800-61.
