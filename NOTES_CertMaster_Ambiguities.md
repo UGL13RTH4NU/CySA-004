@@ -93,16 +93,66 @@ standing readiness, Triage split out, and Eradication and Recovery kept together
 
 ### Cross-model name map (approximate alignment)
 
-| Concept | NIST r2 (4) | Module 1 SOC (6) | Modules 9/12 IR (7) |
-|---|---|---|---|
-| Get ready | Preparation | *(standing readiness)* | Preparation |
-| Find it | Detection & Analysis | Detection | Detection |
-| Validate / prioritize | *(within Detection & Analysis)* | **Triage** | *(within Detection)* |
-| Understand it | Detection & Analysis | **Investigation** | Analysis |
-| Stop the spread | Containment/Erad./Recovery | **Response** | Containment |
-| Remove it | Containment/Erad./Recovery | Eradication and Recovery | Eradication |
-| Restore | Containment/Erad./Recovery | Eradication and Recovery | Recovery |
-| Learn | Post-Incident Activity | Post-Incident Improvement | Post-incident Activity |
+Merged cells mark a single phase in one model that spans several finer-grained steps in another —
+NIST's two compound phases, and Module 1's combined Eradication and Recovery step.
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Concept</th>
+      <th align="left">NIST r2 (4)</th>
+      <th align="left">Module 1 SOC (6)</th>
+      <th align="left">Modules 9/12 IR (7)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Get ready</td>
+      <td>Preparation</td>
+      <td>&mdash;</td>
+      <td>Preparation</td>
+    </tr>
+    <tr>
+      <td>Find it</td>
+      <td rowspan="3" align="center">Detection &amp; Analysis</td>
+      <td>Detection</td>
+      <td rowspan="2" align="center">Detection</td>
+    </tr>
+    <tr>
+      <td>Validate / prioritize</td>
+      <td><b>Triage</b></td>
+    </tr>
+    <tr>
+      <td>Understand it</td>
+      <td><b>Investigation</b></td>
+      <td>Analysis</td>
+    </tr>
+    <tr>
+      <td>Stop the spread</td>
+      <td rowspan="3" align="center">Containment,<br>Eradication &amp; Recovery</td>
+      <td><b>Response</b></td>
+      <td>Containment</td>
+    </tr>
+    <tr>
+      <td>Remove it</td>
+      <td rowspan="2" align="center">Eradication and Recovery</td>
+      <td>Eradication</td>
+    </tr>
+    <tr>
+      <td>Restore</td>
+      <td>Recovery</td>
+    </tr>
+    <tr>
+      <td>Learn</td>
+      <td>Post-Incident Activity</td>
+      <td>Post-Incident Improvement</td>
+      <td>Post-incident Activity</td>
+    </tr>
+  </tbody>
+</table>
+
+*Module 1's SOC model has no explicit Preparation stage (&mdash;); readiness is assumed standing. In
+the 7-stage model, validate/prioritize falls within Detection, so that cell is merged upward.*
 
 ### Exam takeaways
 
