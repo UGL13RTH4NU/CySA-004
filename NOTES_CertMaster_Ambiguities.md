@@ -29,10 +29,10 @@ Here, **respond** stops at containment and **remediate** is the separate, longer
 ### Module 12 — Improving Processes with Automation
 
 Module 12 tracks only MTTD and MTTR, and defines MTTR as the time from detection until the threat
-is contained, mitigated, **and normal operations are restored**.
+is contained, mitigated, **and normal operations are restored**. 
 
 That last clause — *and normal operations are restored* — is the work Module 8 assigns to **MTTRm**.
-So Module 12's single "MTTR" covers both response and remediation in one number.
+So Module 12's single "MTTR" covers both response and remediation in one number. One of the best or clearest instances I saw of this difference was in a practice Quiz question where it identified MTTR as Mean Time to Resolve.
 
 ### Resolution
 
