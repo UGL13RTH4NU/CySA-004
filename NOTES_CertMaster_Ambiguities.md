@@ -35,7 +35,7 @@ That last clause — *and normal operations are restored* — is the work Module
 
 ### Resolution
 
-This is a granularity difference between an efficiency chapter and the KPI chapter, not a redefinition. **Module 8's four-metric split is authoritative.** When the exam distinguishes the metrics, use Module 8. CertMaster Perform - Module/Lesson 8 - briefly touches on the many faces of MTTR but, unfortunately, somewhat leaves the reader in suspense in Lesson 12 with its transition in usage.
+This is a granularity difference between an efficiency chapter and the KPI chapter, not a redefinition. **Module 8's four-metric split is authoritative.** When the exam distinguishes the metrics, use Module 8. CertMaster Perform - Module/Lesson 8 - briefly touches on the many faces of MTTR but, unfortunately, somewhat leaves the reader in suspense in Lesson 12 with its transition in usage without a more declaritive nature/ stronger acknowledgment of the switch from its prior usage.
 
 ### Exam takeaways
 
