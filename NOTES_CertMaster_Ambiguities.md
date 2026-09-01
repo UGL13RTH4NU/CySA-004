@@ -35,7 +35,7 @@ That last clause — *and normal operations are restored* — is the work Module
 
 ### Resolution
 
-This is a granularity difference between an efficiency chapter and the KPI chapter, not a redefinition. **Module 8's four-metric split is authoritative.** When the exam distinguishes the metrics, use Module 8. CertMaster Perform - Module/Lesson 8 - briefly touches on the many faces of MTTR but, unfortunately, somewhat leaves the reader in suspense in Lesson 12 with its transition in usage without a more declaritive nature/ stronger acknowledgment of the switch from its prior usage.
+This is a granularity difference between an efficiency chapter and the KPI chapter, not a redefinition. **Module 8's four-metric split is authoritative.** When the exam distinguishes the metrics, use Module 8. CertMaster Perform - Module/Lesson 8 - briefly touches on the many faces of MTTR but, unfortunately, somewhat leaves the reader in suspense in Lesson 12 with its transition in usage without a more declarative nature/ stronger acknowledgment of the switch from its prior usage.
 
 ### Exam takeaways
 
@@ -238,3 +238,7 @@ playbook's stages; Module 12: it supports the playbook's steps). They diverge on
 Module 9 Lesson 9B (IR process / NIST attribution), Module 11 (SOAR workflows — playbook/runbook by
 automation), Module 12 (automation, incident handling lifecycle, playbook/runbook by detail level).
 CompTIA CS0-004 V4 Exam Objectives v2.0, Obj. 4.2. NIST SP 800-61r2 (withdrawn Apr 3, 2025) and r3.*
+
+*Repo Author's note: I'm not certain whether the ambiguities I noticed are true ambiguities in the sense if someone with actual SOC experience had read the material - I suspect - may not have had any issues understanding what I point out above. But, to someone not experienced, such as myself doing this as part personal improvement/employability enhancement I had issues with these and it took a lot of review and discussing/arguing with AI to come to what I think are the proper conclusions. The CompTIA objectives clearly state the work experience of the desired candidate, so I am more inclined to beleive these were personal deficiencies, and not any type of true flaw in the material.*
+
+
