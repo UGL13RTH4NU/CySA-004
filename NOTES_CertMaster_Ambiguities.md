@@ -31,13 +31,11 @@ Here, **respond** stops at containment and **remediate** is the separate, longer
 Module 12 tracks only MTTD and MTTR, and defines MTTR as the time from detection until the threat
 is contained, mitigated, **and normal operations are restored**. 
 
-That last clause — *and normal operations are restored* — is the work Module 8 assigns to **MTTRm**.
-So Module 12's single "MTTR" covers both response and remediation in one number. One of the best or clearest instances I saw of this difference was in a practice Quiz question where it identified MTTR as Mean Time to Resolve.
+That last clause — *and normal operations are restored* — is the work Module 8 assigns to **MTTRm**. So Module 12's single "MTTR" covers both response and remediation in one number. One of the best, or clearest instances I saw of this difference was in a Lesson 12-2 Practice Quiz question where it identified MTTR as Mean Time to Resolve.
 
 ### Resolution
 
-This is a granularity difference between an efficiency chapter and the KPI chapter, not a redefinition.
-**Module 8's four-metric split is authoritative.** When the exam distinguishes the metrics, use Module 8.
+This is a granularity difference between an efficiency chapter and the KPI chapter, not a redefinition. **Module 8's four-metric split is authoritative.** When the exam distinguishes the metrics, use Module 8. CertMaster Perform - Module/Lesson 8 - briefly touches on the many faces of MTTR but, unfortunately, somewhat leaves the reader in suspense in Lesson 12 with its transition in usage.
 
 ### Exam takeaways
 
