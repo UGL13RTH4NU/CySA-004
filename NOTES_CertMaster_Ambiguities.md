@@ -221,14 +221,18 @@ playbook's stages; Module 12: it supports the playbook's steps). They diverge on
 
 ### Exam takeaways
 
-- CompTIA keys the distinction to **automation**, matching Module 11: **playbook = human-readable
-  procedure** (may or may not be automated); **runbook = the automated version** that executes steps
-  and pauses only at human decision points.
-- If a question asks what separates a runbook from a playbook, answer **automation**, not "level of
-  detail."
-- Module 12's richer treatment (playbook = strategic/what-why, runbook = detailed manual checklist)
-  is the more memorable framing, and it is the one that would steer you to the wrong keyed answer.
-  Both models are valid in the real world; the exam standardizes on the automation axis.
+- **The shared through-line:** playbook = higher-level (decisions, what/why); runbook =
+  lower-level (the executable step-by-step, the how). Both modules agree on this — it is the
+  safe core of the distinction.
+- **Detail and automation are one axis, not two.** A runbook's granularity is what makes it
+  automatable: you can have a detailed *manual* runbook, but you cannot automate high-level
+  guidance. Automation is the downstream consequence of reducing a procedure to deterministic,
+  judgment-free steps — not a separate criterion. A runbook is essentially an algorithm;
+  "automation" just names the case where a machine, not a person, executes it.
+- **On a question:** if the contrast is *high-level vs. detailed step-by-step*, decide on that
+  basis (Module 12's framing). If it specifically hinges on *SOAR / machine execution*, the
+  runbook is the automated one (Module 11's framing). Do not treat "level of detail" as wrong —
+  it is CertMaster's own Module 12 definition.
 
 ---
 
