@@ -18,7 +18,7 @@ I used AI to help build the tool list for this trainer. Gemini and Claude were u
 
 Experience with other certification exams has taught me that the exam objectives do not always list every tool discussed in the supporting course material. CompTIA also notes that the examples listed within its exam objectives are not exhaustive.
 
-I constrained the Tools trainer to **external tools/software** to keep it from becoming unmanageably large. Anyone choosing to use this trainer should therefore use it in conjunction with the official exam objectives and review those objectives independently to ensure they are thoroughly prepared for the tools and technologies they may encounter on the actual exam.
+Anyone choosing to use this trainer should therefore use it in conjunction with the official exam objectives and review those objectives independently to ensure they are thoroughly prepared for the tools and technologies they may encounter on the actual exam.
 
 
 ---
