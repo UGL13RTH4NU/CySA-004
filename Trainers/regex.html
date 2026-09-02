@@ -28,87 +28,4341 @@ aside .card{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto
 <aside><div class="card"><h2>Regex Cheat Sheet</h2>
 <details open><summary>Dot vs literal period</summary><div class="dot-compare"><div class="dot-box"><span class="regex-token dot-token">.</span><div><b>Wildcard</b><br><span class="small">one character</span></div></div><div class="dot-box"><span class="regex-token">\.</span><div><b>Literal period</b><br><span class="small">actual dot</span></div></div></div><div class="callout warn"><b>High-value trap:</b> in an IP or domain pattern, an unescaped <code>.</code> means “any one character,” not a literal dot.</div></details>
 <details open><summary>Core metacharacters & anchors</summary><table class="ref-table"><tr><th>Token</th><th>Meaning</th></tr><tr><td><span class="regex-token dot-token">.</span></td><td>Any single character (commonly except newline).</td></tr><tr><td><code>\</code></td><td>Escape / introduces shorthand sequences.</td></tr><tr><td><code>^</code></td><td>Start anchor; inside <code>[^...]</code>, negates the class.</td></tr><tr><td><code>$</code></td><td>End anchor.</td></tr><tr><td><code>\b</code></td><td>Word boundary in engines that support it.</td></tr></table></details>
-<details><summary>Character classes</summary><table class="ref-table"><tr><td><code>[abc]</code></td><td>one of a, b, c</td></tr><tr><td><code>[a-z]</code></td><td>lowercase range</td></tr><tr><td><code>[0-9]</code></td><td>one digit</td></tr><tr><td><code>[^0-9]</code></td><td>one non-digit</td></tr><tr><td><code>\d</code></td><td>digit shorthand (engine-dependent)</td></tr><tr><td><code>\s</code></td><td>whitespace shorthand</td></tr><tr><td><code>\w</code></td><td>word-character shorthand</td></tr></table></details>
+<details open><summary>Character classes & shorthands</summary><table class="ref-table"><tr><th>Token</th><th>Meaning</th></tr><tr><td><code>[abc]</code></td><td>one of a, b, c</td></tr><tr><td><code>[a-z]</code></td><td>one lowercase ASCII letter</td></tr><tr><td><code>[0-9]</code></td><td>one decimal digit</td></tr><tr><td><code>[^0-9]</code></td><td>one character that is not a digit</td></tr><tr><td><code>\d</code> / <code>\D</code></td><td>digit / non-digit in common engines</td></tr><tr><td><code>\s</code> / <code>\S</code></td><td>whitespace / non-whitespace</td></tr><tr><td><code>\w</code> / <code>\W</code></td><td>word character / non-word character</td></tr></table><div class="callout"><b>Context matters:</b> shorthand and Unicode behavior can differ by regex engine. <code>[0-9]</code> is an explicit ASCII digit range; <code>\d</code> is an engine-defined shorthand.</div></details>
 <details><summary>Quantifiers</summary><table class="ref-table"><tr><td><code>*</code></td><td>zero or more</td></tr><tr><td><code>+</code></td><td>one or more</td></tr><tr><td><code>?</code></td><td>zero or one / optional</td></tr><tr><td><code>{n}</code></td><td>exactly n</td></tr><tr><td><code>{n,}</code></td><td>n or more</td></tr><tr><td><code>{n,m}</code></td><td>between n and m</td></tr></table></details>
-<details><summary>Groups, alternation & lookaround</summary><p><code>(...)</code> groups a subpattern; <code>|</code> means alternation. A backreference such as <code>\1</code> can refer to text captured by group 1 in engines that support it.</p><div class="callout"><code>(?!...)</code> is a <b>negative lookahead</b>: at that position, what is inside must <b>not</b> match.</div></details>
-<details><summary>Security pattern examples</summary><table class="ref-table"><tr><th>Goal</th><th>Detection-style pattern</th></tr><tr><td>IPv4-looking</td><td><code>\b\d{1,3}(?:\.\d{1,3}){3}\b</code></td></tr><tr><td>URL</td><td><code>https?://[^\s]+</code></td></tr><tr><td>Email extraction</td><td><code>[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}</code></td></tr><tr><td>ID</td><td><code>[A-Z]{3}\d{4}</code></td></tr><tr><td>Encoded PowerShell-like</td><td><code>-e(nc(odedcommand)?)?\s+[A-Za-z0-9+/=]{20,}</code></td></tr></table><div class="callout warn"><b>Detection ≠ strict validation.</b> A short IPv4 extraction regex can match 999.999.999.999; that may be acceptable for IOC extraction but not strict validation.</div></details>
-<details><summary>Regex in security tools / dialects</summary><ul><li><b>Python:</b> <code>re.search()</code>, <code>re.findall()</code>, <code>re.compile()</code>.</li><li><b>Splunk:</b> regex-capable search/extraction, including <code>rex</code>.</li><li><b>grep -E:</b> Extended Regular Expressions for command-line log filtering.</li><li><b>BRE vs ERE:</b> some operators require escapes in BRE that are direct operators in ERE.</li></ul><div class="callout">Core concept first: regex engines are similar, not identical. Treat <code>\d</code>, lookarounds, and capture behavior as engine/context-sensitive.</div></details>
-<details><summary>Common traps</summary><ul><li><code>*</code> permits zero occurrences; <code>+</code> does not.</li><li><code>^</code> is an anchor outside a class but negates at the start of <code>[^...]</code>.</li><li><code>?</code> can mean optional, but it also appears inside advanced constructs such as <code>(?!...)</code>.</li><li>Escape a metacharacter when you need its literal character.</li><li>Read complex patterns left to right instead of guessing from the whole string.</li></ul></details>
+<details><summary>Groups, alternation, boundaries & lookaround</summary><table class="ref-table"><tr><td><code>(...)</code></td><td>group; commonly captures matched text</td></tr><tr><td><code>(?:...)</code></td><td>noncapturing group in common PCRE/Python-style engines</td></tr><tr><td><code>|</code></td><td>alternation: left OR right</td></tr><tr><td><code>\1</code></td><td>backreference to capture group 1 where supported</td></tr><tr><td><code>\b</code></td><td>word-boundary position</td></tr><tr><td><code>(?!...)</code></td><td>negative lookahead: what follows must not match</td></tr></table><div class="callout"><b>Grouping changes scope.</b> <code>^(ERROR|WARN)</code> anchors both alternatives. Quantifiers also apply to a whole group: <code>(ab)+</code> repeats <code>ab</code>.</div></details>
+<details><summary>Security pattern examples</summary><table class="ref-table"><tr><th>Goal</th><th>Detection-style pattern</th></tr><tr><td>IPv4-looking</td><td><code>\b\d{1,3}(?:\.\d{1,3}){3}\b</code></td></tr><tr><td>URL-like</td><td><code>https?://[^\s]+</code></td></tr><tr><td>Email-like</td><td><code>[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}</code></td></tr><tr><td>ID shape</td><td><code>[A-Z]{3}\d{4}</code></td></tr><tr><td>32 hex chars</td><td><code>[A-Fa-f0-9]{32}</code></td></tr><tr><td>64 hex chars</td><td><code>[A-Fa-f0-9]{64}</code></td></tr><tr><td>Script extensions</td><td><code>\.(ps1|bat|cmd)$</code></td></tr><tr><td>Encoded PowerShell-like</td><td><code>-e(nc(odedcommand)?)?\s+[A-Za-z0-9+/=]{20,}</code></td></tr></table><div class="callout warn"><b>Detection ≠ strict validation.</b> Shape recognition can deliberately overmatch. <code>999.999.999.999</code> fits a simple dotted-quad detector; 32 hex characters look hash-like but the regex alone does not prove which hash algorithm produced them.</div></details>
+<details><summary>Regex in security tools / dialects</summary><ul><li><b>Python:</b> <code>re.search()</code> first match, <code>re.findall()</code> all matches, <code>re.compile()</code> reusable pattern.</li><li><b>Splunk:</b> <code>rex</code> for regex-based extraction/replacement in SPL.</li><li><b>grep:</b> pattern-search utility for logs/text; <code>-E</code> selects ERE.</li><li><b>BRE vs ERE:</b> some operators require escapes in BRE that are direct operators in ERE.</li><li><b>POSIX classes:</b> examples include <code>[[:digit:]]</code>, <code>[[:space:]]</code>, and <code>[[:alpha:]]</code>.</li></ul><div class="callout">Core concept first: regex engines are similar, not identical. Separate <b>regex syntax</b> from <b>tool options/API syntax</b>.</div></details>
+<details open><summary>Read left to right</summary><div class="callout"><code>[A-Z]{3}\d{4}</code><br><b>1.</b> <code>[A-Z]</code> uppercase letter → <b>2.</b> <code>{3}</code> exactly three → <b>3.</b> <code>\d</code> digit → <b>4.</b> <code>{4}</code> exactly four.</div><div class="callout"><code>\.(exe|dll)$</code><br><b>1.</b> literal dot → <b>2.</b> exe OR dll → <b>3.</b> must occur at the end.</div><p class="small">Do not guess from the overall shape. Identify one token or group, then ask what the next quantifier/anchor changes.</p></details><details><summary>Common traps</summary><ul><li><code>*</code> permits zero occurrences; <code>+</code> does not.</li><li><code>^</code> is an anchor outside a class but negates at the start of <code>[^...]</code>.</li><li><code>?</code> can mean optional, but it also appears inside advanced constructs such as <code>(?!...)</code>.</li><li>Escape a metacharacter when you need its literal character.</li><li>Read complex patterns left to right instead of guessing from the whole string.</li></ul></details>
 </div></aside></main>
 <footer><a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">← CySA+ CS0-004 Study Materials</a></footer>
 <script>
 'use strict';
 const MODULES={
- foundations:{name:'1 · Regex Foundations',desc:'Literals, metacharacters, anchors, escaping, and the high-value dot vs literal-period distinction.',modes:['mcq','typed','match','classify'],mcq:[
- {q:'In a typical regex engine, what does an unescaped <code>.</code> mean?',o:['A literal period','Any single character (commonly except newline)','Zero or more of the previous token','Start of line'],a:1,why:'<code>.</code> is the wildcard token. To require an actual period, escape it as <code>\\.</code>.',type:'recognition'},
- {q:'Which pattern is the better choice when an analyst must match the literal text <code>10.4.8.9</code> rather than allow arbitrary characters between the octets?',o:['<code>10.4.8.9</code>','<code>10\\.4\\.8\\.9</code>','<code>10[.]4[.]8[.]9+</code>','<code>^10.4.8.9?</code>'],a:1,why:'Escaped dots explicitly require literal periods. The unescaped dots are wildcards.',type:'BEST'},
- {q:'What does <code>^</code> do in <code>^Failed</code>?',o:['Negates Failed','Anchors the match at the beginning','Matches any character','Makes Failed optional'],a:1,why:'Outside a character class, <code>^</code> is a start anchor.'},
- {q:'What does <code>$</code> do in <code>denied$</code>?',o:['Matches a dollar sign','Requires “denied” at the end','Repeats denied','Negates denied'],a:1,why:'<code>$</code> is the end anchor.'},
- {q:'Which statement about <code>\\</code> is most accurate?',o:['It always means a literal backslash','It escapes a metacharacter or introduces a special sequence, depending on what follows','It deletes the next token','It only works in Linux'],a:1,why:'Backslash behavior depends on the following token and the regex engine. <code>\\.</code> makes dot literal; <code>\\b</code> can denote a boundary.'}
- ],typed:[
- {p:'Type the regex token for “any single character.”',ans:['.'],show:'.'},
- {p:'Type the regex for a literal period.',ans:['\\.'],show:'\\.'},
- {p:'Type a pattern that matches a completely empty line.',ans:['^$'],show:'^$'},
- {p:'Type the start anchor.',ans:['^'],show:'^'},
- {p:'Type the end anchor.',ans:['$'],show:'$'}
- ],match:[{title:'Match each token to its primary meaning.',pairs:[['.','Any single character'],['\\.','Literal period'],['^','Start anchor'],['$','End anchor'],['\\','Escape / introduces special sequence'],['\\b','Word boundary (where supported)']]}],classify:[{title:'Classify each item by its primary role.',buckets:['Anchor / position','Character-matching syntax','Escape / literalization'],items:[['^','Anchor / position'],['$','Anchor / position'],['\\b','Anchor / position'],['.','Character-matching syntax'],['[0-9]','Character-matching syntax'],['\\.','Escape / literalization'],['\\*','Escape / literalization']]}]},
- classes:{name:'2 · Character Classes & Quantifiers',desc:'Ranges, negation, shorthand classes, repetition, optionality, and exact/ranged counts.',modes:['mcq','typed','match','classify'],mcq:[
- {q:'What does <code>[A-Z]{3}</code> require?',o:['Up to three uppercase letters','Exactly three uppercase letters','Three or more uppercase letters','Three letters of any case'],a:1,why:'<code>[A-Z]</code> supplies one uppercase letter; <code>{3}</code> requires exactly three repetitions.'},
- {q:'Which quantifier allows <b>zero</b> occurrences of the preceding token?',o:['<code>+</code>','<code>*</code>','<code>{1,}</code>','<code>{1}</code>'],a:1,why:'<code>*</code> means zero or more. This is the key discriminator from <code>+</code>, which requires at least one.'},
- {q:'What does <code>[^0-9]</code> match?',o:['A digit at the start of a string','One character that is not a digit','Any number of digits','The literal characters ^0-9'],a:1,why:'At the beginning of a character class, <code>^</code> negates the class.'},
- {q:'What does <code>https?</code> match at the start of <code>https?://</code>?',o:['Only https','Only http','http or https','Any protocol ending in s'],a:2,why:'<code>s?</code> makes the letter s optional, so both http and https are possible.'},
- {q:'Which token means “between 2 and 5 repetitions”?',o:['<code>{2,5}</code>','<code>[2-5]</code>','<code>{2+5}</code>','<code>(2|5)</code>'],a:0,why:'Curly braces express repetition counts; a comma gives the range.'}
- ],typed:[
- {p:'Type the quantifier for one or more occurrences.',ans:['+'],show:'+'},{p:'Type the quantifier for zero or more occurrences.',ans:['*'],show:'*'},{p:'Type the quantifier for zero or one occurrence.',ans:['?'],show:'?'},{p:'Type the quantifier for exactly four digits after <code>\\d</code>.',ans:['{4}'],show:'{4}'},{p:'Type a character class for one digit without using <code>\\d</code>.',ans:['[0-9]'],show:'[0-9]'}
- ],match:[{title:'Match each construct to its meaning.',pairs:[['[a-z]','One lowercase letter'],['[^0-9]','One non-digit'],['*','Zero or more'],['+','One or more'],['?','Zero or one'],['{3,}','Three or more'],['{2,5}','Between two and five']]}],classify:[{title:'Sort syntax by function.',buckets:['Character class','Quantifier','Other structural syntax'],items:[['[abc]','Character class'],['[A-Z]','Character class'],['\\d','Character class'],['*','Quantifier'],['+','Quantifier'],['{4}','Quantifier'],['{1,3}','Quantifier'],['(...)','Other structural syntax'],['|','Other structural syntax']]}]},
- advanced:{name:'3 · Groups, Alternation & Advanced Recognition',desc:'Grouping, alternation, boundaries, captures/backreferences, and recognition-level negative lookahead.',modes:['mcq','typed','match'],mcq:[
- {q:'What does <code>(cat|dog)</code> mean?',o:['cat followed by dog','Either cat or dog at that position','Any letters in cat or dog','A literal parenthesized string'],a:1,why:'Parentheses group alternatives; <code>|</code> chooses either branch.'},
- {q:'In <code>(\\w+)\\s+\\1</code>, what is <code>\\1</code>?',o:['A one-character digit class','A reference to text captured by the first group','A start anchor','A literal backslash and 1 in all engines'],a:1,why:'In engines that support numbered backreferences, <code>\\1</code> reuses the text captured by group 1. This can detect doubled words.'},
- {q:'What is the purpose of <code>\\b</code> in <code>\\badmin\\b</code>?',o:['Match a backspace character only','Require word boundaries around admin','Escape the letters in admin','Make admin optional'],a:1,why:'A word boundary matches a position between word and non-word contexts; it does not consume a character.'},
- {q:'What does the construction <code>(?!server\\.local)</code> mean at its position?',o:['Require server.local','Capture server.local','Require that server.local does not match there','Repeat server.local zero times'],a:2,why:'<code>(?!...)</code> is negative lookahead: the enclosed pattern must not match at the current position.'},
- {q:'Why is <code>?</code> potentially confusing in advanced regex?',o:['It only means zero or one','It can be an optional quantifier, but it also appears as part of constructs such as <code>(?!...)</code>','It always means greedy','It is Linux-specific'],a:1,why:'Context matters. Alone after a token, <code>?</code> is often optional; inside <code>(?!</code>, it is part of negative lookahead syntax.'}
- ],typed:[{p:'Type the alternation operator.',ans:['|'],show:'|'},{p:'Type a numbered backreference to the first captured group.',ans:['\\1'],show:'\\1'},{p:'Type the negative-lookahead opener.',ans:['(?!'],show:'(?!'},{p:'Type a word-boundary token used by common engines.',ans:['\\b'],show:'\\b'}],match:[{title:'Match advanced syntax to its purpose.',pairs:[['(...)','Group a subpattern'],['|','Alternation'],['\\b','Word boundary'],['\\1','Backreference to group 1'],['(?!...)','Negative lookahead']]}]},
- read:{name:'4 · Read the Pattern',desc:'Decompose patterns left to right and determine exactly what they are intended to match.',modes:['mcq','match'],mcq:[
- {q:'What does <code>[A-Z]{3}\\d{4}</code> match?',o:['Three uppercase letters followed by four digits','Three letters of any case followed by up to four digits','Four uppercase letters followed by three digits','A seven-character word'],a:0,why:'Read left to right.',decomp:'<code>[A-Z]</code> → uppercase letter; <code>{3}</code> → exactly three; <code>\\d</code> → digit; <code>{4}</code> → exactly four.'},
- {q:'What does <code>^ERROR.*denied$</code> require?',o:['ERROR anywhere and denied anywhere','A line beginning with ERROR and ending with denied, with anything in between','Only the exact text ERRORdenied','A line ending with ERROR'],a:1,why:'The anchors constrain both ends; <code>.*</code> allows zero or more characters between.',decomp:'<code>^</code> start → <code>ERROR</code> literal → <code>.*</code> any run → <code>denied</code> literal → <code>$</code> end.'},
- {q:'What does <code>https?://[^\\s]+</code> primarily detect?',o:['Only HTTPS URLs','HTTP or HTTPS URLs followed by one or more non-whitespace characters','Any string containing ://','Only domain names ending in .com'],a:1,why:'The optional s permits either protocol; the negated whitespace class consumes the rest of a URL-like token.',decomp:'<code>http</code> literal → <code>s?</code> optional s → <code>://</code> literal → <code>[^\\s]+</code> one or more non-whitespace characters.'},
- {q:'What is the limitation of <code>\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b</code> as an IPv4 detector?',o:['It cannot match dots','It may match IPv4-looking strings with octets above 255','It only matches IPv6','It requires letters'],a:1,why:'This is useful extraction syntax, not strict IPv4 validation. Each octet is only constrained to 1–3 digits.'},
- {q:'What does <code>^\\s*$</code> match?',o:['Only a single space','Empty or whitespace-only lines','Any non-empty line','A literal sequence \\s'],a:1,why:'<code>\\s*</code> allows zero or more whitespace characters between start and end anchors.'}
- ],match:[{title:'Match each pattern to its intended meaning.',pairs:[['^#','Line begins with #'],['^\\s*$','Blank or whitespace-only line'],['[0-9]{1,3}(\\.[0-9]{1,3}){3}','Basic IPv4-looking pattern'],['(\\w+)\\s+\\1','Repeated/doubled word'],['https?://[^\\s]+','HTTP/HTTPS URL-like token']]}]},
- build:{name:'5 · Build the Pattern',desc:'Typed construction drills for short, exam-relevant patterns. Equivalent known forms are accepted where appropriate.',modes:['typed','mcq'],mcq:[
- {q:'An analyst wants to match an identifier consisting of exactly three uppercase letters followed by four digits. Which pattern is BEST?',o:['<code>[A-Z]+\\d+</code>','<code>[A-Z]{3}\\d{4}</code>','<code>[A-z]{3}[0-9]*</code>','<code>...\\d{4}</code>'],a:1,why:'The stem requires exact counts and uppercase letters. The other choices are broader than the requirement.'},
- {q:'Which pattern BEST finds lines that start with either ERROR or WARNING?',o:['<code>ERROR|WARNING</code>','<code>^(ERROR|WARNING)</code>','<code>(ERROR|WARNING)$</code>','<code>^[ERROR|WARNING]</code>'],a:1,why:'The start anchor applies to the grouped alternatives. A character class would match one character, not either whole word.'},
- {q:'Which pattern BEST detects a literal filename ending in <code>.exe</code>?',o:['<code>.exe$</code>','<code>\\.exe$</code>','<code>exe^</code>','<code>[.]exe^</code>'],a:1,why:'The dot must be literal and the extension must occur at the end.'}
- ],typed:[
- {p:'Build a pattern for exactly three uppercase letters followed by four digits.',ans:['[A-Z]{3}\\d{4}','[A-Z]{3}[0-9]{4}'],show:'[A-Z]{3}\\d{4}'},
- {p:'Build a pattern that matches lines beginning with <code>Failed</code>.',ans:['^Failed'],show:'^Failed',case:true},
- {p:'Build a pattern for a literal <code>.exe</code> extension at the end of a string.',ans:['\\.exe$'],show:'\\.exe$'},
- {p:'Build a simple HTTP/HTTPS URL detection pattern ending at whitespace.',ans:['https?://[^\\s]+','https?://\\S+'],show:'https?://[^\\s]+'},
- {p:'Build a detection-style IPv4-looking pattern using digit groups and literal dots.',ans:['\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b','\\d{1,3}(\\.\\d{1,3}){3}','[0-9]{1,3}(\\.[0-9]{1,3}){3}'],show:'\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b'},
- {p:'Build a pattern that matches either <code>cmd.exe</code> or <code>powershell.exe</code> exactly.',ans:['^(cmd|powershell)\\.exe$','^(?:cmd|powershell)\\.exe$'],show:'^(cmd|powershell)\\.exe$'}
- ]},
- security:{name:'6 · Security Analysis Patterns',desc:'CySA-focused use cases: logs, IOCs, email, URLs, suspicious commands, and encoded PowerShell-like data.',modes:['mcq','typed','match','classify'],mcq:[
- {q:'A log contains <code>src=10.1.4.22 action=deny</code>. Which pattern is the most appropriate simple extractor for the IPv4-looking value?',o:['<code>\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b</code>','<code>^\\d+$</code>','<code>https?://[^\\s]+</code>','<code>[A-F0-9]{32}</code>'],a:0,why:'This is a detection/extraction task. The pattern finds four 1–3 digit groups separated by literal dots, but it is not strict octet validation.'},
- {q:'Which pattern is most appropriate for recognizing an HTTP or HTTPS URL in a log token?',o:['<code>https?://[^\\s]+</code>','<code>^https$</code>','<code>http*://</code>','<code>https+://\\d+</code>'],a:0,why:'Optional s covers http/https, and one-or-more non-whitespace characters captures the URL remainder.'},
- {q:'An analyst sees <code>-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}</code>. What is the pattern intended to detect?',o:['A Windows username','An encoded PowerShell-style command flag followed by a long Base64-like string','An IPv4 address','A DLL filename'],a:1,why:'The optional grouped text covers abbreviated/full encoded-command flags, then whitespace and a long Base64-like character set.'},
- {q:'Why should a simple email regex used for log extraction not automatically be described as a complete email validator?',o:['Regex cannot match @','Real email syntax and local/domain rules are more complex than a short extraction pattern','Email addresses never contain dots','Only Linux supports email regex'],a:1,why:'CySA analysis often needs useful extraction, not a giant RFC-complete validator. Match the tool to the task.'},
- {q:'In the CertMaster-style email pattern <code>[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}</code>, why is the dot before the top-level domain escaped?',o:['To make the top-level domain optional','To require a literal period between the domain and TLD','To match any one character','To negate the domain'],a:1,why:'The backslash removes the dot metacharacter meaning so the pattern requires the actual period in addresses such as user@example.com.'},
- {q:'A negative lookahead excludes <code>server.local</code> and <code>mail.internal</code> from a broader email-like pattern. What does the <code>!</code> in <code>(?!...)</code> contribute?',o:['It makes the group mandatory','It turns the lookahead negative: the enclosed pattern must not match there','It means case-insensitive','It repeats the group'],a:1,why:'The <code>!</code> is what makes the lookahead negative. Without it, <code>(?=...)</code> is a positive lookahead.'},
- {q:'Which is the better reasoning habit when a regex in a PBQ looks intimidating?',o:['Guess from the overall visual shape','Decompose it left to right into classes, quantifiers, groups, and anchors','Assume every dot is literal','Ignore quantifiers'],a:1,why:'Pattern decomposition is the transferable skill: identify each token and its quantity/position before deciding what the whole pattern detects.'}
- ],typed:[
- {p:'Type a pattern that detects the literal extension <code>.ps1</code> at the end of a filename.',ans:['\\.ps1$'],show:'\\.ps1$'},
- {p:'Type the CertMaster-style general email extraction pattern.',ans:['[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}'],show:'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}'},
- {p:'Type the character-class portion from a Base64-like detector that allows letters, digits, +, /, and =.',ans:['[A-Za-z0-9+/=]'],show:'[A-Za-z0-9+/=]'},
- {p:'Type a pattern that matches <code>admin</code> as a whole word in engines supporting word boundaries.',ans:['\\badmin\\b'],show:'\\badmin\\b'},
- {p:'Type the negative lookahead that excludes exactly <code>server.local</code> at the current position.',ans:['(?!server\\.local)'],show:'(?!server\\.local)'}
- ],match:[{title:'Match the security-analysis pattern to its likely use.',pairs:[['\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b','Extract IPv4-looking values'],['https?://[^\\s]+','Extract URL-like values'],['\\.exe$','Find executable extension at end'],['\\badmin\\b','Find whole-word admin'],['-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}','Recognize encoded PowerShell-like command syntax']]}],classify:[{title:'Sort the examples by analyst purpose.',buckets:['Detection / extraction','Strict positional constraint','Advanced exclusion'],items:[['\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b','Detection / extraction'],['https?://[^\\s]+','Detection / extraction'],['^ERROR','Strict positional constraint'],['\\.exe$','Strict positional constraint'],['(?!server\\.local)','Advanced exclusion']]}]},
- tools:{name:'7 · Regex in Security Tools / Dialects',desc:'Keep the core regex concept separate from the tool: Python re, Splunk rex, grep -E, and limited BRE/ERE context.',modes:['mcq','match','classify'],mcq:[
- {q:'Which Python function is commonly used to return all matches of a pattern?',o:['<code>re.findall()</code>','<code>re.search()</code>','<code>re.compile()</code>','<code>re.escape()</code>'],a:0,why:'<code>findall()</code> returns all non-overlapping matches. <code>search()</code> finds the first match; <code>compile()</code> prepares a reusable pattern.'},
- {q:'What is the primary reason <code>grep -E</code> appears in a CySA regex context?',o:['It performs packet capture','It filters text/log output using Extended Regular Expressions','It validates JSON','It scans ports'],a:1,why:'grep is a pattern-search utility; <code>-E</code> selects Extended Regular Expressions.'},
- {q:'Which statement about regex dialects is BEST?',o:['Every engine supports exactly the same syntax','Core concepts transfer, but shorthand classes, lookarounds, captures, and escaping rules can differ','Only Python uses regex','BRE is always more powerful than ERE'],a:1,why:'Treat regex as the core skill and the engine as context. Do not assume perfect syntax identity across tools.'},
- {q:'In traditional grep context, what is the high-level distinction between BRE and ERE?',o:['BRE is for binary files; ERE is for text','Some operators require escaping in BRE that are direct operators in ERE','ERE cannot use groups','They differ only in speed'],a:1,why:'The educational point is syntax/dialect awareness, not memorizing every grep flag.'},
- {q:'In Splunk, which command is associated with regex-based field extraction?',o:['<code>rex</code>','<code>ping</code>','<code>grep -E</code>','<code>re.findall()</code>'],a:0,why:'Splunk <code>rex</code> performs regex-based extraction/replacement in SPL context.'}
- ],match:[{title:'Match the tool/context to the regex cue.',pairs:[['Python re','re.search / re.findall / re.compile'],['Splunk rex','Regex-based field extraction in SPL'],['grep -E','Extended regex text/log filtering'],['BRE','Some operators require escaping'],['ERE','Operators such as +, ?, | and grouping are direct syntax']]}],classify:[{title:'Sort by tool/context.',buckets:['Python','Splunk','Linux text tool','Regex dialect concept'],items:[['re.findall()','Python'],['re.compile()','Python'],['rex','Splunk'],['grep -E','Linux text tool'],['BRE vs ERE','Regex dialect concept']]}]}
+  "foundations":{
+    "name":"1 · Regex Foundations",
+    "desc":"Literals, metacharacters, anchors, escaping, empty lines, and the high-value dot vs literal-period distinction.",
+    "modes":[
+      "mcq",
+      "typed",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"In a typical regex engine, what does an unescaped <code>.</code> mean?",
+        "o":[
+          "A literal period",
+          "Any single character (commonly except newline)",
+          "Zero or more of the previous token",
+          "Start of line"
+        ],
+        "a":1,
+        "why":"<code>.</code> is the wildcard token. To require an actual period, escape it as <code>\\.</code>."
+      },
+      {
+        "q":"Which pattern requires a literal period between <code>host</code> and <code>local</code>?",
+        "o":[
+          "<code>host.local</code>",
+          "<code>host\\.local</code>",
+          "<code>host*local</code>",
+          "<code>host$local</code>"
+        ],
+        "a":1,
+        "why":"An escaped dot, <code>\\.</code>, means a literal period. An unescaped dot is a wildcard."
+      },
+      {
+        "q":"What does <code>^</code> do in <code>^Failed</code>?",
+        "o":[
+          "Matches a literal caret",
+          "Requires <code>Failed</code> at the start",
+          "Requires <code>Failed</code> at the end",
+          "Negates the word"
+        ],
+        "a":1,
+        "why":"Outside a character class, <code>^</code> anchors the pattern to the beginning."
+      },
+      {
+        "q":"What does <code>$</code> do in <code>failed$</code>?",
+        "o":[
+          "Requires <code>failed</code> at the end",
+          "Matches any digit",
+          "Makes the word optional",
+          "Starts a capture group"
+        ],
+        "a":0,
+        "why":"<code>$</code> is an end anchor in the usual line/string context."
+      },
+      {
+        "q":"Which regex matches a completely empty line?",
+        "o":[
+          "<code>^$</code>",
+          "<code>.*</code>",
+          "<code>^.+$</code>",
+          "<code>\\s</code>"
+        ],
+        "a":0,
+        "why":"Start immediately followed by end means there are no characters between the anchors."
+      },
+      {
+        "q":"Which regex matches a line that is empty OR contains only whitespace?",
+        "o":[
+          "<code>^$</code>",
+          "<code>^\\s*$</code>",
+          "<code>\\s+</code>",
+          "<code>.*\\s</code>"
+        ],
+        "a":1,
+        "why":"<code>\\s*</code> allows zero or more whitespace characters between start and end."
+      },
+      {
+        "q":"What is the main purpose of a backslash in <code>\\.</code>?",
+        "o":[
+          "Repeat the period",
+          "Escape the metacharacter so the period is literal",
+          "Start a character class",
+          "Anchor to a word boundary"
+        ],
+        "a":1,
+        "why":"Backslash can remove a metacharacter's special meaning; <code>\\.</code> matches a real dot."
+      },
+      {
+        "q":"Which item is a literal in the pattern <code>ERROR</code>?",
+        "o":[
+          "Every letter in <code>ERROR</code>",
+          "Only <code>E</code>",
+          "None; letters are metacharacters",
+          "The implicit end anchor"
+        ],
+        "a":0,
+        "why":"Ordinary letters normally match themselves unless a special mode or escape changes the meaning."
+      },
+      {
+        "q":"Which pattern BEST requires the entire string to be exactly <code>admin</code>?",
+        "o":[
+          "<code>admin</code>",
+          "<code>^admin</code>",
+          "<code>admin$</code>",
+          "<code>^admin$</code>"
+        ],
+        "a":3,
+        "why":"Both anchors constrain the whole string rather than merely locating <code>admin</code> somewhere inside it.",
+        "type":"BEST"
+      },
+      {
+        "q":"The pattern <code>10.0.0.1</code> is risky when the intent is to match only that literal IP text because:",
+        "o":[
+          "Digits must be escaped",
+          "Each dot can match another character",
+          "Anchors are illegal with IP addresses",
+          "Zero is a quantifier"
+        ],
+        "a":1,
+        "why":"Unescaped dots are wildcards, so strings such as <code>10x0y0z1</code> can satisfy the pattern."
+      },
+      {
+        "q":"Which pattern matches a literal asterisk?",
+        "o":[
+          "<code>*</code>",
+          "<code>\\*</code>",
+          "<code>.*</code>",
+          "<code>[+]</code>"
+        ],
+        "a":1,
+        "why":"The asterisk is normally a quantifier; escaping it requests the literal character."
+      },
+      {
+        "q":"Which pattern matches a literal question mark?",
+        "o":[
+          "<code>?</code>",
+          "<code>\\?</code>",
+          "<code>.+</code>",
+          "<code>^?</code>"
+        ],
+        "a":1,
+        "why":"Outside a character class, <code>?</code> is normally a quantifier or part of an advanced construct. Escape it for a literal question mark."
+      },
+      {
+        "q":"What does an anchor match?",
+        "o":[
+          "A character value",
+          "A position in the text",
+          "Only punctuation",
+          "Exactly one digit"
+        ],
+        "a":1,
+        "why":"Anchors constrain position; they do not consume a character the way literals or character classes do."
+      },
+      {
+        "q":"Which statement about <code>.</code> inside a character class such as <code>[.]</code> is generally true?",
+        "o":[
+          "It is still a wildcard",
+          "It usually represents a literal period",
+          "It becomes an end anchor",
+          "It means zero or one"
+        ],
+        "a":1,
+        "why":"Most common engines treat dot as an ordinary literal inside a character class; <code>[.]</code> is another way to request a period."
+      },
+      {
+        "q":"Which pattern would find <code>ERROR</code> anywhere in a line rather than only at the start?",
+        "o":[
+          "<code>^ERROR</code>",
+          "<code>ERROR</code>",
+          "<code>ERROR$</code>",
+          "<code>^ERROR$</code>"
+        ],
+        "a":1,
+        "why":"With no anchors, the engine may search for the literal sequence anywhere in the searchable text."
+      },
+      {
+        "q":"Which is the strongest reason to learn escaping early?",
+        "o":[
+          "It changes font rendering",
+          "Many security strings contain dots, slashes, plus signs, parentheses, and other characters that may have regex meaning",
+          "It makes every pattern case-insensitive",
+          "It automatically validates IPv4 ranges"
+        ],
+        "a":1,
+        "why":"Security artifacts are punctuation-heavy. Knowing whether punctuation is literal or functional prevents false matches."
+      },
+      {
+        "q":"Which pair correctly contrasts wildcard and literal period?",
+        "o":[
+          "<code>.</code> wildcard; <code>\\.</code> literal period",
+          "<code>.</code> literal period; <code>\\.</code> wildcard",
+          "Both are always wildcard",
+          "Both are always literal"
+        ],
+        "a":0,
+        "why":"This is a core exam and analyst distinction."
+      },
+      {
+        "q":"A pattern is intended to detect filenames ending in <code>.exe</code>. Which is BEST?",
+        "o":[
+          "<code>.exe</code>",
+          "<code>\\.exe</code>",
+          "<code>\\.exe$</code>",
+          "<code>^exe</code>"
+        ],
+        "a":2,
+        "why":"<code>\\.</code> requires the real dot and <code>$</code> requires the extension at the end.",
+        "decomp":"<code>\\.</code> literal dot → <code>exe</code> literals → <code>$</code> end.",
+        "type":"BEST"
+      }
+    ],
+    "typed":[
+      {
+        "p":"Type the regex token for “any single character” in the usual regex context.",
+        "ans":[
+          "."
+        ],
+        "show":"."
+      },
+      {
+        "p":"Type the regex for a literal period.",
+        "ans":[
+          "\\.",
+          "[.]"
+        ],
+        "show":"\\."
+      },
+      {
+        "p":"Type the start-of-line/string anchor.",
+        "ans":[
+          "^"
+        ],
+        "show":"^"
+      },
+      {
+        "p":"Type the end-of-line/string anchor.",
+        "ans":[
+          "$"
+        ],
+        "show":"$"
+      },
+      {
+        "p":"Type a pattern for an entirely empty line.",
+        "ans":[
+          "^$"
+        ],
+        "show":"^$"
+      },
+      {
+        "p":"Type a pattern for a line that may contain only whitespace.",
+        "ans":[
+          "^\\s*$"
+        ],
+        "show":"^\\s*$"
+      },
+      {
+        "p":"Type a pattern that requires the exact whole string <code>root</code>.",
+        "ans":[
+          "^root$"
+        ],
+        "show":"^root$"
+      },
+      {
+        "p":"Type the escaped form of a literal asterisk.",
+        "ans":[
+          "\\*"
+        ],
+        "show":"\\*"
+      },
+      {
+        "p":"Type the escaped form of a literal plus sign.",
+        "ans":[
+          "\\+"
+        ],
+        "show":"\\+"
+      },
+      {
+        "p":"Type the escaped form of a literal question mark.",
+        "ans":[
+          "\\?"
+        ],
+        "show":"\\?"
+      },
+      {
+        "p":"Type the escaped form of a literal dollar sign.",
+        "ans":[
+          "\\$"
+        ],
+        "show":"\\$"
+      },
+      {
+        "p":"Type a pattern that finds lines beginning with <code>ERROR</code>.",
+        "ans":[
+          "^ERROR"
+        ],
+        "show":"^ERROR",
+        "case":true
+      },
+      {
+        "p":"Type a pattern that finds lines ending with <code>denied</code>.",
+        "ans":[
+          "denied$"
+        ],
+        "show":"denied$",
+        "case":true
+      },
+      {
+        "p":"Type a pattern that requires the literal text <code>server.local</code>.",
+        "ans":[
+          "server\\.local",
+          "server[.]local"
+        ],
+        "show":"server\\.local",
+        "case":true
+      },
+      {
+        "p":"Type the simplest literal pattern for the text <code>admin</code> anywhere.",
+        "ans":[
+          "admin"
+        ],
+        "show":"admin",
+        "case":true
+      },
+      {
+        "p":"Type a pattern that requires exactly <code>cmd.exe</code> as the whole string.",
+        "ans":[
+          "^cmd\\.exe$",
+          "^cmd[.]exe$"
+        ],
+        "show":"^cmd\\.exe$",
+        "case":true
+      }
+    ],
+    "match":[
+      {
+        "title":"Core metacharacters and anchors — match each token to its meaning.",
+        "pairs":[
+          [
+            ".",
+            "Any single character (usual default, often except newline)"
+          ],
+          [
+            "^",
+            "Beginning anchor"
+          ],
+          [
+            "$",
+            "End anchor"
+          ],
+          [
+            "\\",
+            "Escape introducer"
+          ],
+          [
+            "\\.",
+            "Literal period"
+          ],
+          [
+            "^$",
+            "Completely empty line/string"
+          ]
+        ]
+      },
+      {
+        "title":"Escaped punctuation — match the pattern to the literal character it requests.",
+        "pairs":[
+          [
+            "\\.",
+            "Literal period"
+          ],
+          [
+            "\\*",
+            "Literal asterisk"
+          ],
+          [
+            "\\+",
+            "Literal plus sign"
+          ],
+          [
+            "\\?",
+            "Literal question mark"
+          ],
+          [
+            "\\$",
+            "Literal dollar sign"
+          ],
+          [
+            "\\^",
+            "Literal caret"
+          ]
+        ]
+      },
+      {
+        "title":"Anchored forms — identify the positional requirement.",
+        "pairs":[
+          [
+            "^ERROR",
+            "ERROR at the beginning"
+          ],
+          [
+            "denied$",
+            "denied at the end"
+          ],
+          [
+            "^admin$",
+            "The entire string is admin"
+          ],
+          [
+            "^$",
+            "No characters at all"
+          ],
+          [
+            "^\\s*$",
+            "Only whitespace or nothing"
+          ],
+          [
+            "\\.exe$",
+            "Literal .exe at the end"
+          ]
+        ]
+      },
+      {
+        "title":"Foundational concepts — match the concept to the description.",
+        "pairs":[
+          [
+            "Literal",
+            "Ordinary text that normally matches itself"
+          ],
+          [
+            "Metacharacter",
+            "Syntax with a special regex function"
+          ],
+          [
+            "Escape",
+            "Changes how the following token is interpreted"
+          ],
+          [
+            "Anchor",
+            "Matches a position rather than a character"
+          ],
+          [
+            "Wildcard",
+            "A token that can stand for another character"
+          ],
+          [
+            "Pattern",
+            "The expression used to locate or describe matching text"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Literal or functional? Sort each standalone form by how it behaves.",
+        "buckets":[
+          "Literal character",
+          "Functional regex syntax"
+        ],
+        "items":[
+          [
+            "a",
+            "Literal character"
+          ],
+          [
+            "7",
+            "Literal character"
+          ],
+          [
+            "_",
+            "Literal character"
+          ],
+          [
+            ".",
+            "Functional regex syntax"
+          ],
+          [
+            "^",
+            "Functional regex syntax"
+          ],
+          [
+            "$",
+            "Functional regex syntax"
+          ],
+          [
+            "*",
+            "Functional regex syntax"
+          ],
+          [
+            "\\.",
+            "Literal character"
+          ],
+          [
+            "\\*",
+            "Literal character"
+          ],
+          [
+            "\\?",
+            "Literal character"
+          ]
+        ]
+      },
+      {
+        "title":"Sort each expression by its positional behavior.",
+        "buckets":[
+          "Unanchored search",
+          "Start anchored",
+          "End anchored",
+          "Both ends anchored"
+        ],
+        "items":[
+          [
+            "ERROR",
+            "Unanchored search"
+          ],
+          [
+            "^ERROR",
+            "Start anchored"
+          ],
+          [
+            "denied$",
+            "End anchored"
+          ],
+          [
+            "^admin$",
+            "Both ends anchored"
+          ],
+          [
+            "\\.exe$",
+            "End anchored"
+          ],
+          [
+            "^GET",
+            "Start anchored"
+          ],
+          [
+            "^$",
+            "Both ends anchored"
+          ],
+          [
+            "cmd\\.exe",
+            "Unanchored search"
+          ]
+        ]
+      },
+      {
+        "title":"Wildcard or literal dot?",
+        "buckets":[
+          "Contains wildcard dot",
+          "Requires literal period"
+        ],
+        "items":[
+          [
+            "a.b",
+            "Contains wildcard dot"
+          ],
+          [
+            "10.0.0.1",
+            "Contains wildcard dot"
+          ],
+          [
+            "a\\.b",
+            "Requires literal period"
+          ],
+          [
+            "10\\.0\\.0\\.1",
+            "Requires literal period"
+          ],
+          [
+            "[.]exe",
+            "Requires literal period"
+          ],
+          [
+            ".*",
+            "Contains wildcard dot"
+          ],
+          [
+            "\\.ps1$",
+            "Requires literal period"
+          ]
+        ]
+      }
+    ]
+  },
+  "classes":{
+    "name":"2 · Character Classes & Quantifiers",
+    "desc":"Sets, ranges, negation, shorthand classes, exact/ranged quantities, and the crucial zero-vs-one repetition distinctions.",
+    "modes":[
+      "mcq",
+      "typed",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"What does <code>[abc]</code> match?",
+        "o":[
+          "The literal string abc",
+          "One character: a, b, or c",
+          "Any character except a, b, or c",
+          "Three characters in any order"
+        ],
+        "a":1,
+        "why":"Square brackets define a character class; one position is matched from the listed alternatives."
+      },
+      {
+        "q":"What does <code>[a-z]</code> represent?",
+        "o":[
+          "Any lowercase letter in the range a through z",
+          "The literal string a-z",
+          "Any uppercase letter",
+          "Any non-letter"
+        ],
+        "a":0,
+        "why":"The hyphen denotes a range in this position inside the class."
+      },
+      {
+        "q":"What does <code>[0-9]</code> match?",
+        "o":[
+          "Any number of digits",
+          "One digit from 0 through 9",
+          "Only 0 or 9",
+          "A two-digit number"
+        ],
+        "a":1,
+        "why":"A character class consumes one character unless a quantifier follows it."
+      },
+      {
+        "q":"What does <code>[^0-9]</code> match?",
+        "o":[
+          "A digit",
+          "One character that is not a digit",
+          "The start of a digit string",
+          "The literal text ^0-9"
+        ],
+        "a":1,
+        "why":"A caret immediately after <code>[</code> negates the class in common regex syntax."
+      },
+      {
+        "q":"What does <code>\\d</code> commonly mean in Python/PCRE-style regex?",
+        "o":[
+          "Any digit",
+          "Any letter",
+          "Whitespace",
+          "A literal d"
+        ],
+        "a":0,
+        "why":"<code>\\d</code> is a shorthand digit class in many common engines."
+      },
+      {
+        "q":"What does <code>\\D</code> commonly mean?",
+        "o":[
+          "Digit",
+          "Non-digit",
+          "Decimal point",
+          "End of data"
+        ],
+        "a":1,
+        "why":"Uppercase shorthand classes commonly negate their lowercase counterpart: <code>\\D</code> means non-digit."
+      },
+      {
+        "q":"What does <code>\\s</code> commonly match?",
+        "o":[
+          "Only a literal space",
+          "Whitespace such as spaces and tabs, engine-dependent",
+          "Only letters",
+          "A slash followed by s"
+        ],
+        "a":1,
+        "why":"<code>\\s</code> is the common shorthand whitespace class; exact Unicode/newline behavior is engine-dependent."
+      },
+      {
+        "q":"What does <code>\\S</code> commonly match?",
+        "o":[
+          "Whitespace",
+          "A non-whitespace character",
+          "Only punctuation",
+          "Start of string"
+        ],
+        "a":1,
+        "why":"<code>\\S</code> is the negated shorthand of <code>\\s</code>."
+      },
+      {
+        "q":"What does <code>\\w</code> commonly match?",
+        "o":[
+          "A word boundary",
+          "A word character such as letter/digit/underscore, with engine-dependent Unicode behavior",
+          "Whitespace",
+          "Only lowercase letters"
+        ],
+        "a":1,
+        "why":"<code>\\w</code> is a character class shorthand, not the boundary token <code>\\b</code>."
+      },
+      {
+        "q":"What does <code>*</code> mean when it quantifies the previous token?",
+        "o":[
+          "Exactly one",
+          "Zero or more",
+          "One or more",
+          "Zero or one"
+        ],
+        "a":1,
+        "why":"A key trap: star permits zero occurrences."
+      },
+      {
+        "q":"What does <code>+</code> mean when it quantifies the previous token?",
+        "o":[
+          "Zero or more",
+          "One or more",
+          "Exactly two",
+          "Zero or one"
+        ],
+        "a":1,
+        "why":"Plus requires at least one occurrence."
+      },
+      {
+        "q":"What does <code>?</code> mean as a basic quantifier?",
+        "o":[
+          "Zero or one",
+          "Exactly one",
+          "One or more",
+          "Negation"
+        ],
+        "a":0,
+        "why":"As a quantifier, question mark makes the previous token/group optional."
+      },
+      {
+        "q":"What does <code>{4}</code> mean after a token?",
+        "o":[
+          "At least four",
+          "Exactly four",
+          "Up to four",
+          "Four or fewer"
+        ],
+        "a":1,
+        "why":"A single number in braces requests that exact count."
+      },
+      {
+        "q":"What does <code>{3,}</code> mean?",
+        "o":[
+          "Exactly three",
+          "Three or more",
+          "Zero through three",
+          "One through three"
+        ],
+        "a":1,
+        "why":"The missing upper bound means no specified maximum."
+      },
+      {
+        "q":"What does <code>{2,5}</code> mean?",
+        "o":[
+          "Exactly 2 or 5",
+          "Between 2 and 5 inclusive",
+          "At least 5",
+          "No more than 2"
+        ],
+        "a":1,
+        "why":"The two numbers set inclusive minimum and maximum repetition counts."
+      },
+      {
+        "q":"Which pattern matches exactly three uppercase ASCII letters?",
+        "o":[
+          "<code>[A-Z]+</code>",
+          "<code>[A-Z]{3}</code>",
+          "<code>[A-Z]{3,}</code>",
+          "<code>[A-Z]?</code>"
+        ],
+        "a":1,
+        "why":"The class selects an uppercase letter and <code>{3}</code> requires exactly three of them."
+      },
+      {
+        "q":"Which pattern matches one or more digits?",
+        "o":[
+          "<code>\\d*</code>",
+          "<code>\\d+</code>",
+          "<code>\\d?</code>",
+          "<code>\\d{0}</code>"
+        ],
+        "a":1,
+        "why":"Plus requires at least one digit; star would also match zero digits."
+      },
+      {
+        "q":"Why is <code>\\d*</code> often too permissive when the field must contain a number?",
+        "o":[
+          "It requires too many digits",
+          "It can match zero digits",
+          "It matches only letters",
+          "It anchors to the end"
+        ],
+        "a":1,
+        "why":"Because star allows zero occurrences, the pattern can succeed without consuming a digit."
+      },
+      {
+        "q":"Which pattern matches an optional leading minus sign followed by one or more digits?",
+        "o":[
+          "<code>-\\d+</code>",
+          "<code>-?\\d+</code>",
+          "<code>-*\\d*</code>",
+          "<code>[-\\d]+?</code>"
+        ],
+        "a":1,
+        "why":"<code>-?</code> makes the minus optional; <code>\\d+</code> requires at least one digit."
+      },
+      {
+        "q":"What does <code>[A-Fa-f0-9]</code> describe?",
+        "o":[
+          "One hexadecimal-looking character",
+          "A complete hash",
+          "Only uppercase hex",
+          "Whitespace"
+        ],
+        "a":0,
+        "why":"It is a single-character class covering decimal digits and A–F in either case."
+      },
+      {
+        "q":"Which pattern is a reasonable detector for 32 hexadecimal characters?",
+        "o":[
+          "<code>[A-Fa-f0-9]{32}</code>",
+          "<code>[A-Fa-f0-9]+</code>",
+          "<code>\\d{32}</code>",
+          "<code>.{32,}</code>"
+        ],
+        "a":0,
+        "why":"The class limits allowed characters to hex and <code>{32}</code> sets the length. This is pattern detection, not proof of a particular hash algorithm."
+      },
+      {
+        "q":"Which statement about <code>[^...]</code> is correct?",
+        "o":[
+          "It negates the entire regex",
+          "It defines a negated character class when caret begins the class",
+          "It means start anchor inside every class position",
+          "It always means a literal caret"
+        ],
+        "a":1,
+        "why":"The caret changes role based on context: outside a class it is an anchor; at the beginning inside a class it negates that class."
+      }
+    ],
+    "typed":[
+      {
+        "p":"Type a character class matching one lowercase letter a through z.",
+        "ans":[
+          "[a-z]"
+        ],
+        "show":"[a-z]"
+      },
+      {
+        "p":"Type a character class matching one uppercase letter A through Z.",
+        "ans":[
+          "[A-Z]"
+        ],
+        "show":"[A-Z]"
+      },
+      {
+        "p":"Type a character class matching one digit 0 through 9.",
+        "ans":[
+          "[0-9]",
+          "\\d"
+        ],
+        "show":"[0-9]"
+      },
+      {
+        "p":"Type a negated class matching one character that is NOT a digit.",
+        "ans":[
+          "[^0-9]",
+          "\\D"
+        ],
+        "show":"[^0-9]"
+      },
+      {
+        "p":"Type the common shorthand for a digit.",
+        "ans":[
+          "\\d"
+        ],
+        "show":"\\d"
+      },
+      {
+        "p":"Type the common shorthand for whitespace.",
+        "ans":[
+          "\\s"
+        ],
+        "show":"\\s"
+      },
+      {
+        "p":"Type the common shorthand for a non-whitespace character.",
+        "ans":[
+          "\\S"
+        ],
+        "show":"\\S"
+      },
+      {
+        "p":"Type the common shorthand for a word character.",
+        "ans":[
+          "\\w"
+        ],
+        "show":"\\w"
+      },
+      {
+        "p":"Type the quantifier meaning zero or more.",
+        "ans":[
+          "*"
+        ],
+        "show":"*"
+      },
+      {
+        "p":"Type the quantifier meaning one or more.",
+        "ans":[
+          "+"
+        ],
+        "show":"+"
+      },
+      {
+        "p":"Type the quantifier meaning zero or one.",
+        "ans":[
+          "?"
+        ],
+        "show":"?"
+      },
+      {
+        "p":"Type the quantifier for exactly 6 repetitions.",
+        "ans":[
+          "{6}"
+        ],
+        "show":"{6}"
+      },
+      {
+        "p":"Type the quantifier for 4 or more repetitions.",
+        "ans":[
+          "{4,}"
+        ],
+        "show":"{4,}"
+      },
+      {
+        "p":"Type the quantifier for 2 through 8 repetitions.",
+        "ans":[
+          "{2,8}"
+        ],
+        "show":"{2,8}"
+      },
+      {
+        "p":"Type a pattern for exactly three uppercase ASCII letters.",
+        "ans":[
+          "[A-Z]{3}"
+        ],
+        "show":"[A-Z]{3}"
+      },
+      {
+        "p":"Type a pattern for one or more digits.",
+        "ans":[
+          "\\d+",
+          "[0-9]+"
+        ],
+        "show":"\\d+"
+      },
+      {
+        "p":"Type a pattern for an optional minus sign followed by one or more digits.",
+        "ans":[
+          "-?\\d+",
+          "-?[0-9]+"
+        ],
+        "show":"-?\\d+"
+      },
+      {
+        "p":"Type a class matching one Base64-style character from letters, digits, +, /, or =.",
+        "ans":[
+          "[A-Za-z0-9+/=]"
+        ],
+        "show":"[A-Za-z0-9+/=]"
+      },
+      {
+        "p":"Type a detector for exactly 40 hexadecimal characters.",
+        "ans":[
+          "[A-Fa-f0-9]{40}",
+          "[0-9A-Fa-f]{40}"
+        ],
+        "show":"[A-Fa-f0-9]{40}"
+      }
+    ],
+    "match":[
+      {
+        "title":"Character classes — match each class to what one occurrence matches.",
+        "pairs":[
+          [
+            "[abc]",
+            "One a, b, or c"
+          ],
+          [
+            "[a-z]",
+            "One lowercase ASCII letter"
+          ],
+          [
+            "[A-Z]",
+            "One uppercase ASCII letter"
+          ],
+          [
+            "[0-9]",
+            "One decimal digit"
+          ],
+          [
+            "[^0-9]",
+            "One non-digit character"
+          ],
+          [
+            "[A-Fa-f0-9]",
+            "One hexadecimal-looking character"
+          ]
+        ]
+      },
+      {
+        "title":"Shorthand classes — match each token to its usual meaning.",
+        "pairs":[
+          [
+            "\\d",
+            "Digit"
+          ],
+          [
+            "\\D",
+            "Non-digit"
+          ],
+          [
+            "\\s",
+            "Whitespace"
+          ],
+          [
+            "\\S",
+            "Non-whitespace"
+          ],
+          [
+            "\\w",
+            "Word character"
+          ],
+          [
+            "\\W",
+            "Non-word character"
+          ]
+        ]
+      },
+      {
+        "title":"Quantifiers — match each form to the count it permits.",
+        "pairs":[
+          [
+            "*",
+            "Zero or more"
+          ],
+          [
+            "+",
+            "One or more"
+          ],
+          [
+            "?",
+            "Zero or one"
+          ],
+          [
+            "{3}",
+            "Exactly three"
+          ],
+          [
+            "{3,}",
+            "Three or more"
+          ],
+          [
+            "{2,5}",
+            "Two through five"
+          ]
+        ]
+      },
+      {
+        "title":"Read the class + quantifier pair.",
+        "pairs":[
+          [
+            "\\d{4}",
+            "Exactly four digits"
+          ],
+          [
+            "[A-Z]{3}",
+            "Exactly three uppercase letters"
+          ],
+          [
+            "\\s+",
+            "One or more whitespace characters"
+          ],
+          [
+            "[^,]+",
+            "One or more characters that are not commas"
+          ],
+          [
+            "[A-Fa-f0-9]{32}",
+            "Exactly 32 hex-looking characters"
+          ],
+          [
+            "[01]?",
+            "Zero or one binary digit"
+          ]
+        ]
+      },
+      {
+        "title":"Security-friendly components — match each fragment to its purpose.",
+        "pairs":[
+          [
+            "[A-Za-z0-9._%+-]+",
+            "One or more common email-local-part characters"
+          ],
+          [
+            "[A-Za-z]{2,}",
+            "At least two letters"
+          ],
+          [
+            "[^\\s]+",
+            "One or more non-whitespace characters"
+          ],
+          [
+            "[A-Za-z0-9+/=]{20,}",
+            "At least 20 Base64-style characters"
+          ],
+          [
+            "\\d{1,3}",
+            "One to three digits"
+          ],
+          [
+            "[._-]?",
+            "Optional dot, underscore, or hyphen"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Sort each syntax item by regex family.",
+        "buckets":[
+          "Character class",
+          "Shorthand class",
+          "Quantifier"
+        ],
+        "items":[
+          [
+            "[a-z]",
+            "Character class"
+          ],
+          [
+            "[^0-9]",
+            "Character class"
+          ],
+          [
+            "[ABC]",
+            "Character class"
+          ],
+          [
+            "\\d",
+            "Shorthand class"
+          ],
+          [
+            "\\s",
+            "Shorthand class"
+          ],
+          [
+            "\\w",
+            "Shorthand class"
+          ],
+          [
+            "*",
+            "Quantifier"
+          ],
+          [
+            "+",
+            "Quantifier"
+          ],
+          [
+            "?",
+            "Quantifier"
+          ],
+          [
+            "{2,5}",
+            "Quantifier"
+          ]
+        ]
+      },
+      {
+        "title":"Does the quantifier allow ZERO occurrences?",
+        "buckets":[
+          "Zero allowed",
+          "At least one required"
+        ],
+        "items":[
+          [
+            "*",
+            "Zero allowed"
+          ],
+          [
+            "?",
+            "Zero allowed"
+          ],
+          [
+            "{0,3}",
+            "Zero allowed"
+          ],
+          [
+            "{0,}",
+            "Zero allowed"
+          ],
+          [
+            "+",
+            "At least one required"
+          ],
+          [
+            "{1,}",
+            "At least one required"
+          ],
+          [
+            "{3}",
+            "At least one required"
+          ],
+          [
+            "{2,5}",
+            "At least one required"
+          ]
+        ]
+      },
+      {
+        "title":"Positive or negated character selection?",
+        "buckets":[
+          "Positive class",
+          "Negated class/shorthand"
+        ],
+        "items":[
+          [
+            "[0-9]",
+            "Positive class"
+          ],
+          [
+            "[A-Z]",
+            "Positive class"
+          ],
+          [
+            "\\d",
+            "Positive class"
+          ],
+          [
+            "\\s",
+            "Positive class"
+          ],
+          [
+            "[^0-9]",
+            "Negated class/shorthand"
+          ],
+          [
+            "[^,]",
+            "Negated class/shorthand"
+          ],
+          [
+            "\\D",
+            "Negated class/shorthand"
+          ],
+          [
+            "\\S",
+            "Negated class/shorthand"
+          ],
+          [
+            "\\W",
+            "Negated class/shorthand"
+          ]
+        ]
+      },
+      {
+        "title":"Sort by quantity meaning.",
+        "buckets":[
+          "Exact count",
+          "Minimum only",
+          "Bounded range",
+          "Open-ended simple"
+        ],
+        "items":[
+          [
+            "{4}",
+            "Exact count"
+          ],
+          [
+            "{32}",
+            "Exact count"
+          ],
+          [
+            "{3,}",
+            "Minimum only"
+          ],
+          [
+            "{20,}",
+            "Minimum only"
+          ],
+          [
+            "{2,5}",
+            "Bounded range"
+          ],
+          [
+            "{1,3}",
+            "Bounded range"
+          ],
+          [
+            "*",
+            "Open-ended simple"
+          ],
+          [
+            "+",
+            "Open-ended simple"
+          ]
+        ]
+      }
+    ]
+  },
+  "advanced":{
+    "name":"3 · Groups, Alternation & Advanced Recognition",
+    "desc":"Grouping, alternation, word boundaries, captures/backreferences, noncapturing groups, and exam-relevant lookahead recognition.",
+    "modes":[
+      "mcq",
+      "typed",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"What is the main purpose of parentheses in <code>(cat|dog)</code>?",
+        "o":[
+          "Create a character class",
+          "Group alternatives as one unit",
+          "Anchor the line",
+          "Escape the pipe"
+        ],
+        "a":1,
+        "why":"Parentheses group a subpattern; the pipe provides alternation inside the group."
+      },
+      {
+        "q":"What does <code>|</code> mean in <code>error|warning</code>?",
+        "o":[
+          "Concatenation",
+          "Alternation: error OR warning",
+          "End of line",
+          "Negation"
+        ],
+        "a":1,
+        "why":"The pipe separates alternatives."
+      },
+      {
+        "q":"Which pattern correctly requires a line to start with either <code>ERROR</code> or <code>WARN</code>?",
+        "o":[
+          "<code>^ERROR|WARN</code>",
+          "<code>^(ERROR|WARN)</code>",
+          "<code>^[ERROR|WARN]</code>",
+          "<code>ERROR^WARN</code>"
+        ],
+        "a":1,
+        "why":"Grouping keeps the start anchor applied to both alternatives. Without grouping, precedence can allow the second alternative elsewhere."
+      },
+      {
+        "q":"What does <code>\\badmin\\b</code> try to enforce?",
+        "o":[
+          "admin at the start only",
+          "admin as a whole word",
+          "admin repeated twice",
+          "admin followed by whitespace only"
+        ],
+        "a":1,
+        "why":"<code>\\b</code> is a word-boundary position in common engines."
+      },
+      {
+        "q":"Which token is a word boundary rather than a word character?",
+        "o":[
+          "<code>\\w</code>",
+          "<code>\\b</code>",
+          "<code>\\s</code>",
+          "<code>\\d</code>"
+        ],
+        "a":1,
+        "why":"<code>\\w</code> consumes a word character; <code>\\b</code> asserts a boundary position."
+      },
+      {
+        "q":"What does a capturing group such as <code>(\\w+)</code> generally do?",
+        "o":[
+          "Only groups; it can never retain matched text",
+          "Groups a subpattern and can retain its matched text for later use",
+          "Negates word characters",
+          "Anchors to a word boundary"
+        ],
+        "a":1,
+        "why":"Capturing groups both group tokens and, in engines that support captures, store the matched substring."
+      },
+      {
+        "q":"What does <code>\\1</code> commonly mean after a capturing group?",
+        "o":[
+          "Literal digit 1",
+          "A backreference to what group 1 matched",
+          "Exactly one repetition",
+          "Start of string"
+        ],
+        "a":1,
+        "why":"A numeric backreference refers to text previously captured by the corresponding group in engines that support it."
+      },
+      {
+        "q":"What can <code>(\\w+)\\s+\\1</code> detect?",
+        "o":[
+          "An IPv4 address",
+          "A repeated word separated by whitespace",
+          "A URL",
+          "An empty line"
+        ],
+        "a":1,
+        "why":"Capture one word, require whitespace, then require the exact same captured text again."
+      },
+      {
+        "q":"What is <code>(?:...)</code> commonly called?",
+        "o":[
+          "Negative lookahead",
+          "Noncapturing group",
+          "Word boundary",
+          "Named character class"
+        ],
+        "a":1,
+        "why":"It groups a subpattern without creating a numbered capture in common PCRE/Python-style syntax."
+      },
+      {
+        "q":"Why might a noncapturing group be useful?",
+        "o":[
+          "It disables regex",
+          "It groups structure when you do not need a capture value",
+          "It turns every token literal",
+          "It forces case-insensitive matching"
+        ],
+        "a":1,
+        "why":"Grouping and capturing are different needs. <code>(?:...)</code> provides grouping without consuming a capture slot."
+      },
+      {
+        "q":"What does the negative lookahead <code>(?!server\\.local)</code> assert at its position?",
+        "o":[
+          "server.local must appear",
+          "server.local must NOT begin there",
+          "server.local must occur at the end",
+          "server.local becomes a capture group"
+        ],
+        "a":1,
+        "why":"A negative lookahead is a zero-width assertion: the specified pattern must not match next."
+      },
+      {
+        "q":"Does a lookahead normally consume the characters it checks?",
+        "o":[
+          "Yes, always",
+          "No; it is generally zero-width",
+          "Only digits",
+          "Only in grep"
+        ],
+        "a":1,
+        "why":"Lookaround checks context without consuming it as part of the match."
+      },
+      {
+        "q":"In <code>https?</code>, what does the <code>?</code> apply to?",
+        "o":[
+          "The whole URL",
+          "Only the preceding <code>s</code>",
+          "The colon",
+          "The slash pair"
+        ],
+        "a":1,
+        "why":"Quantifiers apply to the immediately preceding token unless grouping changes the unit."
+      },
+      {
+        "q":"In <code>(ab)+</code>, what does <code>+</code> repeat?",
+        "o":[
+          "Only b",
+          "The grouped sequence ab",
+          "The opening parenthesis",
+          "Any character"
+        ],
+        "a":1,
+        "why":"Grouping makes <code>ab</code> the unit being quantified."
+      },
+      {
+        "q":"Which pattern matches either <code>.exe</code> or <code>.dll</code> at the end of a filename?",
+        "o":[
+          "<code>\\.(exe|dll)$</code>",
+          "<code>.exe|dll</code>",
+          "<code>[exe|dll]$</code>",
+          "<code>\\.exe+dll$</code>"
+        ],
+        "a":0,
+        "why":"Literal dot + grouped alternation + end anchor gives the intended structure."
+      },
+      {
+        "q":"Which pattern is more precise for the whole word <code>net</code> without matching the <code>net</code> inside <code>internet</code>?",
+        "o":[
+          "<code>net</code>",
+          "<code>\\bnet\\b</code>",
+          "<code>.*net.*</code>",
+          "<code>net+</code>"
+        ],
+        "a":1,
+        "why":"Word boundaries constrain the token to word edges."
+      },
+      {
+        "q":"What is the key difference between <code>[ab]</code> and <code>(a|b)</code> for this simple case?",
+        "o":[
+          "The class selects one character; alternation selects one alternative pattern",
+          "They are never related",
+          "The class matches both characters at once",
+          "Alternation means repetition"
+        ],
+        "a":0,
+        "why":"For single-character alternatives they can match the same characters, but a class is character selection while alternation can choose multi-token patterns."
+      },
+      {
+        "q":"Which is the better construction for <code>cat</code> OR <code>dog</code>?",
+        "o":[
+          "<code>[catdog]</code>",
+          "<code>(cat|dog)</code>",
+          "<code>cat+dog</code>",
+          "<code>cat?dog</code>"
+        ],
+        "a":1,
+        "why":"A character class chooses one character; alternation chooses between full multi-character alternatives."
+      }
+    ],
+    "typed":[
+      {
+        "p":"Type the alternation operator.",
+        "ans":[
+          "|"
+        ],
+        "show":"|"
+      },
+      {
+        "p":"Type a grouped alternation that matches <code>error</code> or <code>warning</code>.",
+        "ans":[
+          "(error|warning)"
+        ],
+        "show":"(error|warning)",
+        "case":true
+      },
+      {
+        "p":"Type a pattern that starts with either <code>ERROR</code> or <code>WARN</code>.",
+        "ans":[
+          "^(ERROR|WARN)",
+          "^(?:ERROR|WARN)"
+        ],
+        "show":"^(ERROR|WARN)",
+        "case":true
+      },
+      {
+        "p":"Type the common word-boundary token.",
+        "ans":[
+          "\\b"
+        ],
+        "show":"\\b"
+      },
+      {
+        "p":"Type a pattern matching <code>admin</code> as a whole word.",
+        "ans":[
+          "\\badmin\\b"
+        ],
+        "show":"\\badmin\\b",
+        "case":true
+      },
+      {
+        "p":"Type the backreference to capture group 1.",
+        "ans":[
+          "\\1"
+        ],
+        "show":"\\1"
+      },
+      {
+        "p":"Type a pattern that detects a doubled word separated by whitespace.",
+        "ans":[
+          "(\\w+)\\s+\\1"
+        ],
+        "show":"(\\w+)\\s+\\1"
+      },
+      {
+        "p":"Type the opening syntax for a noncapturing group.",
+        "ans":[
+          "(?:"
+        ],
+        "show":"(?:"
+      },
+      {
+        "p":"Type the negative-lookahead opening syntax.",
+        "ans":[
+          "(?!"
+        ],
+        "show":"(?!"
+      },
+      {
+        "p":"Type a negative lookahead excluding <code>mail.internal</code> at the current position.",
+        "ans":[
+          "(?!mail\\.internal)"
+        ],
+        "show":"(?!mail\\.internal)",
+        "case":true
+      },
+      {
+        "p":"Type a pattern matching <code>.exe</code> or <code>.dll</code> at the end.",
+        "ans":[
+          "\\.(exe|dll)$",
+          "\\.(?:exe|dll)$"
+        ],
+        "show":"\\.(exe|dll)$",
+        "case":true
+      },
+      {
+        "p":"Type a pattern that repeats the grouped sequence <code>ab</code> one or more times.",
+        "ans":[
+          "(ab)+",
+          "(?:ab)+"
+        ],
+        "show":"(ab)+",
+        "case":true
+      },
+      {
+        "p":"Type a pattern matching either <code>http</code> or <code>https</code> followed by <code>://</code> using optionality.",
+        "ans":[
+          "https?://"
+        ],
+        "show":"https?://",
+        "case":true
+      },
+      {
+        "p":"Type a pattern that matches the whole word <code>cmd</code>.",
+        "ans":[
+          "\\bcmd\\b"
+        ],
+        "show":"\\bcmd\\b",
+        "case":true
+      }
+    ],
+    "match":[
+      {
+        "title":"Structural syntax — match each construct to its role.",
+        "pairs":[
+          [
+            "(...)",
+            "Grouping / capturing group"
+          ],
+          [
+            "|",
+            "Alternation"
+          ],
+          [
+            "(?:...)",
+            "Noncapturing group"
+          ],
+          [
+            "\\b",
+            "Word boundary"
+          ],
+          [
+            "\\1",
+            "Backreference to capture 1"
+          ],
+          [
+            "(?!...)",
+            "Negative lookahead"
+          ]
+        ]
+      },
+      {
+        "title":"Pattern fragments — identify what each does.",
+        "pairs":[
+          [
+            "(cat|dog)",
+            "cat OR dog"
+          ],
+          [
+            "https?",
+            "http followed by optional s"
+          ],
+          [
+            "(ab)+",
+            "One or more copies of ab"
+          ],
+          [
+            "\\badmin\\b",
+            "Whole-word admin"
+          ],
+          [
+            "(\\w+)\\s+\\1",
+            "Repeated word"
+          ],
+          [
+            "\\.(exe|dll)$",
+            "Ends in .exe or .dll"
+          ]
+        ]
+      },
+      {
+        "title":"Grouping vs character class — match the syntax to the correct interpretation.",
+        "pairs":[
+          [
+            "[abc]",
+            "One character: a, b, or c"
+          ],
+          [
+            "(abc)",
+            "The sequence abc grouped/captured"
+          ],
+          [
+            "(a|b)",
+            "Alternative a or b"
+          ],
+          [
+            "[a|b]",
+            "One character: a, pipe, or b"
+          ],
+          [
+            "[0-9]",
+            "One decimal digit"
+          ],
+          [
+            "(0|9)",
+            "The alternative 0 or 9"
+          ]
+        ]
+      },
+      {
+        "title":"Lookaround / boundary recognition — identify the assertion.",
+        "pairs":[
+          [
+            "\\b",
+            "Word-edge position"
+          ],
+          [
+            "(?!bad)",
+            "bad must not begin here"
+          ],
+          [
+            "(?=cmd)",
+            "cmd must begin here (positive lookahead, engine permitting)"
+          ],
+          [
+            "^",
+            "Beginning position"
+          ],
+          [
+            "$",
+            "End position"
+          ],
+          [
+            "(?:abc)",
+            "Groups abc without numbered capture"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Consuming token or zero-width position/assertion?",
+        "buckets":[
+          "Consumes characters",
+          "Zero-width position/assertion"
+        ],
+        "items":[
+          [
+            "\\w",
+            "Consumes characters"
+          ],
+          [
+            "[A-Z]",
+            "Consumes characters"
+          ],
+          [
+            ".",
+            "Consumes characters"
+          ],
+          [
+            "(cat|dog)",
+            "Consumes characters"
+          ],
+          [
+            "^",
+            "Zero-width position/assertion"
+          ],
+          [
+            "$",
+            "Zero-width position/assertion"
+          ],
+          [
+            "\\b",
+            "Zero-width position/assertion"
+          ],
+          [
+            "(?!bad)",
+            "Zero-width position/assertion"
+          ]
+        ]
+      },
+      {
+        "title":"Grouping-related construct or character-selection construct?",
+        "buckets":[
+          "Grouping / alternation",
+          "Character selection"
+        ],
+        "items":[
+          [
+            "(abc)",
+            "Grouping / alternation"
+          ],
+          [
+            "(?:abc)",
+            "Grouping / alternation"
+          ],
+          [
+            "(a|b)",
+            "Grouping / alternation"
+          ],
+          [
+            "cat|dog",
+            "Grouping / alternation"
+          ],
+          [
+            "[abc]",
+            "Character selection"
+          ],
+          [
+            "[a-z]",
+            "Character selection"
+          ],
+          [
+            "[^0-9]",
+            "Character selection"
+          ],
+          [
+            "\\d",
+            "Character selection"
+          ]
+        ]
+      },
+      {
+        "title":"Capture-related or not?",
+        "buckets":[
+          "Creates/uses numbered capture",
+          "Does not create numbered capture"
+        ],
+        "items":[
+          [
+            "(\\w+)",
+            "Creates/uses numbered capture"
+          ],
+          [
+            "\\1",
+            "Creates/uses numbered capture"
+          ],
+          [
+            "(cat)",
+            "Creates/uses numbered capture"
+          ],
+          [
+            "(?:cat)",
+            "Does not create numbered capture"
+          ],
+          [
+            "\\b",
+            "Does not create numbered capture"
+          ],
+          [
+            "(?!cat)",
+            "Does not create numbered capture"
+          ],
+          [
+            "[cat]",
+            "Does not create numbered capture"
+          ]
+        ]
+      }
+    ]
+  },
+  "read":{
+    "name":"4 · Read the Pattern",
+    "desc":"Decompose regex left to right and decide what it matches, what it rejects, and where similar-looking patterns differ.",
+    "modes":[
+      "mcq",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"What does <code>[A-Z]{3}\\d{4}</code> match?",
+        "o":[
+          "Three uppercase letters followed by four digits",
+          "Four uppercase letters followed by three digits",
+          "Any seven characters",
+          "Three letters anywhere and four optional digits"
+        ],
+        "a":0,
+        "why":"Read left to right: uppercase-letter class ×3, then digit shorthand ×4.",
+        "decomp":"<code>[A-Z]</code> uppercase → <code>{3}</code> three → <code>\\d</code> digit → <code>{4}</code> four."
+      },
+      {
+        "q":"What does <code>^USER-\\d{6}$</code> require?",
+        "o":[
+          "USER- anywhere followed by six digits",
+          "The whole string USER- plus exactly six digits",
+          "Six USER strings",
+          "A username ending in any number"
+        ],
+        "a":1,
+        "why":"Both anchors constrain the entire string.",
+        "decomp":"<code>^</code> start → <code>USER-</code> literals → <code>\\d{6}</code> six digits → <code>$</code> end."
+      },
+      {
+        "q":"What does <code>https?://[^\\s]+</code> detect?",
+        "o":[
+          "Only HTTPS and never HTTP",
+          "HTTP or HTTPS followed by :// and one or more non-whitespace characters",
+          "Any line containing the word https",
+          "A strict RFC URL validator"
+        ],
+        "a":1,
+        "why":"The optional <code>s</code> permits http or https; the tail is a broad non-whitespace extraction pattern, not strict validation."
+      },
+      {
+        "q":"What does <code>\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b</code> detect?",
+        "o":[
+          "Strictly valid IPv4 only",
+          "IPv4-looking dotted quads with 1–3 digits per component",
+          "MAC addresses",
+          "Four hexadecimal bytes"
+        ],
+        "a":1,
+        "why":"It is useful extraction syntax but does not enforce each octet ≤255."
+      },
+      {
+        "q":"Which string matches <code>^[A-F0-9]{8}$</code>?",
+        "o":[
+          "<code>12AB90EF</code>",
+          "<code>12ab90ef</code>",
+          "<code>12AB90EF44</code>",
+          "<code>X2AB90EF</code>"
+        ],
+        "a":0,
+        "why":"Exactly eight characters are required, each from uppercase A–F or 0–9."
+      },
+      {
+        "q":"Which string matches <code>^user[0-9]+$</code>?",
+        "o":[
+          "<code>user</code>",
+          "<code>user42</code>",
+          "<code>xuser42</code>",
+          "<code>user42x</code>"
+        ],
+        "a":1,
+        "why":"The prefix is fixed, at least one digit is required, and both anchors exclude extra characters."
+      },
+      {
+        "q":"Which string matches <code>^colou?r$</code>?",
+        "o":[
+          "<code>color</code> only",
+          "<code>colour</code> only",
+          "Both <code>color</code> and <code>colour</code>",
+          "Neither"
+        ],
+        "a":2,
+        "why":"The <code>u</code> is optional because <code>?</code> quantifies only the preceding token."
+      },
+      {
+        "q":"Which strings can satisfy <code>^ab*$</code>?",
+        "o":[
+          "Only ab",
+          "a, ab, abb, abbb, ...",
+          "b, bb, bbb only",
+          "Only a and b"
+        ],
+        "a":1,
+        "why":"The pattern requires one literal a followed by zero or more b characters."
+      },
+      {
+        "q":"Which strings can satisfy <code>^ab+$</code>?",
+        "o":[
+          "a alone",
+          "ab, abb, abbb, ... but not a alone",
+          "Any string beginning a",
+          "Only ab"
+        ],
+        "a":1,
+        "why":"Plus requires at least one b."
+      },
+      {
+        "q":"What is the difference between <code>^\\d*$</code> and <code>^\\d+$</code>?",
+        "o":[
+          "No difference",
+          "The star form allows the empty string; plus requires at least one digit",
+          "Plus allows empty; star does not",
+          "Only star supports anchors"
+        ],
+        "a":1,
+        "why":"This is the zero-vs-one minimum distinction."
+      },
+      {
+        "q":"What does <code>^[^,]+</code> match at the start of CSV-like text?",
+        "o":[
+          "One or more commas",
+          "One or more characters up to but not including a comma",
+          "Only digits",
+          "The final field"
+        ],
+        "a":1,
+        "why":"The negated class consumes non-comma characters; plus requires at least one."
+      },
+      {
+        "q":"What does <code>\\.(exe|dll)$</code> target?",
+        "o":[
+          "Any occurrence of exe or dll",
+          "A filename/string ending in literal .exe or .dll",
+          "Only the literal text exe|dll",
+          "Files starting with exe or dll"
+        ],
+        "a":1,
+        "why":"Literal dot, alternation between extensions, then end anchor."
+      },
+      {
+        "q":"What does <code>^192\\.168\\.</code> detect?",
+        "o":[
+          "Strings beginning with literal 192.168.",
+          "Any string containing 192x168x",
+          "Only a complete IPv4 address",
+          "Anything ending with 192.168."
+        ],
+        "a":0,
+        "why":"The start anchor fixes position and escaped periods are literal."
+      },
+      {
+        "q":"What does <code>^\\s*#</code> detect?",
+        "o":[
+          "A hash at absolute column 1 only",
+          "Lines with optional leading whitespace followed by #",
+          "Blank lines only",
+          "Any line ending in #"
+        ],
+        "a":1,
+        "why":"Whitespace can occur zero or more times before the literal hash."
+      },
+      {
+        "q":"What does <code>^[A-Za-z_][A-Za-z0-9_]*$</code> describe?",
+        "o":[
+          "A simple identifier starting with a letter/underscore and continuing with word-like ASCII characters",
+          "An email address",
+          "An IPv4 address",
+          "A Base64 blob"
+        ],
+        "a":0,
+        "why":"The first character has a narrower class; the remaining zero-or-more characters may include digits."
+      },
+      {
+        "q":"What does <code>^.{8,}$</code> say about a string?",
+        "o":[
+          "Exactly eight digits",
+          "At least eight characters, broadly",
+          "At most eight characters",
+          "Eight literal periods"
+        ],
+        "a":1,
+        "why":"Dot consumes any single character in the usual mode and <code>{8,}</code> sets a minimum length."
+      },
+      {
+        "q":"Which string does NOT match <code>^[0-9]{2}:[0-9]{2}$</code>?",
+        "o":[
+          "<code>09:30</code>",
+          "<code>23:59</code>",
+          "<code>99:99</code>",
+          "<code>9:30</code>"
+        ],
+        "a":3,
+        "why":"The regex enforces two digits, colon, two digits. It does not validate clock ranges, so 99:99 still matches."
+      },
+      {
+        "q":"What important limitation does <code>^[0-9]{2}:[0-9]{2}$</code> demonstrate?",
+        "o":[
+          "Regex cannot match punctuation",
+          "A shape/pattern detector may accept semantically invalid values such as 99:99",
+          "Anchors prevent matching",
+          "Character classes cannot use ranges"
+        ],
+        "a":1,
+        "why":"Structural matching and strict semantic validation are different goals."
+      },
+      {
+        "q":"What does <code>^GET\\s+[^\\s]+</code> resemble in an HTTP log/request context?",
+        "o":[
+          "A line beginning GET, then whitespace, then a non-whitespace target",
+          "Any line containing GET anywhere",
+          "Only a valid complete HTTP request",
+          "A DNS query"
+        ],
+        "a":0,
+        "why":"This is a simple prefix detector, not a full HTTP grammar."
+      },
+      {
+        "q":"What does <code>-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}</code> look for?",
+        "o":[
+          "Any PowerShell command",
+          "An encoded-command-like flag followed by a long Base64-style token",
+          "Only literal -e",
+          "A strict Base64 decoder"
+        ],
+        "a":1,
+        "why":"The optional nested group permits forms such as -e, -enc, and -encodedcommand, then requires whitespace and a long Base64-style sequence."
+      },
+      {
+        "q":"In <code>-e(nc(odedcommand)?)?</code>, what is required?",
+        "o":[
+          "Only <code>-e</code>; the remainder is optional",
+          "The full word encodedcommand",
+          "Exactly -enc",
+          "Nothing"
+        ],
+        "a":0,
+        "why":"The literal <code>-e</code> is required; the outer group is optional."
+      },
+      {
+        "q":"Which string matches <code>^(ERROR|WARN):\\s+.+$</code>?",
+        "o":[
+          "<code>INFO: ok</code>",
+          "<code>WARN: disk full</code>",
+          "<code>xERROR: bad</code>",
+          "<code>ERROR:</code> with no trailing text"
+        ],
+        "a":1,
+        "why":"It requires ERROR or WARN at start, colon, whitespace, then at least one character."
+      },
+      {
+        "q":"What does <code>\\badmin\\b</code> avoid matching?",
+        "o":[
+          "admin as a whole word",
+          "The substring admin inside a larger word such as administrator",
+          "Any uppercase ADMIN",
+          "All text"
+        ],
+        "a":1,
+        "why":"Word boundaries help avoid substring matches inside larger word-character sequences."
+      },
+      {
+        "q":"Which pattern is more likely to overmatch when trying to detect a literal dotted domain?",
+        "o":[
+          "<code>example.com</code>",
+          "<code>example\\.com</code>",
+          "Both equally",
+          "Neither can match"
+        ],
+        "a":0,
+        "why":"The unescaped dot can stand for another character."
+      }
+    ],
+    "match":[
+      {
+        "title":"Read each compact pattern.",
+        "pairs":[
+          [
+            "[A-Z]{3}\\d{4}",
+            "3 uppercase letters + 4 digits"
+          ],
+          [
+            "^admin$",
+            "Exactly admin"
+          ],
+          [
+            "https?://[^\\s]+",
+            "HTTP/HTTPS URL-like token"
+          ],
+          [
+            "\\.exe$",
+            "Ends with literal .exe"
+          ],
+          [
+            "^\\s*$",
+            "Empty or whitespace-only line"
+          ],
+          [
+            "\\badmin\\b",
+            "Whole-word admin"
+          ]
+        ]
+      },
+      {
+        "title":"Read the repetition carefully.",
+        "pairs":[
+          [
+            "ab*",
+            "a then zero or more b"
+          ],
+          [
+            "ab+",
+            "a then one or more b"
+          ],
+          [
+            "ab?",
+            "a then optional b"
+          ],
+          [
+            "a{3}",
+            "aaa"
+          ],
+          [
+            "a{2,4}",
+            "2 through 4 a characters"
+          ],
+          [
+            "(ab)+",
+            "One or more copies of ab"
+          ]
+        ]
+      },
+      {
+        "title":"Security-oriented readout.",
+        "pairs":[
+          [
+            "^192\\.168\\.",
+            "Starts with literal 192.168."
+          ],
+          [
+            "[A-Fa-f0-9]{64}",
+            "64 hex-looking characters"
+          ],
+          [
+            "^GET\\s+[^\\s]+",
+            "GET prefix + request target-like token"
+          ],
+          [
+            "\\.(exe|dll)$",
+            "Ends in .exe or .dll"
+          ],
+          [
+            "[^,]+",
+            "One or more non-comma characters"
+          ],
+          [
+            "[A-Za-z0-9+/=]{20,}",
+            "Long Base64-style sequence"
+          ]
+        ]
+      },
+      {
+        "title":"Which structural limitation is present?",
+        "pairs":[
+          [
+            "\\d{1,3}(?:\\.\\d{1,3}){3}",
+            "IPv4 shape but no 0–255 enforcement"
+          ],
+          [
+            "[0-9]{2}:[0-9]{2}",
+            "Time shape but no 00–23/00–59 enforcement"
+          ],
+          [
+            "\\S+@\\S+\\.\\S+",
+            "Broad email extraction, not full RFC validation"
+          ],
+          [
+            "https?://[^\\s]+",
+            "Broad URL extraction, not strict URL validation"
+          ],
+          [
+            "[A-Fa-f0-9]{32}",
+            "Hex length/shape, not proof of MD5"
+          ],
+          [
+            ".{8,}",
+            "Length check only; no composition rule"
+          ]
+        ]
+      },
+      {
+        "title":"Anchors change the meaning — identify the constraint.",
+        "pairs":[
+          [
+            "ERROR",
+            "ERROR anywhere"
+          ],
+          [
+            "^ERROR",
+            "ERROR at the start"
+          ],
+          [
+            "ERROR$",
+            "ERROR at the end"
+          ],
+          [
+            "^ERROR$",
+            "Exactly ERROR"
+          ],
+          [
+            "^ERROR.*$",
+            "Line begins ERROR and may continue"
+          ],
+          [
+            ".*ERROR.*",
+            "Contains ERROR somewhere"
+          ]
+        ]
+      },
+      {
+        "title":"Groups and alternatives — read the unit.",
+        "pairs":[
+          [
+            "(cat|dog)",
+            "cat or dog"
+          ],
+          [
+            "[cat]",
+            "one c, a, or t"
+          ],
+          [
+            "https?",
+            "http or https"
+          ],
+          [
+            "(ab){2}",
+            "abab"
+          ],
+          [
+            "^(ERROR|WARN)",
+            "ERROR or WARN at the start"
+          ],
+          [
+            "\\.(ps1|bat|cmd)$",
+            "Ends in .ps1, .bat, or .cmd"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Will the sample match? Pattern: ^user[0-9]+$",
+        "buckets":[
+          "Matches",
+          "Does not match"
+        ],
+        "items":[
+          [
+            "user1",
+            "Matches"
+          ],
+          [
+            "user007",
+            "Matches"
+          ],
+          [
+            "user",
+            "Does not match"
+          ],
+          [
+            "xuser1",
+            "Does not match"
+          ],
+          [
+            "user1x",
+            "Does not match"
+          ],
+          [
+            "USER1",
+            "Does not match"
+          ]
+        ]
+      },
+      {
+        "title":"Will the sample match? Pattern: ^colou?r$",
+        "buckets":[
+          "Matches",
+          "Does not match"
+        ],
+        "items":[
+          [
+            "color",
+            "Matches"
+          ],
+          [
+            "colour",
+            "Matches"
+          ],
+          [
+            "colouur",
+            "Does not match"
+          ],
+          [
+            "colors",
+            "Does not match"
+          ],
+          [
+            "xcolor",
+            "Does not match"
+          ]
+        ]
+      },
+      {
+        "title":"Will the sample match? Pattern: ^[A-F0-9]{8}$",
+        "buckets":[
+          "Matches",
+          "Does not match"
+        ],
+        "items":[
+          [
+            "12AB90EF",
+            "Matches"
+          ],
+          [
+            "FFFFFFFF",
+            "Matches"
+          ],
+          [
+            "12ab90ef",
+            "Does not match"
+          ],
+          [
+            "12AB90EF00",
+            "Does not match"
+          ],
+          [
+            "G2AB90EF",
+            "Does not match"
+          ]
+        ]
+      },
+      {
+        "title":"Detection or strict validation?",
+        "buckets":[
+          "Useful detection / extraction",
+          "Stricter structural constraint"
+        ],
+        "items":[
+          [
+            "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b",
+            "Useful detection / extraction"
+          ],
+          [
+            "https?://[^\\s]+",
+            "Useful detection / extraction"
+          ],
+          [
+            "\\S+@\\S+\\.\\S+",
+            "Useful detection / extraction"
+          ],
+          [
+            "^USER-\\d{6}$",
+            "Stricter structural constraint"
+          ],
+          [
+            "^[A-F0-9]{8}$",
+            "Stricter structural constraint"
+          ],
+          [
+            "^admin$",
+            "Stricter structural constraint"
+          ]
+        ]
+      }
+    ]
+  },
+  "build":{
+    "name":"5 · Build the Pattern",
+    "desc":"Construct short, exam-relevant regex from plain-language requirements. Emphasis is correct components, not enormous production validators.",
+    "modes":[
+      "typed",
+      "mcq",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"You need exactly four digits. Which fragment is BEST?",
+        "o":[
+          "<code>\\d+</code>",
+          "<code>\\d{4}</code>",
+          "<code>\\d*</code>",
+          "<code>\\d{4,}</code>"
+        ],
+        "a":1,
+        "why":"Exact count calls for <code>{4}</code>.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need a literal period followed by <code>log</code> at the end. Which is BEST?",
+        "o":[
+          "<code>.log</code>",
+          "<code>\\.log$</code>",
+          "<code>^log.</code>",
+          "<code>[log]+</code>"
+        ],
+        "a":1,
+        "why":"Escape the dot and anchor the extension to the end.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need either <code>ERROR</code> or <code>WARN</code> at the beginning of a line. Which is BEST?",
+        "o":[
+          "<code>^ERROR|WARN</code>",
+          "<code>^(ERROR|WARN)</code>",
+          "<code>[ERROR|WARN]</code>",
+          "<code>ERROR+WARN</code>"
+        ],
+        "a":1,
+        "why":"Grouping keeps the start anchor scoped to either alternative.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need <code>http</code> with an optional <code>s</code>. Which fragment is simplest?",
+        "o":[
+          "<code>http(s*)</code>",
+          "<code>https?</code>",
+          "<code>http+s</code>",
+          "<code>[https]</code>"
+        ],
+        "a":1,
+        "why":"Question mark makes the immediately preceding s optional."
+      },
+      {
+        "q":"You need one or more non-whitespace characters. Which fragment fits?",
+        "o":[
+          "<code>\\s+</code>",
+          "<code>\\S+</code>",
+          "<code>.*</code>",
+          "<code>\\S?</code>"
+        ],
+        "a":1,
+        "why":"Uppercase <code>\\S</code> means non-whitespace; plus requires at least one."
+      },
+      {
+        "q":"You need exactly three uppercase letters followed by four digits. Which is BEST?",
+        "o":[
+          "<code>[A-Z]{3}\\d{4}</code>",
+          "<code>[A-Z]+\\d+</code>",
+          "<code>[A-z]{7}</code>",
+          "<code>\\w{7}</code>"
+        ],
+        "a":0,
+        "why":"The classes and exact quantifiers directly encode the requirement.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need a whole-word occurrence of <code>admin</code>. Which is BEST?",
+        "o":[
+          "<code>admin</code>",
+          "<code>\\badmin\\b</code>",
+          "<code>^admin</code>",
+          "<code>admin+</code>"
+        ],
+        "a":1,
+        "why":"Word boundaries prevent matching inside a larger word-character sequence.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need to match an optional minus sign before one or more digits. Which is BEST?",
+        "o":[
+          "<code>-?\\d+</code>",
+          "<code>-*\\d*</code>",
+          "<code>-+\\d?</code>",
+          "<code>[-\\d]+</code>"
+        ],
+        "a":0,
+        "why":"The sign is optional and the number itself must have at least one digit.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need to extract the first comma-delimited field by character shape. Which fragment is useful?",
+        "o":[
+          "<code>[^,]+</code>",
+          "<code>,+</code>",
+          "<code>.*</code>",
+          "<code>\\d+</code>"
+        ],
+        "a":0,
+        "why":"A negated comma class consumes characters until the delimiter."
+      },
+      {
+        "q":"You need a line that is blank or whitespace-only. Which is BEST?",
+        "o":[
+          "<code>^$</code>",
+          "<code>^\\s*$</code>",
+          "<code>\\s+</code>",
+          "<code>.*</code>"
+        ],
+        "a":1,
+        "why":"The whitespace class with star between anchors includes both empty and whitespace-only lines.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need the literal filename <code>cmd.exe</code> anywhere in text. Which pattern is safer than <code>cmd.exe</code>?",
+        "o":[
+          "<code>cmd\\.exe</code>",
+          "<code>cmd*exe</code>",
+          "<code>cmd+exe</code>",
+          "<code>cmd$exe</code>"
+        ],
+        "a":0,
+        "why":"The escaped dot prevents a wildcard match between cmd and exe."
+      },
+      {
+        "q":"You need filenames ending in <code>.ps1</code>, <code>.bat</code>, or <code>.cmd</code>. Which is BEST?",
+        "o":[
+          "<code>\\.(ps1|bat|cmd)$</code>",
+          "<code>.[ps1batcmd]</code>",
+          "<code>ps1|bat|cmd</code>",
+          "<code>^\\.(ps1|bat|cmd)</code>"
+        ],
+        "a":0,
+        "why":"Group the alternative extensions, require a literal dot, and anchor the end.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need an ID that is the whole string and follows <code>ABC1234</code> shape. Which is BEST?",
+        "o":[
+          "<code>[A-Z]{3}\\d{4}</code>",
+          "<code>^[A-Z]{3}\\d{4}$</code>",
+          "<code>\\w{7}</code>",
+          "<code>^[A-Z]+\\d+$</code>"
+        ],
+        "a":1,
+        "why":"The first pattern finds the shape within larger text; both anchors enforce the whole-string requirement.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need at least 20 Base64-style characters. Which fragment is most direct?",
+        "o":[
+          "<code>[A-Za-z0-9+/=]{20,}</code>",
+          "<code>.*{20}</code>",
+          "<code>\\w{20}</code>",
+          "<code>[A-z]{20,}</code>"
+        ],
+        "a":0,
+        "why":"The class lists the expected alphabet and the quantifier supplies the minimum length."
+      },
+      {
+        "q":"You need a prefix <code>192.168.</code> literally at the beginning. Which is BEST?",
+        "o":[
+          "<code>^192.168.</code>",
+          "<code>^192\\.168\\.</code>",
+          "<code>192\\.168\\.$</code>",
+          "<code>[192.168]</code>"
+        ],
+        "a":1,
+        "why":"Anchor the beginning and escape the periods.",
+        "type":"BEST"
+      },
+      {
+        "q":"You need one to three digits for a dotted-quad component. Which fragment is appropriate?",
+        "o":[
+          "<code>\\d{1,3}</code>",
+          "<code>\\d{3}</code>",
+          "<code>\\d+</code>",
+          "<code>[1-3]</code>"
+        ],
+        "a":0,
+        "why":"The bounded quantifier expresses 1–3 occurrences of a digit."
+      },
+      {
+        "q":"You need to EXCLUDE <code>server.local</code> at the current domain position using lookahead recognition. Which construct fits?",
+        "o":[
+          "<code>(server\\.local)</code>",
+          "<code>(?!server\\.local)</code>",
+          "<code>[^server.local]</code>",
+          "<code>^server\\.local</code>"
+        ],
+        "a":1,
+        "why":"Negative lookahead asserts that the excluded text does not begin at that position."
+      },
+      {
+        "q":"You need a repeated-word detector. Which is the relevant mechanism?",
+        "o":[
+          "Character range only",
+          "Capture a word, then backreference it",
+          "End anchor only",
+          "Wildcard dot only"
+        ],
+        "a":1,
+        "why":"A backreference can require the same text that an earlier capture matched."
+      }
+    ],
+    "typed":[
+      {
+        "p":"Build a pattern for exactly four digits.",
+        "ans":[
+          "\\d{4}",
+          "[0-9]{4}"
+        ],
+        "show":"\\d{4}"
+      },
+      {
+        "p":"Build a pattern for three uppercase letters followed by four digits.",
+        "ans":[
+          "[A-Z]{3}\\d{4}",
+          "[A-Z]{3}[0-9]{4}"
+        ],
+        "show":"[A-Z]{3}\\d{4}"
+      },
+      {
+        "p":"Build a whole-string pattern for three uppercase letters followed by four digits.",
+        "ans":[
+          "^[A-Z]{3}\\d{4}$",
+          "^[A-Z]{3}[0-9]{4}$"
+        ],
+        "show":"^[A-Z]{3}\\d{4}$"
+      },
+      {
+        "p":"Build a pattern for the literal extension <code>.exe</code> at the end.",
+        "ans":[
+          "\\.exe$",
+          "[.]exe$"
+        ],
+        "show":"\\.exe$",
+        "case":true
+      },
+      {
+        "p":"Build a pattern for <code>.ps1</code>, <code>.bat</code>, or <code>.cmd</code> at the end.",
+        "ans":[
+          "\\.(ps1|bat|cmd)$",
+          "\\.(?:ps1|bat|cmd)$"
+        ],
+        "show":"\\.(ps1|bat|cmd)$",
+        "case":true
+      },
+      {
+        "p":"Build a pattern for HTTP or HTTPS followed by <code>://</code>.",
+        "ans":[
+          "https?://"
+        ],
+        "show":"https?://",
+        "case":true
+      },
+      {
+        "p":"Build a pattern for the whole word <code>admin</code>.",
+        "ans":[
+          "\\badmin\\b"
+        ],
+        "show":"\\badmin\\b",
+        "case":true
+      },
+      {
+        "p":"Build a pattern for one or more non-whitespace characters.",
+        "ans":[
+          "\\S+",
+          "[^\\s]+"
+        ],
+        "show":"\\S+"
+      },
+      {
+        "p":"Build a pattern for a blank or whitespace-only line.",
+        "ans":[
+          "^\\s*$"
+        ],
+        "show":"^\\s*$"
+      },
+      {
+        "p":"Build a pattern for an optional minus sign followed by one or more digits.",
+        "ans":[
+          "-?\\d+",
+          "-?[0-9]+"
+        ],
+        "show":"-?\\d+"
+      },
+      {
+        "p":"Build a pattern for exactly eight uppercase hexadecimal characters.",
+        "ans":[
+          "[A-F0-9]{8}",
+          "[0-9A-F]{8}"
+        ],
+        "show":"[A-F0-9]{8}",
+        "case":true
+      },
+      {
+        "p":"Build a pattern for 20 or more Base64-style characters.",
+        "ans":[
+          "[A-Za-z0-9+/=]{20,}"
+        ],
+        "show":"[A-Za-z0-9+/=]{20,}"
+      },
+      {
+        "p":"Build a prefix pattern requiring literal <code>192.168.</code> at the start.",
+        "ans":[
+          "^192\\.168\\.",
+          "^192[.]168[.]"
+        ],
+        "show":"^192\\.168\\."
+      },
+      {
+        "p":"Build a simple IPv4-looking detector using four 1–3 digit components and literal dots.",
+        "ans":[
+          "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b",
+          "\\b[0-9]{1,3}(?:\\.[0-9]{1,3}){3}\\b"
+        ],
+        "show":"\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b"
+      },
+      {
+        "p":"Build a grouped pattern requiring ERROR or WARN at the start.",
+        "ans":[
+          "^(ERROR|WARN)",
+          "^(?:ERROR|WARN)"
+        ],
+        "show":"^(ERROR|WARN)",
+        "case":true
+      },
+      {
+        "p":"Build a pattern for one or more characters that are not commas.",
+        "ans":[
+          "[^,]+"
+        ],
+        "show":"[^,]+"
+      },
+      {
+        "p":"Build a pattern that detects a repeated word separated by whitespace.",
+        "ans":[
+          "(\\w+)\\s+\\1"
+        ],
+        "show":"(\\w+)\\s+\\1"
+      },
+      {
+        "p":"Build a negative lookahead excluding <code>server.local</code>.",
+        "ans":[
+          "(?!server\\.local)"
+        ],
+        "show":"(?!server\\.local)",
+        "case":true
+      },
+      {
+        "p":"Build a whole-string pattern for <code>USER-</code> followed by exactly six digits.",
+        "ans":[
+          "^USER-\\d{6}$",
+          "^USER-[0-9]{6}$"
+        ],
+        "show":"^USER-\\d{6}$",
+        "case":true
+      },
+      {
+        "p":"Build a detector for a line beginning <code>GET</code>, then whitespace, then one or more non-whitespace characters.",
+        "ans":[
+          "^GET\\s+\\S+",
+          "^GET\\s+[^\\s]+"
+        ],
+        "show":"^GET\\s+\\S+",
+        "case":true
+      }
+    ],
+    "match":[
+      {
+        "title":"Requirement → pattern fragment.",
+        "pairs":[
+          [
+            "Exactly four digits",
+            "\\d{4}"
+          ],
+          [
+            "One or more digits",
+            "\\d+"
+          ],
+          [
+            "Optional minus sign",
+            "-?"
+          ],
+          [
+            "Literal period",
+            "\\."
+          ],
+          [
+            "Whole-word admin",
+            "\\badmin\\b"
+          ],
+          [
+            "Blank/whitespace-only line",
+            "^\\s*$"
+          ]
+        ]
+      },
+      {
+        "title":"Security requirement → compact pattern.",
+        "pairs":[
+          [
+            "Ends in .exe",
+            "\\.exe$"
+          ],
+          [
+            "Starts with literal 192.168.",
+            "^192\\.168\\."
+          ],
+          [
+            "3 uppercase + 4 digits",
+            "[A-Z]{3}\\d{4}"
+          ],
+          [
+            "HTTP or HTTPS prefix",
+            "https?://"
+          ],
+          [
+            "Long Base64-style token",
+            "[A-Za-z0-9+/=]{20,}"
+          ],
+          [
+            "ERROR or WARN at start",
+            "^(ERROR|WARN)"
+          ]
+        ]
+      },
+      {
+        "title":"Plain-language quantity → quantifier.",
+        "pairs":[
+          [
+            "Zero or more",
+            "*"
+          ],
+          [
+            "One or more",
+            "+"
+          ],
+          [
+            "Optional / zero or one",
+            "?"
+          ],
+          [
+            "Exactly 6",
+            "{6}"
+          ],
+          [
+            "At least 20",
+            "{20,}"
+          ],
+          [
+            "Between 1 and 3",
+            "{1,3}"
+          ]
+        ]
+      },
+      {
+        "title":"Need → structural mechanism.",
+        "pairs":[
+          [
+            "Choose between multi-character alternatives",
+            "(...) with |"
+          ],
+          [
+            "Require same text again",
+            "Capture + backreference"
+          ],
+          [
+            "Exclude a next pattern without consuming",
+            "Negative lookahead"
+          ],
+          [
+            "Require exact whole string",
+            "^ ... $"
+          ],
+          [
+            "Select one character from a set",
+            "[...]"
+          ],
+          [
+            "Select anything except listed characters",
+            "[^...]"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Which building block would you reach for?",
+        "buckets":[
+          "Anchor",
+          "Character class",
+          "Quantifier",
+          "Grouping/alternation"
+        ],
+        "items":[
+          [
+            "Require start position",
+            "Anchor"
+          ],
+          [
+            "Require end position",
+            "Anchor"
+          ],
+          [
+            "Choose a digit",
+            "Character class"
+          ],
+          [
+            "Exclude commas",
+            "Character class"
+          ],
+          [
+            "Require exactly 4 repeats",
+            "Quantifier"
+          ],
+          [
+            "Make a token optional",
+            "Quantifier"
+          ],
+          [
+            "Choose ERROR or WARN",
+            "Grouping/alternation"
+          ],
+          [
+            "Repeat multi-character unit",
+            "Grouping/alternation"
+          ]
+        ]
+      },
+      {
+        "title":"Detection-oriented or whole-string/position constrained?",
+        "buckets":[
+          "Detection / extraction",
+          "Whole-string or positional constraint"
+        ],
+        "items":[
+          [
+            "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b",
+            "Detection / extraction"
+          ],
+          [
+            "https?://[^\\s]+",
+            "Detection / extraction"
+          ],
+          [
+            "[A-Fa-f0-9]{32}",
+            "Detection / extraction"
+          ],
+          [
+            "^[A-Z]{3}\\d{4}$",
+            "Whole-string or positional constraint"
+          ],
+          [
+            "\\.exe$",
+            "Whole-string or positional constraint"
+          ],
+          [
+            "^ERROR",
+            "Whole-string or positional constraint"
+          ]
+        ]
+      },
+      {
+        "title":"Which requirement needs escaping?",
+        "buckets":[
+          "Escape metacharacter",
+          "No escape needed for literal text"
+        ],
+        "items":[
+          [
+            "Literal period .",
+            "Escape metacharacter"
+          ],
+          [
+            "Literal plus +",
+            "Escape metacharacter"
+          ],
+          [
+            "Literal question mark ?",
+            "Escape metacharacter"
+          ],
+          [
+            "Literal a",
+            "No escape needed for literal text"
+          ],
+          [
+            "Literal word ERROR",
+            "No escape needed for literal text"
+          ],
+          [
+            "Literal underscore _",
+            "No escape needed for literal text"
+          ]
+        ]
+      }
+    ]
+  },
+  "security":{
+    "name":"6 · Security Analysis Patterns",
+    "desc":"Apply regex to logs, IOCs, emails, URLs, hashes, suspicious commands, file extensions, and extraction-vs-validation decisions.",
+    "modes":[
+      "mcq",
+      "typed",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"An analyst wants to extract IPv4-looking values from logs. Which is a useful detection pattern?",
+        "o":[
+          "<code>\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b</code>",
+          "<code>^\\d{4}$</code>",
+          "<code>[A-F0-9]{12}</code>",
+          "<code>https?://</code>"
+        ],
+        "a":0,
+        "why":"It encodes four 1–3 digit groups separated by literal dots. It is extraction-oriented and may still match invalid octet values."
+      },
+      {
+        "q":"Why should the IPv4-looking pattern above not be taught as strict validation?",
+        "o":[
+          "It cannot match dots",
+          "It permits numeric groups such as 999",
+          "It matches only IPv6",
+          "It requires letters"
+        ],
+        "a":1,
+        "why":"The shape is right, but it does not enforce the 0–255 semantic range."
+      },
+      {
+        "q":"Which regex is a useful broad URL detector in logs?",
+        "o":[
+          "<code>https?://[^\\s]+</code>",
+          "<code>^URL$</code>",
+          "<code>\\d{1,3}</code>",
+          "<code>[A-F0-9]{64}</code>"
+        ],
+        "a":0,
+        "why":"It finds http/https followed by a non-whitespace token. It is intentionally broad."
+      },
+      {
+        "q":"Which regex is the stronger general email extraction pattern among these?",
+        "o":[
+          "<code>\\S+@\\S+.\\S+</code>",
+          "<code>[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}</code>",
+          "<code>.*@.*</code>",
+          "<code>^@</code>"
+        ],
+        "a":1,
+        "why":"It constrains the local/domain characters and requires a literal dot before a letter-only suffix of at least two characters. It is still practical extraction, not full RFC validation.",
+        "type":"BEST"
+      },
+      {
+        "q":"Why is <code>\\.</code> especially important in email/domain regex?",
+        "o":[
+          "Domains never contain dots",
+          "An unescaped dot is a wildcard and could accept another separator character",
+          "Backslash makes the domain case-insensitive",
+          "It forces HTTPS"
+        ],
+        "a":1,
+        "why":"Literal separators should be represented literally when that distinction matters."
+      },
+      {
+        "q":"Which pattern is appropriate for finding filenames ending in executable extensions <code>.exe</code> or <code>.dll</code>?",
+        "o":[
+          "<code>\\.(exe|dll)$</code>",
+          "<code>[exe|dll]</code>",
+          "<code>.exe</code>",
+          "<code>exe+dll</code>"
+        ],
+        "a":0,
+        "why":"It uses a literal dot, grouped alternation, and an end anchor."
+      },
+      {
+        "q":"Which pattern could detect a 64-character hexadecimal hash-looking value?",
+        "o":[
+          "<code>[A-Fa-f0-9]{64}</code>",
+          "<code>\\d{64}</code>",
+          "<code>.{64}</code>",
+          "<code>[A-Z]{64}</code>"
+        ],
+        "a":0,
+        "why":"The class constrains the alphabet to hexadecimal characters and the quantifier sets the length. It detects shape; it does not prove provenance."
+      },
+      {
+        "q":"Which pattern could detect a 32-character hexadecimal hash-looking value?",
+        "o":[
+          "<code>[A-Fa-f0-9]{32}</code>",
+          "<code>\\w{32}</code>",
+          "<code>[0-9]{16}</code>",
+          "<code>.*32</code>"
+        ],
+        "a":0,
+        "why":"This is a common shape detector for a 32-hex token, though the pattern alone does not establish that it is an MD5 hash."
+      },
+      {
+        "q":"Which pattern is most useful to detect a PowerShell encoded-command-like flag followed by a long Base64-looking token?",
+        "o":[
+          "<code>-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}</code>",
+          "<code>powershell</code>",
+          "<code>\\d{20}</code>",
+          "<code>^Base64$</code>"
+        ],
+        "a":0,
+        "why":"The pattern captures common -e/-enc/-encodedcommand forms, whitespace, and a long Base64-style character run."
+      },
+      {
+        "q":"What is the strongest clue in <code>[A-Za-z0-9+/=]{20,}</code>?",
+        "o":[
+          "It proves the data is malicious",
+          "It describes a long sequence drawn from the Base64 alphabet",
+          "It decodes the content",
+          "It requires a Windows process"
+        ],
+        "a":1,
+        "why":"Regex can recognize shape. Further analysis is required to decode and judge the content."
+      },
+      {
+        "q":"An analyst needs lines beginning with <code>Failed password</code>. Which is BEST?",
+        "o":[
+          "<code>Failed password</code>",
+          "<code>^Failed password</code>",
+          "<code>Failed password$</code>",
+          "<code>^password</code>"
+        ],
+        "a":1,
+        "why":"The explicit requirement is position at the beginning.",
+        "type":"BEST"
+      },
+      {
+        "q":"An analyst wants the exact whole word <code>admin</code>, not <code>administrator</code>. Which is BEST?",
+        "o":[
+          "<code>admin</code>",
+          "<code>\\badmin\\b</code>",
+          "<code>admin*</code>",
+          "<code>^admin</code>"
+        ],
+        "a":1,
+        "why":"Word boundaries distinguish the whole token from a substring within a larger word-character sequence.",
+        "type":"BEST"
+      },
+      {
+        "q":"Which pattern is useful for a Windows Event ID shape of exactly four digits?",
+        "o":[
+          "<code>\\d{4}</code>",
+          "<code>\\d+</code>",
+          "<code>[A-Z]{4}</code>",
+          "<code>.{4}</code>"
+        ],
+        "a":0,
+        "why":"The explicit requirement is four digits. Add anchors if the entire field must consist only of the ID."
+      },
+      {
+        "q":"If the entire field must be exactly a four-digit event ID, what improves <code>\\d{4}</code>?",
+        "o":[
+          "<code>^\\d{4}$</code>",
+          "<code>.*\\d{4}.*</code>",
+          "<code>\\d*</code>",
+          "<code>[\\d]</code>"
+        ],
+        "a":0,
+        "why":"Both anchors enforce the field boundaries."
+      },
+      {
+        "q":"Which pattern is useful for detecting a domain ending in <code>.local</code>?",
+        "o":[
+          "<code>\\.local$</code>",
+          "<code>.local</code>",
+          "<code>^local.</code>",
+          "<code>[.local]</code>"
+        ],
+        "a":0,
+        "why":"Escaped dot + literal suffix + end anchor directly encodes the condition."
+      },
+      {
+        "q":"What does the negative lookahead in <code>@(?!server\\.local|mail\\.internal)</code> do?",
+        "o":[
+          "Requires one of those internal names",
+          "Excludes those alternatives at that position",
+          "Makes @ optional",
+          "Captures the domain"
+        ],
+        "a":1,
+        "why":"The pattern at that position must not begin with either excluded internal domain."
+      },
+      {
+        "q":"What is the main weakness of excluding only <code>server.local</code> and <code>mail.internal</code> in a lookahead?",
+        "o":[
+          "Negative lookahead never works",
+          "It is highly specific and does not exclude other internal-looking domains",
+          "It also excludes all public email",
+          "It cannot contain alternation"
+        ],
+        "a":1,
+        "why":"Specific exclusions are useful only when the requirement truly concerns those values; they do not define a general public-domain rule."
+      },
+      {
+        "q":"Which regex is most appropriate for finding lines beginning with either <code>ERROR</code> or <code>WARN</code>?",
+        "o":[
+          "<code>^(ERROR|WARN)</code>",
+          "<code>^ERROR|WARN</code>",
+          "<code>[ERRORWARN]</code>",
+          "<code>ERROR+WARN</code>"
+        ],
+        "a":0,
+        "why":"Grouping ensures the start condition applies to both alternatives.",
+        "type":"BEST"
+      },
+      {
+        "q":"Which pattern would extract the first whitespace-delimited token after the literal text <code>user=</code>?",
+        "o":[
+          "<code>user=\\S+</code>",
+          "<code>user=\\s+</code>",
+          "<code>^user=$</code>",
+          "<code>user=.</code>"
+        ],
+        "a":0,
+        "why":"One or more non-whitespace characters is a simple field-like extraction after the literal prefix."
+      },
+      {
+        "q":"Which pattern could find a simple UUID-like shape?",
+        "o":[
+          "<code>[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}</code>",
+          "<code>\\d{36}</code>",
+          "<code>.{16}</code>",
+          "<code>[A-Z]+</code>"
+        ],
+        "a":0,
+        "why":"It describes the familiar hexadecimal group lengths separated by hyphens. It is a structural detector, not full version/variant validation."
+      },
+      {
+        "q":"Which pattern could find a MAC-address-like shape using colons?",
+        "o":[
+          "<code>(?:[A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}</code>",
+          "<code>\\d{12}</code>",
+          "<code>.*:.*</code>",
+          "<code>[A-Z]{6}</code>"
+        ],
+        "a":0,
+        "why":"It describes six two-hex-character groups separated by colons. This is general regex supplementation useful to analysts."
+      },
+      {
+        "q":"Which is a better pattern for the literal suspicious filename <code>invoice.pdf.exe</code>?",
+        "o":[
+          "<code>invoice.pdf.exe</code>",
+          "<code>invoice\\.pdf\\.exe</code>",
+          "<code>invoice*pdf*exe</code>",
+          "<code>^invoice$</code>"
+        ],
+        "a":1,
+        "why":"Both literal periods should be escaped so wildcard semantics do not broaden the match."
+      },
+      {
+        "q":"An analyst wants any command line containing <code>-enc</code> as a separate token. Which concept can reduce substring noise?",
+        "o":[
+          "Word/token boundary reasoning",
+          "More wildcard dots",
+          "Remove all escapes",
+          "Use <code>*</code> everywhere"
+        ],
+        "a":0,
+        "why":"Boundaries or surrounding whitespace/token delimiters can distinguish a real flag token from an arbitrary substring."
+      },
+      {
+        "q":"Why is regex especially useful in security analysis?",
+        "o":[
+          "It proves malicious intent by itself",
+          "It can search, filter, and extract repeated textual patterns from large data sets",
+          "It replaces packet capture",
+          "It validates every protocol grammar automatically"
+        ],
+        "a":1,
+        "why":"Regex is a pattern-matching tool. Its value is rapid text selection and extraction, with analyst interpretation still required."
+      }
+    ],
+    "typed":[
+      {
+        "p":"Type a practical IPv4-looking extraction regex using 1–3 digit octets and literal dots.",
+        "ans":[
+          "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b"
+        ],
+        "show":"\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b"
+      },
+      {
+        "p":"Type a broad HTTP/HTTPS URL extraction pattern that runs until whitespace.",
+        "ans":[
+          "https?://[^\\s]+",
+          "https?://\\S+"
+        ],
+        "show":"https?://[^\\s]+",
+        "case":true
+      },
+      {
+        "p":"Type the general email extraction regex used in this trainer.",
+        "ans":[
+          "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        ],
+        "show":"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+      },
+      {
+        "p":"Type a pattern for the literal extension <code>.ps1</code> at the end.",
+        "ans":[
+          "\\.ps1$",
+          "[.]ps1$"
+        ],
+        "show":"\\.ps1$",
+        "case":true
+      },
+      {
+        "p":"Type a pattern for <code>.exe</code> or <code>.dll</code> at the end.",
+        "ans":[
+          "\\.(exe|dll)$",
+          "\\.(?:exe|dll)$"
+        ],
+        "show":"\\.(exe|dll)$",
+        "case":true
+      },
+      {
+        "p":"Type a detector for exactly 64 hexadecimal characters.",
+        "ans":[
+          "[A-Fa-f0-9]{64}",
+          "[0-9A-Fa-f]{64}"
+        ],
+        "show":"[A-Fa-f0-9]{64}"
+      },
+      {
+        "p":"Type a detector for exactly 32 hexadecimal characters.",
+        "ans":[
+          "[A-Fa-f0-9]{32}",
+          "[0-9A-Fa-f]{32}"
+        ],
+        "show":"[A-Fa-f0-9]{32}"
+      },
+      {
+        "p":"Type the Base64-style character class used by the encoded-command detector.",
+        "ans":[
+          "[A-Za-z0-9+/=]"
+        ],
+        "show":"[A-Za-z0-9+/=]"
+      },
+      {
+        "p":"Type a pattern for 20 or more Base64-style characters.",
+        "ans":[
+          "[A-Za-z0-9+/=]{20,}"
+        ],
+        "show":"[A-Za-z0-9+/=]{20,}"
+      },
+      {
+        "p":"Type the encoded PowerShell-like detector used in the course material/trainer.",
+        "ans":[
+          "-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}"
+        ],
+        "show":"-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}",
+        "case":true
+      },
+      {
+        "p":"Type a whole-word pattern for <code>admin</code>.",
+        "ans":[
+          "\\badmin\\b"
+        ],
+        "show":"\\badmin\\b",
+        "case":true
+      },
+      {
+        "p":"Type a line-start detector for <code>Failed password</code>.",
+        "ans":[
+          "^Failed password"
+        ],
+        "show":"^Failed password",
+        "case":true
+      },
+      {
+        "p":"Type a whole-field pattern for exactly four digits.",
+        "ans":[
+          "^\\d{4}$",
+          "^[0-9]{4}$"
+        ],
+        "show":"^\\d{4}$"
+      },
+      {
+        "p":"Type a domain-suffix pattern requiring literal <code>.local</code> at the end.",
+        "ans":[
+          "\\.local$",
+          "[.]local$"
+        ],
+        "show":"\\.local$",
+        "case":true
+      },
+      {
+        "p":"Type the negative lookahead excluding <code>server.local</code> or <code>mail.internal</code>.",
+        "ans":[
+          "(?!server\\.local|mail\\.internal)"
+        ],
+        "show":"(?!server\\.local|mail\\.internal)",
+        "case":true
+      },
+      {
+        "p":"Type a pattern for ERROR or WARN at the beginning of a line.",
+        "ans":[
+          "^(ERROR|WARN)",
+          "^(?:ERROR|WARN)"
+        ],
+        "show":"^(ERROR|WARN)",
+        "case":true
+      },
+      {
+        "p":"Type a UUID-like hexadecimal shape: 8-4-4-4-12.",
+        "ans":[
+          "[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}"
+        ],
+        "show":"[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}"
+      },
+      {
+        "p":"Type a MAC-like colon-delimited pattern with six two-hex-character groups.",
+        "ans":[
+          "(?:[A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}",
+          "([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}"
+        ],
+        "show":"(?:[A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}"
+      }
+    ],
+    "match":[
+      {
+        "title":"Security pattern → likely target.",
+        "pairs":[
+          [
+            "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b",
+            "IPv4-looking values"
+          ],
+          [
+            "https?://[^\\s]+",
+            "URL-like values"
+          ],
+          [
+            "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+            "Email-like addresses"
+          ],
+          [
+            "[A-Fa-f0-9]{64}",
+            "64-hex-character token"
+          ],
+          [
+            "\\.(exe|dll)$",
+            "Executable/library extension at end"
+          ],
+          [
+            "\\badmin\\b",
+            "Whole-word admin"
+          ]
+        ]
+      },
+      {
+        "title":"Log-search requirement → useful pattern.",
+        "pairs":[
+          [
+            "^Failed password",
+            "Authentication line beginning Failed password"
+          ],
+          [
+            "^(ERROR|WARN)",
+            "ERROR or WARN at beginning"
+          ],
+          [
+            "^GET\\s+\\S+",
+            "GET request-like prefix"
+          ],
+          [
+            "user=\\S+",
+            "user= followed by a non-whitespace token"
+          ],
+          [
+            "\\.local$",
+            "Ends in .local"
+          ],
+          [
+            "^\\d{4}$",
+            "Entire field is four digits"
+          ]
+        ]
+      },
+      {
+        "title":"Suspicious command syntax → purpose.",
+        "pairs":[
+          [
+            "-e(nc(odedcommand)?)?",
+            "EncodedCommand-like PowerShell flag variants"
+          ],
+          [
+            "[A-Za-z0-9+/=]{20,}",
+            "Long Base64-style token"
+          ],
+          [
+            "\\b(cmd|powershell|pwsh)\\b",
+            "Command interpreter name alternatives"
+          ],
+          [
+            "\\.(ps1|bat|cmd)$",
+            "Script/command extension at end"
+          ],
+          [
+            "https?://\\S+",
+            "Remote URL-like token"
+          ],
+          [
+            "(?!server\\.local)",
+            "Exclude one internal name at current position"
+          ]
+        ]
+      },
+      {
+        "title":"IOC shape → limitation to remember.",
+        "pairs":[
+          [
+            "[A-Fa-f0-9]{32}",
+            "32 hex chars; not proof it is MD5"
+          ],
+          [
+            "[A-Fa-f0-9]{64}",
+            "64 hex chars; not proof it is SHA-256"
+          ],
+          [
+            "IPv4-looking dotted quad",
+            "May allow 999 octets"
+          ],
+          [
+            "URL-like non-whitespace token",
+            "Not strict URL validation"
+          ],
+          [
+            "Email extraction pattern",
+            "Not full RFC email validation"
+          ],
+          [
+            "UUID-like 8-4-4-4-12",
+            "Shape only unless version/variant constrained"
+          ]
+        ]
+      },
+      {
+        "title":"File / host patterns → what they constrain.",
+        "pairs":[
+          [
+            "\\.exe$",
+            "Literal .exe at end"
+          ],
+          [
+            "^192\\.168\\.",
+            "Literal private-network prefix at start"
+          ],
+          [
+            "invoice\\.pdf\\.exe",
+            "Exact dotted double-extension text"
+          ],
+          [
+            "\\.(ps1|bat|cmd)$",
+            "One of three script/command extensions at end"
+          ],
+          [
+            "\\.local$",
+            "Domain suffix .local"
+          ],
+          [
+            "^cmd\\.exe$",
+            "Exactly cmd.exe"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Detection/extraction or strict/positional?",
+        "buckets":[
+          "Detection / extraction",
+          "Strict/positional constraint"
+        ],
+        "items":[
+          [
+            "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b",
+            "Detection / extraction"
+          ],
+          [
+            "https?://[^\\s]+",
+            "Detection / extraction"
+          ],
+          [
+            "[A-Fa-f0-9]{64}",
+            "Detection / extraction"
+          ],
+          [
+            "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+            "Detection / extraction"
+          ],
+          [
+            "^\\d{4}$",
+            "Strict/positional constraint"
+          ],
+          [
+            "\\.exe$",
+            "Strict/positional constraint"
+          ],
+          [
+            "^ERROR",
+            "Strict/positional constraint"
+          ],
+          [
+            "^cmd\\.exe$",
+            "Strict/positional constraint"
+          ]
+        ]
+      },
+      {
+        "title":"What kind of security artifact does this shape resemble?",
+        "buckets":[
+          "Network / domain",
+          "Identity / email",
+          "File / hash",
+          "Command / script"
+        ],
+        "items":[
+          [
+            "https?://[^\\s]+",
+            "Network / domain"
+          ],
+          [
+            "\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b",
+            "Network / domain"
+          ],
+          [
+            "\\.local$",
+            "Network / domain"
+          ],
+          [
+            "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+            "Identity / email"
+          ],
+          [
+            "\\badmin\\b",
+            "Identity / email"
+          ],
+          [
+            "[A-Fa-f0-9]{64}",
+            "File / hash"
+          ],
+          [
+            "\\.(exe|dll)$",
+            "File / hash"
+          ],
+          [
+            "-e(nc(odedcommand)?)?\\s+[A-Za-z0-9+/=]{20,}",
+            "Command / script"
+          ],
+          [
+            "\\.(ps1|bat|cmd)$",
+            "Command / script"
+          ]
+        ]
+      },
+      {
+        "title":"Does this pattern prove semantic validity?",
+        "buckets":[
+          "Shape only / may overmatch",
+          "Strong exact textual constraint"
+        ],
+        "items":[
+          [
+            "\\d{1,3}(?:\\.\\d{1,3}){3}",
+            "Shape only / may overmatch"
+          ],
+          [
+            "[0-9]{2}:[0-9]{2}",
+            "Shape only / may overmatch"
+          ],
+          [
+            "[A-Fa-f0-9]{32}",
+            "Shape only / may overmatch"
+          ],
+          [
+            "https?://[^\\s]+",
+            "Shape only / may overmatch"
+          ],
+          [
+            "^admin$",
+            "Strong exact textual constraint"
+          ],
+          [
+            "^cmd\\.exe$",
+            "Strong exact textual constraint"
+          ],
+          [
+            "^ERROR",
+            "Strong exact textual constraint"
+          ]
+        ]
+      },
+      {
+        "title":"Escaped separator or wildcard risk?",
+        "buckets":[
+          "Literal separator encoded",
+          "Wildcard may overmatch"
+        ],
+        "items":[
+          [
+            "example\\.com",
+            "Literal separator encoded"
+          ],
+          [
+            "10\\.0\\.0\\.1",
+            "Literal separator encoded"
+          ],
+          [
+            "invoice\\.pdf\\.exe",
+            "Literal separator encoded"
+          ],
+          [
+            "example.com",
+            "Wildcard may overmatch"
+          ],
+          [
+            "10.0.0.1",
+            "Wildcard may overmatch"
+          ],
+          [
+            "invoice.pdf.exe",
+            "Wildcard may overmatch"
+          ]
+        ]
+      }
+    ]
+  },
+  "tools":{
+    "name":"7 · Regex in Security Tools / Dialects",
+    "desc":"Keep the regex concept separate from the implementation: Python re, Splunk rex, grep -E, limited BRE/ERE/POSIX awareness, and context-sensitive syntax.",
+    "modes":[
+      "mcq",
+      "typed",
+      "match",
+      "classify"
+    ],
+    "mcq":[
+      {
+        "q":"Which Python function is commonly used to return all non-overlapping matches?",
+        "o":[
+          "<code>re.findall()</code>",
+          "<code>re.search()</code>",
+          "<code>re.compile()</code>",
+          "<code>re.escape()</code>"
+        ],
+        "a":0,
+        "why":"<code>findall()</code> returns all matches; <code>search()</code> locates the first match and <code>compile()</code> prepares a reusable pattern."
+      },
+      {
+        "q":"Which Python function is commonly used to find the first match anywhere in a string?",
+        "o":[
+          "<code>re.search()</code>",
+          "<code>re.findall()</code>",
+          "<code>re.compile()</code>",
+          "<code>re.splitlines()</code>"
+        ],
+        "a":0,
+        "why":"<code>re.search()</code> scans for the first location where the pattern matches."
+      },
+      {
+        "q":"Why use <code>re.compile()</code>?",
+        "o":[
+          "To perform packet capture",
+          "To create a reusable regex pattern object",
+          "To validate JSON automatically",
+          "To open a file"
+        ],
+        "a":1,
+        "why":"Compilation is useful when a pattern is reused or when you want to package a pattern with flags."
+      },
+      {
+        "q":"In Splunk, which command is associated with regex-based field extraction?",
+        "o":[
+          "<code>rex</code>",
+          "<code>ping</code>",
+          "<code>grep -E</code>",
+          "<code>re.findall()</code>"
+        ],
+        "a":0,
+        "why":"Splunk <code>rex</code> supports regex-based extraction/replacement in SPL context."
+      },
+      {
+        "q":"What is the primary reason <code>grep</code> matters to a security analyst?",
+        "o":[
+          "It captures packets",
+          "It searches/filters text, logs, and command output for patterns",
+          "It performs vulnerability scanning",
+          "It manages certificates"
+        ],
+        "a":1,
+        "why":"The CySA-relevant cue is pattern-searching large textual output."
+      },
+      {
+        "q":"What does <code>grep -E</code> select?",
+        "o":[
+          "Encrypted mode",
+          "Extended Regular Expressions",
+          "Exact-string-only mode",
+          "Email extraction"
+        ],
+        "a":1,
+        "why":"<code>-E</code> enables the Extended Regular Expression syntax in grep."
+      },
+      {
+        "q":"What is the high-level BRE vs ERE distinction worth remembering?",
+        "o":[
+          "BRE is binary and ERE is text",
+          "Some operators need escaping in BRE that are direct operators in ERE",
+          "ERE has no alternation",
+          "BRE is always more powerful"
+        ],
+        "a":1,
+        "why":"The exam-useful point is dialect syntax, not memorizing every historical detail."
+      },
+      {
+        "q":"Which operator commonly needs different treatment between traditional BRE and ERE?",
+        "o":[
+          "Literal letters only",
+          "Grouping/alternation/+, ?, braces in traditional forms",
+          "Digits 0–9",
+          "Whitespace itself"
+        ],
+        "a":1,
+        "why":"Traditional BRE and ERE differ in how several operators are written."
+      },
+      {
+        "q":"Which statement about regex engines is BEST?",
+        "o":[
+          "All engines are identical",
+          "Core concepts transfer, but shorthand classes, lookaround, Unicode behavior, flags, and escaping can differ",
+          "Only Python supports regex",
+          "Regex works only on Linux"
+        ],
+        "a":1,
+        "why":"Treat the concept as portable but verify dialect details when the engine matters.",
+        "type":"BEST"
+      },
+      {
+        "q":"Which common shorthand is not guaranteed to behave identically across every regex engine?",
+        "o":[
+          "<code>\\d</code>",
+          "Literal <code>A</code>",
+          "Literal underscore",
+          "Literal hyphen outside a class"
+        ],
+        "a":0,
+        "why":"Many engines support <code>\\d</code>, but POSIX/basic contexts may prefer bracket/POSIX classes, and Unicode semantics vary."
+      },
+      {
+        "q":"Which POSIX class represents digits?",
+        "o":[
+          "<code>[[:digit:]]</code>",
+          "<code>[[:alpha:]]</code>",
+          "<code>[[:space:]]</code>",
+          "<code>[[:upper:]]</code>"
+        ],
+        "a":0,
+        "why":"POSIX character classes appear inside bracket expressions."
+      },
+      {
+        "q":"Which POSIX class represents whitespace?",
+        "o":[
+          "<code>[[:space:]]</code>",
+          "<code>[[:digit:]]</code>",
+          "<code>[[:alnum:]]</code>",
+          "<code>[[:lower:]]</code>"
+        ],
+        "a":0,
+        "why":"<code>[:space:]</code> is the POSIX whitespace class when used within brackets."
+      },
+      {
+        "q":"Which grep option is useful when a security analyst wants case-insensitive matching?",
+        "o":[
+          "<code>-i</code>",
+          "<code>-E</code>",
+          "<code>-n</code>",
+          "<code>-v</code>"
+        ],
+        "a":0,
+        "why":"<code>-i</code> is a grep option, not regex syntax itself. This distinction helps separate tool behavior from pattern behavior."
+      },
+      {
+        "q":"Which grep option inverts the selection to show non-matching lines?",
+        "o":[
+          "<code>-v</code>",
+          "<code>-i</code>",
+          "<code>-E</code>",
+          "<code>-c</code>"
+        ],
+        "a":0,
+        "why":"<code>-v</code> is tool behavior that reverses which lines are selected."
+      },
+      {
+        "q":"Why should the trainer not turn into a grep-flags course?",
+        "o":[
+          "grep is irrelevant",
+          "The core exam skill is regex/pattern analysis; tool options are supporting context",
+          "grep has no regex support",
+          "Python replaces grep completely"
+        ],
+        "a":1,
+        "why":"The modernization spec deliberately demotes Linux command trivia while preserving relevant analyst context."
+      },
+      {
+        "q":"Which is an example of regex syntax rather than a tool option?",
+        "o":[
+          "<code>+</code>",
+          "<code>grep -i</code>",
+          "<code>grep -n</code>",
+          "<code>re.findall()</code>"
+        ],
+        "a":0,
+        "why":"Plus is a regex quantifier; the others are tool/API context."
+      },
+      {
+        "q":"Which is an example of tool/API context rather than regex syntax?",
+        "o":[
+          "<code>\\d{4}</code>",
+          "<code>^ERROR</code>",
+          "<code>re.findall()</code>",
+          "<code>(ERROR|WARN)</code>"
+        ],
+        "a":2,
+        "why":"The Python function invokes regex behavior but is not itself part of the regex language."
+      },
+      {
+        "q":"A pattern works in Python but fails in a POSIX-oriented tool. What should the analyst check FIRST?",
+        "o":[
+          "Whether regex itself is obsolete",
+          "The engine/dialect and supported syntax",
+          "Whether the log is malicious",
+          "Whether the host has IPv6"
+        ],
+        "a":1,
+        "why":"Dialect mismatch is a common reason portable-looking regex needs adjustment.",
+        "type":"BEST"
+      }
+    ],
+    "typed":[
+      {
+        "p":"Type the Python function name used to return all matches.",
+        "ans":[
+          "re.findall()",
+          "re.findall"
+        ],
+        "show":"re.findall()"
+      },
+      {
+        "p":"Type the Python function name commonly used to search for the first match.",
+        "ans":[
+          "re.search()",
+          "re.search"
+        ],
+        "show":"re.search()"
+      },
+      {
+        "p":"Type the Python function name used to prepare a reusable pattern object.",
+        "ans":[
+          "re.compile()",
+          "re.compile"
+        ],
+        "show":"re.compile()"
+      },
+      {
+        "p":"Type the Splunk command associated with regex field extraction.",
+        "ans":[
+          "rex"
+        ],
+        "show":"rex"
+      },
+      {
+        "p":"Type the grep option that selects Extended Regular Expressions.",
+        "ans":[
+          "-E",
+          "-e"
+        ],
+        "show":"-E",
+        "case":true
+      },
+      {
+        "p":"Type the grep option for case-insensitive matching.",
+        "ans":[
+          "-i"
+        ],
+        "show":"-i"
+      },
+      {
+        "p":"Type the grep option that inverts matching lines.",
+        "ans":[
+          "-v"
+        ],
+        "show":"-v"
+      },
+      {
+        "p":"Type the POSIX digit class in full bracket-expression form.",
+        "ans":[
+          "[[:digit:]]"
+        ],
+        "show":"[[:digit:]]"
+      },
+      {
+        "p":"Type the POSIX whitespace class in full bracket-expression form.",
+        "ans":[
+          "[[:space:]]"
+        ],
+        "show":"[[:space:]]"
+      },
+      {
+        "p":"Type the POSIX alphabetic class in full bracket-expression form.",
+        "ans":[
+          "[[:alpha:]]"
+        ],
+        "show":"[[:alpha:]]"
+      }
+    ],
+    "match":[
+      {
+        "title":"Tool/context → regex role.",
+        "pairs":[
+          [
+            "Python re",
+            "Programming-language regex module"
+          ],
+          [
+            "Splunk rex",
+            "Regex extraction/replacement in SPL"
+          ],
+          [
+            "grep",
+            "CLI pattern-search/filter tool"
+          ],
+          [
+            "grep -E",
+            "grep using Extended Regular Expressions"
+          ],
+          [
+            "BRE",
+            "Traditional basic regex dialect"
+          ],
+          [
+            "ERE",
+            "Traditional extended regex dialect"
+          ]
+        ]
+      },
+      {
+        "title":"Python API → purpose.",
+        "pairs":[
+          [
+            "re.search()",
+            "Find first match location"
+          ],
+          [
+            "re.findall()",
+            "Return all non-overlapping matches"
+          ],
+          [
+            "re.compile()",
+            "Create reusable pattern object"
+          ],
+          [
+            "re.IGNORECASE",
+            "Case-insensitive flag"
+          ],
+          [
+            "re.escape()",
+            "Escape characters in arbitrary literal text"
+          ],
+          [
+            "raw string r\"...\"",
+            "Convenient Python string notation for many backslash-heavy patterns"
+          ]
+        ]
+      },
+      {
+        "title":"grep option → tool behavior.",
+        "pairs":[
+          [
+            "-E",
+            "Use ERE"
+          ],
+          [
+            "-i",
+            "Case-insensitive search"
+          ],
+          [
+            "-v",
+            "Invert match"
+          ],
+          [
+            "-n",
+            "Show line numbers"
+          ],
+          [
+            "-c",
+            "Count matching lines"
+          ],
+          [
+            "-o",
+            "Print only matched portions"
+          ]
+        ]
+      },
+      {
+        "title":"POSIX class → meaning.",
+        "pairs":[
+          [
+            "[[:digit:]]",
+            "Digits"
+          ],
+          [
+            "[[:alpha:]]",
+            "Alphabetic characters"
+          ],
+          [
+            "[[:alnum:]]",
+            "Letters and digits"
+          ],
+          [
+            "[[:space:]]",
+            "Whitespace"
+          ],
+          [
+            "[[:upper:]]",
+            "Uppercase letters"
+          ],
+          [
+            "[[:lower:]]",
+            "Lowercase letters"
+          ]
+        ]
+      }
+    ],
+    "classify":[
+      {
+        "title":"Regex syntax or tool/API syntax?",
+        "buckets":[
+          "Regex language",
+          "Tool / API context"
+        ],
+        "items":[
+          [
+            "^ERROR",
+            "Regex language"
+          ],
+          [
+            "\\d{4}",
+            "Regex language"
+          ],
+          [
+            "(ERROR|WARN)",
+            "Regex language"
+          ],
+          [
+            "[^,]+",
+            "Regex language"
+          ],
+          [
+            "re.findall()",
+            "Tool / API context"
+          ],
+          [
+            "rex",
+            "Tool / API context"
+          ],
+          [
+            "grep -E",
+            "Tool / API context"
+          ],
+          [
+            "grep -i",
+            "Tool / API context"
+          ]
+        ]
+      },
+      {
+        "title":"Which ecosystem/context?",
+        "buckets":[
+          "Python",
+          "Splunk",
+          "grep / POSIX CLI"
+        ],
+        "items":[
+          [
+            "re.search()",
+            "Python"
+          ],
+          [
+            "re.compile()",
+            "Python"
+          ],
+          [
+            "re.findall()",
+            "Python"
+          ],
+          [
+            "rex",
+            "Splunk"
+          ],
+          [
+            "grep -E",
+            "grep / POSIX CLI"
+          ],
+          [
+            "-i",
+            "grep / POSIX CLI"
+          ],
+          [
+            "[[:digit:]]",
+            "grep / POSIX CLI"
+          ],
+          [
+            "BRE vs ERE",
+            "grep / POSIX CLI"
+          ]
+        ]
+      },
+      {
+        "title":"Core portable idea or dialect-sensitive detail?",
+        "buckets":[
+          "Core portable concept",
+          "Dialect-sensitive detail"
+        ],
+        "items":[
+          [
+            "Literal characters match themselves",
+            "Core portable concept"
+          ],
+          [
+            "Character classes select alternatives",
+            "Core portable concept"
+          ],
+          [
+            "Quantifiers control repetition",
+            "Core portable concept"
+          ],
+          [
+            "Anchors constrain position",
+            "Core portable concept"
+          ],
+          [
+            "Availability/meaning of \\d",
+            "Dialect-sensitive detail"
+          ],
+          [
+            "Lookaround support",
+            "Dialect-sensitive detail"
+          ],
+          [
+            "Unicode behavior of \\w",
+            "Dialect-sensitive detail"
+          ],
+          [
+            "BRE vs ERE escaping",
+            "Dialect-sensitive detail"
+          ]
+        ]
+      }
+    ]
+  }
 };
 const MODE_LABELS={mcq:'Multiple Choice + Type',typed:'Typed Recall',match:'Drag & Match',classify:'Classify / Sort'};
 let moduleKey='foundations',mode='mcq',queues={},selectedChip=null,currentDrag=null;
@@ -131,9 +4385,9 @@ function clearSelection(){if(selectedChip)selectedChip.classList.remove('selecte
 function wireZone(z){z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');if(currentDrag)place(currentDrag,z)});z.addEventListener('click',()=>{if(selectedChip)place(selectedChip,z)})}
 function place(c,z){if(z.classList.contains('slot')){const old=z.querySelector('.chip');if(old&&old!==c)returnHome(old)}z.appendChild(c);c.classList.remove('correct','wrong');z.classList.remove('correct','wrong');clearSelection()}
 function returnHome(c){const bank=$('#answerBank');if(bank)bank.appendChild(c);c.classList.remove('correct','wrong');c.parentElement?.classList.remove('correct','wrong');clearSelection()}
-function renderMatch(){const sets=getPool('match');if(!sets.length)return;const idx=nextIndex('match'),set=sets[idx];updateCoverage('match');const pairs=shuffle(set.pairs.map((p,i)=>({i,a:p[0],b:p[1]})));$('#host').innerHTML=`<div class="instructions">Drag, or tap an answer then tap a destination. Tap a placed answer to return it to the tray. Grade at any time, correct, then re-score.</div><h2 style="font-size:1rem;color:var(--accent)">${set.title}</h2><div class="workgrid"><div class="targets" id="targets"></div><div class="answertray"><div class="traytitle">Answer tray</div><div class="bank" id="answerBank"></div></div></div><div class="controls"><button class="primary" id="gradeMatch">Grade / Re-score</button><button id="shuffleMatch">New Set / Shuffle</button></div><div id="matchFB" class="feedback"></div>`;const targets=$('#targets'),bank=$('#answerBank');set.pairs.forEach((p,i)=>{const row=document.createElement('div');row.className='target-row';row.innerHTML=`<div class="target-label">${p[0]==='.'?'<span class="regex-token dot-token">.</span>':`<code>${esc(p[0])}</code>`}</div><div class="slot" data-answer="${esc(p[1])}"></div>`;targets.appendChild(row);wireZone(row.querySelector('.slot'))});pairs.forEach(x=>bank.appendChild(chipNode(x.b,x.b)));wireZone(bank);$('#gradeMatch').onclick=()=>gradePlacement('.slot',set.pairs.length,'#matchFB');$('#shuffleMatch').onclick=renderMatch}
+function renderMatch(){const sets=getPool('match');if(!sets.length)return;const idx=nextIndex('match'),set=sets[idx];updateCoverage('match');const pairs=shuffle(set.pairs.map((p,i)=>({i,a:p[0],b:p[1]})));$('#host').innerHTML=`<div class="instructions">Drag, or tap an answer then tap a destination. Tap a placed answer to return it to the tray. Grade at any time, correct, then re-score.</div><h2 style="font-size:1rem;color:var(--accent)">${set.title}</h2><div class="workgrid"><div class="targets" id="targets"></div><div class="answertray"><div class="traytitle">Answer tray</div><div class="bank" id="answerBank"></div></div></div><div class="controls"><button class="primary" id="gradeMatch">Grade / Re-score</button><button id="shuffleMatch">Next Set</button></div><div id="matchFB" class="feedback"></div>`;const targets=$('#targets'),bank=$('#answerBank');set.pairs.forEach((p,i)=>{const row=document.createElement('div');row.className='target-row';row.innerHTML=`<div class="target-label">${p[0]==='.'?'<span class="regex-token dot-token">.</span>':`<code>${esc(p[0])}</code>`}</div><div class="slot" data-answer="${esc(p[1])}"></div>`;targets.appendChild(row);wireZone(row.querySelector('.slot'))});pairs.forEach(x=>bank.appendChild(chipNode(x.b,x.b)));wireZone(bank);$('#gradeMatch').onclick=()=>gradePlacement('.slot',set.pairs.length,'#matchFB');$('#shuffleMatch').onclick=renderMatch}
 function gradePlacement(selector,total,fbsel){let correct=0,placed=0;$$(selector).forEach(z=>{z.classList.remove('correct','wrong');const c=z.querySelector('.chip');if(!c)return;placed++;const ok=c.dataset.answer===z.dataset.answer;if(ok)correct++;c.classList.toggle('correct',ok);c.classList.toggle('wrong',!ok);z.classList.add(ok?'correct':'wrong')});const fb=$(fbsel);fb.className='feedback show '+(correct===total?'good':'');fb.innerHTML=`<b>${correct} of ${total}</b> correctly placed. ${placed<total?`${total-placed} remain unplaced. `:''}The board stays editable; move items and re-score.`;$('#scorePill').textContent=`Current: ${correct} / ${total}`}
-function renderClassify(){const sets=getPool('classify');if(!sets.length)return;const idx=nextIndex('classify'),set=sets[idx];updateCoverage('classify');$('#host').innerHTML=`<div class="instructions">Sort each item into the correct category. Drag or tap-select/tap-place. Tap a placed answer to return it to the tray.</div><h2 style="font-size:1rem;color:var(--accent)">${set.title}</h2><div class="workgrid"><div class="bucket-grid" id="bucketGrid"></div><div class="answertray"><div class="traytitle">Answer tray</div><div class="bank" id="answerBank"></div></div></div><div class="controls"><button class="primary" id="gradeClass">Grade / Re-score</button><button id="newClass">New Set / Shuffle</button></div><div id="classFB" class="feedback"></div>`;const grid=$('#bucketGrid');set.buckets.forEach(b=>{const z=document.createElement('div');z.className='bucket';z.dataset.answer=b;z.innerHTML=`<h3>${esc(b)}</h3>`;grid.appendChild(z);wireZone(z)});const bank=$('#answerBank');shuffle(set.items).forEach(x=>bank.appendChild(chipNode(x[0],x[1])));wireZone(bank);$('#gradeClass').onclick=()=>{let correct=0;set.items.forEach(()=>{});$$('.bucket').forEach(z=>{z.classList.remove('correct','wrong');let bucketOK=true;z.querySelectorAll('.chip').forEach(c=>{const ok=c.dataset.answer===z.dataset.answer;if(ok)correct++;else bucketOK=false;c.classList.toggle('correct',ok);c.classList.toggle('wrong',!ok)});if(z.querySelector('.chip'))z.classList.add(bucketOK?'correct':'wrong')});const fb=$('#classFB');fb.className='feedback show '+(correct===set.items.length?'good':'');fb.innerHTML=`<b>${correct} of ${set.items.length}</b> correctly classified. Correct and re-score without resetting.`;$('#scorePill').textContent=`Current: ${correct} / ${set.items.length}`};$('#newClass').onclick=renderClassify}
+function renderClassify(){const sets=getPool('classify');if(!sets.length)return;const idx=nextIndex('classify'),set=sets[idx];updateCoverage('classify');$('#host').innerHTML=`<div class="instructions">Sort each item into the correct category. Drag or tap-select/tap-place. Tap a placed answer to return it to the tray.</div><h2 style="font-size:1rem;color:var(--accent)">${set.title}</h2><div class="workgrid"><div class="bucket-grid" id="bucketGrid"></div><div class="answertray"><div class="traytitle">Answer tray</div><div class="bank" id="answerBank"></div></div></div><div class="controls"><button class="primary" id="gradeClass">Grade / Re-score</button><button id="newClass">Next Set</button></div><div id="classFB" class="feedback"></div>`;const grid=$('#bucketGrid');set.buckets.forEach(b=>{const z=document.createElement('div');z.className='bucket';z.dataset.answer=b;z.innerHTML=`<h3>${esc(b)}</h3>`;grid.appendChild(z);wireZone(z)});const bank=$('#answerBank');shuffle(set.items).forEach(x=>bank.appendChild(chipNode(x[0],x[1])));wireZone(bank);$('#gradeClass').onclick=()=>{let correct=0;set.items.forEach(()=>{});$$('.bucket').forEach(z=>{z.classList.remove('correct','wrong');let bucketOK=true;z.querySelectorAll('.chip').forEach(c=>{const ok=c.dataset.answer===z.dataset.answer;if(ok)correct++;else bucketOK=false;c.classList.toggle('correct',ok);c.classList.toggle('wrong',!ok)});if(z.querySelector('.chip'))z.classList.add(bucketOK?'correct':'wrong')});const fb=$('#classFB');fb.className='feedback show '+(correct===set.items.length?'good':'');fb.innerHTML=`<b>${correct} of ${set.items.length}</b> correctly classified. Correct and re-score without resetting.`;$('#scorePill').textContent=`Current: ${correct} / ${set.items.length}`};$('#newClass').onclick=renderClassify}
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body></html>
