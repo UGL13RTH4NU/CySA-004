@@ -6,7 +6,7 @@
 
 <link rel="icon" type="image/png" href="../favicon.png">
   
-<title>CySA+ CS0-004 · Wireshark Trainer v2</title>
+<title>CySA+ CS0-004 · Wireshark Trainer v3</title>
 <style>
 :root{
   --accent:#1f6fb2;--accent2:#2e8b57;--orange:#c46a13;--purple:#7d4aa8;--warn:#b8322a;
@@ -39,13 +39,13 @@ h2{font-size:1.04rem;color:var(--accent);margin:2px 0 7px}h3{font-size:.92rem;co
 .badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 7px;background:var(--chip);color:var(--muted);font-size:.72rem;margin-right:4px}.badge.core{color:var(--accent);background:var(--neutral)}.badge.supp{color:var(--orange);background:var(--amberbg)}
 .callout{border-left:3px solid var(--accent);background:var(--neutral);border-radius:7px;padding:8px 10px;margin:8px 0;font-size:.84rem}.callout.warn{border-left-color:var(--orange);background:var(--amberbg)}.callout b{color:var(--accent)}
 .filter-workspace{display:grid;grid-template-columns:minmax(0,1fr) 305px;gap:12px;align-items:start}.stage{min-width:0}.token-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:11px;padding:9px;max-height:calc(100vh - 90px);overflow:auto;box-shadow:var(--shadow)}
-.tray-title{font-weight:800;color:var(--accent);font-size:.88rem}.tray-help{font-size:.75rem;color:var(--muted);margin:3px 0 8px}.token-pool{display:flex;gap:7px;flex-wrap:wrap;min-height:55px;padding:8px;border:1px dashed var(--dash);background:var(--chip);border-radius:9px}
+.tray-title{font-weight:800;color:var(--accent);font-size:.88rem}.tray-help{font-size:.75rem;color:var(--muted);margin:3px 0 8px}.pool-tabs{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 7px}.pool-tab{padding:5px 8px;font-size:.75rem}.pool-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}.token-pool{display:flex;gap:7px;flex-wrap:wrap;min-height:55px;padding:8px;border:1px dashed var(--dash);background:var(--chip);border-radius:9px}.pool-note{width:100%;font-size:.75rem;color:var(--muted)}
 .token{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--panel);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem;cursor:grab;user-select:none;overflow-wrap:anywhere;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.token.selected{outline:2px solid var(--accent);outline-offset:1px;background:var(--selected);cursor:pointer}.token.tap-target{border-color:var(--accent);background:var(--neutral)}.token.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.token.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
 .scenario{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:11px;margin-bottom:10px}.scenario .lead{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;margin-bottom:4px}.scenario .q{font-weight:700}.scenario .meta{font-size:.77rem;color:var(--muted);margin-top:6px}
 .filter-line{min-height:74px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);display:flex;align-content:flex-start;align-items:center;gap:7px;flex-wrap:wrap;touch-action:manipulation}.filter-line.over,.filter-line.tap-ready,.token-pool.over{border-color:var(--accent);background:var(--neutral)}.filter-line.correct{border-color:var(--goodbd);background:var(--goodbg)}.filter-line.wrong{border-color:var(--badbd);background:var(--badbg)}
 .filter-line .placeholder{color:var(--muted);font-size:.82rem}.filter-preview{margin-top:8px;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--chip);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem;overflow-wrap:anywhere;min-height:40px}.filter-preview b{color:var(--accent)}
 .type-input{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1rem;background:var(--panel);border:2px solid var(--dash);color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.type-input:focus{border-color:var(--accent)}.type-input.correct{border-color:var(--goodbd);background:var(--goodbg)}.type-input.wrong{border-color:var(--badbd);background:var(--badbg)}.type-input.alternate{border-color:var(--orange);background:var(--amberbg)}
-.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}.progress-line{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:7px 0 9px}.selection-status{font-size:.78rem;color:var(--muted);min-height:1.2em}.selection-status.active{color:var(--accent);font-weight:700}code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{background:rgba(128,128,128,.10);border-radius:4px;padding:1px 4px;color:var(--orange)}
+.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}.feedback-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.remediation{display:none;margin-top:8px;padding:8px 9px;border:1px solid var(--border);border-radius:8px;background:var(--panel)}.remediation.show{display:block}.remediation.hint-box{border-left:3px solid var(--accent)}.remediation.answer-box{border-left:3px solid var(--orange)}.progress-line{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:7px 0 9px}.selection-status{font-size:.78rem;color:var(--muted);min-height:1.2em}.selection-status.active{color:var(--accent);font-weight:700}code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{background:rgba(128,128,128,.10);border-radius:4px;padding:1px 4px;color:var(--orange)}
 .mcq-card{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:12px}.mcq-q{font-weight:750;margin-bottom:8px}.mcq-filter{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.96rem;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:9px;margin-bottom:9px;overflow-wrap:anywhere;color:var(--accent)}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}.opt{text-align:left;padding:9px;border:1px solid var(--border);border-radius:9px;background:var(--panel);cursor:pointer;font-size:.85rem}.opt:hover{border-color:var(--accent)}.opt.sel{outline:2px solid var(--accent);background:var(--selected)}.opt.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.opt.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
 .color-layout{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:11px;align-items:start}.color-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:9px}.color-zone{min-height:104px;border:2px dashed var(--dash);border-radius:10px;padding:8px;background:var(--panel);transition:.12s}.color-zone.over{border-color:var(--accent)}.color-zone.correct{border-color:var(--goodbd)}.color-zone.wrong{border-color:var(--badbd)}.swatch{height:50px;border-radius:7px;border:1px solid rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.77rem;letter-spacing:.02em}.color-slot{min-height:38px;margin-top:7px;display:flex;align-items:center}.color-slot .color-chip{width:100%}
@@ -62,7 +62,7 @@ footer{max-width:1600px;margin:0 auto;padding:2px 14px 18px;color:var(--muted);f
 </head>
 <body>
 <header>
-  <h1>CySA+ CS0-004 · Wireshark Trainer v2 <span class="sub">Filters · Packet Colors · Analysis Recognition</span></h1>
+  <h1>CySA+ CS0-004 · Wireshark Trainer v3 <span class="sub">Filters · Packet Colors · Analysis Recognition</span></h1>
   <span class="spacer"></span>
   <span class="pill">Current: <b id="scorePill">Not graded</b></span>
   <button id="cheatBtn">📚 Hide Cheats</button>
@@ -181,7 +181,7 @@ footer{max-width:1600px;margin:0 auto;padding:2px 14px 18px;color:var(--muted);f
   </details>
 </div></aside>
 </main>
-<footer class="trainer-footer">Version 2 · Updated September 3, 2026 · <a href="../index.html">← Back to CySA+ Study Materials</a> · <a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a></footer>
+<footer class="trainer-footer">Version 3 · Updated September 3, 2026 · <a href="../index.html">← Back to CySA+ Study Materials</a> · <a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a></footer>
 <script>
 const resolveRoot=r=>typeof r==='string'?document.querySelector(r):r;
 const $=(s,r=document)=>resolveRoot(r).querySelector(s), $$=(s,r=document)=>Array.from(resolveRoot(r).querySelectorAll(s));
@@ -190,19 +190,19 @@ const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 const safeStorage={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
 
 const CORE_FILTERS=[
- {id:'dns',tier:'core',desc:'Show DNS traffic.',answer:'dns',tokens:['dns'],why:'A protocol-name presence filter. No comparison operator is needed.'},
- {id:'http-request',tier:'core',desc:'Show HTTP request packets.',answer:'http.request',tokens:['http.request'],why:'The field itself is used as a presence test for HTTP requests.'},
- {id:'http-post',tier:'core',desc:'Show only HTTP POST requests.',answer:'http.request.method == "POST"',tokens:['http.request.method','==','"POST"'],why:'The method field is compared to the string POST, so the value is quoted.'},
- {id:'ip-any',tier:'core',desc:'Show packets where 192.168.1.10 is either the IPv4 source or destination.',answer:'ip.addr == 192.168.1.10',tokens:['ip.addr','==','192.168.1.10'],why:'ip.addr matches either direction. Use ip.src or ip.dst only when direction matters.'},
- {id:'tcp-port',tier:'core',desc:'Show TCP traffic where port 443 is either the source or destination port.',answer:'tcp.port == 443',tokens:['tcp.port','==','443'],why:'tcp.port is direction-agnostic; it matches source or destination TCP port 443.'},
- {id:'syn-noack',tier:'core',desc:'Show initial TCP connection attempts: SYN is set and ACK is not set.',answer:'tcp.flags.syn == 1 and tcp.flags.ack == 0',tokens:['tcp.flags.syn','==','1','and','tcp.flags.ack','==','0'],why:'Initial SYN packets have SYN=1 and ACK=0. The repeated == appears twice because two comparisons are required.'}
+ {id:'dns',tier:'core',desc:'Show DNS traffic.',answer:'dns',tokens:['dns'],hint:'This is a protocol-presence filter. Do not add a comparison operator or a value.',why:'A protocol-name presence filter. No comparison operator is needed.'},
+ {id:'http-request',tier:'core',desc:'Show HTTP request packets.',answer:'http.request',tokens:['http.request'],hint:'This is a presence test for request packets. You are not filtering by request method, so no comparison or value is needed.',why:'The field itself is used as a presence test for HTTP requests.'},
+ {id:'http-post',tier:'core',desc:'Show only HTTP POST requests.',answer:'http.request.method == "POST"',tokens:['http.request.method','==','"POST"'],hint:'You must test the HTTP request-method field, compare it for equality, and use a quoted string value.',why:'The method field is compared to the string POST, so the value is quoted.'},
+ {id:'ip-any',tier:'core',desc:'Show packets where 192.168.1.10 is either the IPv4 source or destination.',answer:'ip.addr == 192.168.1.10',tokens:['ip.addr','==','192.168.1.10'],hint:'The phrase “either source or destination” calls for the direction-agnostic IPv4 address field, followed by an equality comparison.',why:'ip.addr matches either direction. Use ip.src or ip.dst only when direction matters.'},
+ {id:'tcp-port',tier:'core',desc:'Show TCP traffic where port 443 is either the source or destination port.',answer:'tcp.port == 443',tokens:['tcp.port','==','443'],hint:'The phrase “either source or destination port” calls for the direction-agnostic TCP port field, not a source-only or destination-only field.',why:'tcp.port is direction-agnostic; it matches source or destination TCP port 443.'},
+ {id:'syn-noack',tier:'core',desc:'Show initial TCP connection attempts: SYN is set and ACK is not set.',answer:'tcp.flags.syn == 1 and tcp.flags.ack == 0',tokens:['tcp.flags.syn','==','1','and','tcp.flags.ack','==','0'],hint:'Translate the requirement into two flag comparisons joined by a logical AND: one flag must be set and the other must be clear.',why:'Initial SYN packets have SYN=1 and ACK=0. The repeated == appears twice because two comparisons are required.'}
 ];
 const EXT_FILTERS=[
- {id:'ip-src',tier:'supp',desc:'Show packets sourced from 10.10.10.25 only.',answer:'ip.src == 10.10.10.25',tokens:['ip.src','==','10.10.10.25'],why:'ip.src restricts the match to the IPv4 source address.'},
- {id:'ip-dst',tier:'supp',desc:'Show packets destined for 203.0.113.50 only.',answer:'ip.dst == 203.0.113.50',tokens:['ip.dst','==','203.0.113.50'],why:'ip.dst restricts the match to the IPv4 destination address.'},
- {id:'tcp-srcport',tier:'supp',desc:'Show TCP packets whose source port is 51514.',answer:'tcp.srcport == 51514',tokens:['tcp.srcport','==','51514'],why:'tcp.srcport is directional and matches the source port only.'},
- {id:'tcp-dstport',tier:'supp',desc:'Show TCP packets whose destination port is 8443.',answer:'tcp.dstport == 8443',tokens:['tcp.dstport','==','8443'],why:'tcp.dstport is directional and matches the destination port only.'},
- {id:'udp-port',tier:'supp',desc:'Show UDP traffic where port 53 is either source or destination.',answer:'udp.port == 53',tokens:['udp.port','==','53'],why:'udp.port works like tcp.port but for UDP.'}
+ {id:'ip-src',tier:'supp',desc:'Show packets sourced from 10.10.10.25 only.',answer:'ip.src == 10.10.10.25',tokens:['ip.src','==','10.10.10.25'],hint:'Direction matters here: the address is explicitly the source, so choose the source-specific IPv4 field before the equality comparison.',why:'ip.src restricts the match to the IPv4 source address.'},
+ {id:'ip-dst',tier:'supp',desc:'Show packets destined for 203.0.113.50 only.',answer:'ip.dst == 203.0.113.50',tokens:['ip.dst','==','203.0.113.50'],hint:'Direction matters here: the address is explicitly the destination, so choose the destination-specific IPv4 field before the equality comparison.',why:'ip.dst restricts the match to the IPv4 destination address.'},
+ {id:'tcp-srcport',tier:'supp',desc:'Show TCP packets whose source port is 51514.',answer:'tcp.srcport == 51514',tokens:['tcp.srcport','==','51514'],hint:'The word “source” is the discriminator. Use a directional TCP port field rather than the either-direction TCP port field.',why:'tcp.srcport is directional and matches the source port only.'},
+ {id:'tcp-dstport',tier:'supp',desc:'Show TCP packets whose destination port is 8443.',answer:'tcp.dstport == 8443',tokens:['tcp.dstport','==','8443'],hint:'The word “destination” is the discriminator. Use a directional TCP port field rather than the either-direction TCP port field.',why:'tcp.dstport is directional and matches the destination port only.'},
+ {id:'udp-port',tier:'supp',desc:'Show UDP traffic where port 53 is either source or destination.',answer:'udp.port == 53',tokens:['udp.port','==','53'],hint:'The transport protocol is UDP, and the requirement accepts either direction. Choose the direction-agnostic UDP port field.',why:'udp.port works like tcp.port but for UDP.'}
 ];
 const ALL_FILTERS=[...CORE_FILTERS,...EXT_FILTERS];
 
@@ -260,8 +260,8 @@ const COLOR_RULES=[
 ];
 
 const DESCS={
- build:'Assemble the filter in the correct order. The token pool contains every required word/value/operator, but not the answer order.',
- type:'Harder recall: type the working filter yourself. The shuffled token pool acts as a limited cheat sheet without showing the order.',
+ build:'Assemble the filter from the complete 11-filter syntax bank. Irrelevant tokens are deliberate distractors, so the pool does not disclose the answer.',
+ type:'Harder recall: type the working filter yourself. The reference pool shows every syntax component used across all 11 tested filters, not the components for this answer.',
  recognize:'Read a Wireshark display filter and identify exactly what traffic it isolates.',
  capture:'Burn in the high-value distinction between BPF capture filters and Wireshark display filters.',
  colors:'Match major built-in default coloring-rule families to their packet colors. Exact shades can change with theme/profile; rules are customizable.',
@@ -270,14 +270,28 @@ const DESCS={
 };
 
 let currentQuiz='build';
-let filterCycle=[];let filterPos=0;let currentFilter=null;let assembled=[];let poolTokens=[];let draggedTokenId=null;let selectedTokenId=null;
+let filterCycle=[];let filterPos=0;let currentFilter=null;let assembled=[];let poolTokens=[];let draggedTokenId=null;let selectedTokenId=null;let activeBuildPoolTab=0;
+let typePoolGroups=[[],[],[]];let activeTypePoolTab=0;
 let mcqCycle=[];let mcqPos=0;let currentMcq=null;let selectedOpt=null;
 let colorSelectedId=null;let colorDraggedId=null;
 
 function setScore(text){$('#scorePill').textContent=text;}
 function tierBadge(f){return f.tier==='core'?'<span class="badge core">Dion core</span>':'<span class="badge supp">Useful supplement</span>';}
 function refillFilterCycle(){filterCycle=[...shuffle([...CORE_FILTERS]),...shuffle([...EXT_FILTERS])];filterPos=0;}
-function nextFilter(){if(!filterCycle.length||filterPos>=filterCycle.length)refillFilterCycle();currentFilter=filterCycle[filterPos++];assembled=[];selectedTokenId=null;poolTokens=shuffle(currentFilter.tokens.map((t,i)=>({id:currentFilter.id+'-'+i+'-'+Math.random().toString(36).slice(2),text:t})));}
+function buildFullSyntaxInventory(){
+ const maxCounts=new Map();
+ ALL_FILTERS.forEach(f=>{const counts=new Map();f.tokens.forEach(t=>counts.set(t,(counts.get(t)||0)+1));counts.forEach((count,text)=>maxCounts.set(text,Math.max(maxCounts.get(text)||0,count)));});
+ const items=[];maxCounts.forEach((count,text)=>{for(let i=0;i<count;i++)items.push(text);});return items;
+}
+const FULL_SYNTAX_INVENTORY=buildFullSyntaxInventory();
+const SYNTAX_POOL_TABS=3;
+function makeFullPoolTokens(){
+ const items=shuffle(FULL_SYNTAX_INVENTORY.map((text,i)=>({id:'syntax-'+i+'-'+Math.random().toString(36).slice(2),text,poolGroup:0})));
+ items.forEach((item,i)=>item.poolGroup=i%SYNTAX_POOL_TABS);return items;
+}
+function makeStaticSyntaxGroups(){const groups=Array.from({length:SYNTAX_POOL_TABS},()=>[]);shuffle([...FULL_SYNTAX_INVENTORY]).forEach((text,i)=>groups[i%SYNTAX_POOL_TABS].push(text));return groups;}
+function poolTabsMarkup(active,prefix){return Array.from({length:SYNTAX_POOL_TABS},(_,i)=>`<button class="pool-tab${active===i?' active':''}" data-pool-tab="${i}" type="button">Pool ${i+1}</button>`).join('');}
+function nextFilter(){if(!filterCycle.length||filterPos>=filterCycle.length)refillFilterCycle();currentFilter=filterCycle[filterPos++];assembled=[];selectedTokenId=null;activeBuildPoolTab=0;poolTokens=makeFullPoolTokens();}
 function normalizedCanonical(s){return String(s).trim().replace(/\s+/g,' ').replace(/\s*==\s*/g,' == ').trim();}
 function alternateNormalize(s){return String(s).trim().replace(/\s+/g,' ').replace(/\beq\b/gi,'==').replace(/&&/g,'and').replace(/\s*==\s*/g,' == ').trim();}
 function tokenTextById(id){const t=[...poolTokens,...assembled].find(x=>x.id===id);return t?t.text:'';}
@@ -299,25 +313,28 @@ function renderBuild(newQuestion=false){
  <div class="filter-workspace">
   <div class="stage">
    <h2>Build the display filter</h2>
-   <p class="hint">Drag tokens normally, or tap/click a pool token to select it and then tap/click the filter line to append it. To insert before an existing token, select a pool token and tap that placed token. Tap a placed token with nothing selected to return it to the pool. You may grade, correct, and re-grade without resetting.</p>
-   <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)} The pool contains one of each required item, except a token appears more than once when the filter actually repeats it.</div></div>
+   <p class="hint">Build from the complete syntax bank used by all 11 tested filters. Drag tokens normally, or tap/click a pool token to select it and then tap/click the filter line to append it. To insert before an existing token, select a pool token and tap that placed token. Tap a placed token with nothing selected to return it to its pool. You may grade, correct, and re-grade without resetting.</p>
+   <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)} The same full distractor pool is used for every filter; the pool does not disclose which components this answer needs.</div></div>
    <div class="progress-line"><span class="pill">Coverage: <b>${filterPos} / ${filterCycle.length}</b></span><span class="selection-status" id="buildSelectionStatus">Tap a token to select it for placement.</span></div>
    <div class="filter-line" id="filterLine" aria-label="assembled filter" role="button" tabindex="0"></div>
    <div class="filter-preview" id="filterPreview"><b>Current:</b> <span></span></div>
-   <div class="controls"><button class="primary" id="buildCheck">Score / Re-score</button><button id="buildNew">New Filter</button><button id="buildClear">Clear Line</button><button id="buildShuffle">Shuffle Pool</button></div>
+   <div class="controls"><button class="primary" id="buildCheck">Score / Re-score</button><button id="buildNew">New Filter</button><button id="buildClear">Clear Line</button><button id="buildShuffle">Shuffle Full Pool</button></div>
    <div class="feedback" id="buildFeedback"></div>
   </div>
-  <div class="token-tray"><div class="tray-title">Filter Token Pool</div><div class="tray-help">Shuffled on purpose. Tap/click a token to select it, then tap/click the filter line or a placed token. Drag-and-drop still works.</div><div class="token-pool" id="tokenPool"></div></div>
+  <div class="token-tray"><div class="tray-title">Full 11-Filter Syntax Pool</div><div class="tray-help">All ${FULL_SYNTAX_INVENTORY.length} syntax components used anywhere in the 11-filter set are available on every question. The three neutral pools only manage space; irrelevant tokens are deliberate distractors.</div><div class="pool-tabs" id="buildPoolTabs"></div><div class="token-pool" id="tokenPool"></div></div>
  </div>`;
  renderBuildState();bindBuild();
 }
 function renderBuildState(){
- const line=$('#filterLine'),pool=$('#tokenPool');if(!line||!pool)return;
- line.innerHTML=assembled.length?assembled.map(t=>`<div class="token${selectedTokenId?' tap-target':''}" draggable="true" data-id="${t.id}" data-home="line" role="button" tabindex="0" title="${selectedTokenId?'Place selected token before this token':'Return this token to the pool'}">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">Drop/tap tokens here in filter order…</span>';
- pool.innerHTML=poolTokens.length?poolTokens.map(t=>`<div class="token${selectedTokenId===t.id?' selected':''}" draggable="true" data-id="${t.id}" data-home="pool" role="button" tabindex="0" aria-pressed="${selectedTokenId===t.id?'true':'false'}">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">All tokens are in the filter line.</span>';
+ const line=$('#filterLine'),pool=$('#tokenPool'),tabs=$('#buildPoolTabs');if(!line||!pool||!tabs)return;
+ line.innerHTML=assembled.length?assembled.map(t=>`<div class="token${selectedTokenId?' tap-target':''}" draggable="true" data-id="${t.id}" data-home="line" role="button" tabindex="0" title="${selectedTokenId?'Place selected token before this token':'Return this token to its pool'}">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">Drop/tap tokens here in filter order…</span>';
+ tabs.innerHTML=poolTabsMarkup(activeBuildPoolTab,'build');
+ const visiblePool=poolTokens.filter(t=>t.poolGroup===activeBuildPoolTab);
+ pool.innerHTML=visiblePool.length?visiblePool.map(t=>`<div class="token${selectedTokenId===t.id?' selected':''}" draggable="true" data-id="${t.id}" data-home="pool" role="button" tabindex="0" aria-pressed="${selectedTokenId===t.id?'true':'false'}">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">No unused tokens remain in this pool tab.</span>';
  line.classList.toggle('tap-ready',Boolean(selectedTokenId));
  $('#filterPreview span').textContent=assembled.map(x=>x.text).join(' ');
  const status=$('#buildSelectionStatus');if(status){const text=selectedTokenId?tokenTextById(selectedTokenId):'';status.textContent=text?`Selected: ${text} — tap the filter line to append, or tap a placed token to insert before it.`:'Tap a token to select it for placement.';status.classList.toggle('active',Boolean(text));}
+ $$('.pool-tab',tabs).forEach(btn=>btn.onclick=()=>{activeBuildPoolTab=Number(btn.dataset.poolTab);selectedTokenId=null;renderBuildState();});
  bindBuildTokens();
 }
 function moveToLine(id,beforeId=null){
@@ -326,7 +343,7 @@ function moveToLine(id,beforeId=null){
  if(beforeId){const b=assembled.findIndex(x=>x.id===beforeId);b>=0?assembled.splice(b,0,item):assembled.push(item);}else assembled.push(item);
  selectedTokenId=null;clearBuildGrade();renderBuildState();
 }
-function moveToPool(id){const idx=assembled.findIndex(x=>x.id===id);if(idx<0)return;poolTokens.push(assembled.splice(idx,1)[0]);selectedTokenId=null;clearBuildGrade();renderBuildState();}
+function moveToPool(id){const idx=assembled.findIndex(x=>x.id===id);if(idx<0)return;const item=assembled.splice(idx,1)[0];poolTokens.push(item);activeBuildPoolTab=item.poolGroup;selectedTokenId=null;clearBuildGrade();renderBuildState();}
 function bindBuildTokens(){
  $$('.token','#quizHost').forEach(el=>{
   el.addEventListener('dragstart',e=>{draggedTokenId=el.dataset.id;e.dataTransfer.setData('text/plain',draggedTokenId);});
@@ -350,36 +367,51 @@ function bindBuild(){
  line.addEventListener('click',e=>{if(selectedTokenId&&!e.target.closest('.token'))moveToLine(selectedTokenId);});
  line.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&selectedTokenId){e.preventDefault();moveToLine(selectedTokenId);}});
  pool.addEventListener('dragover',e=>{e.preventDefault();pool.classList.add('over')});pool.addEventListener('dragleave',()=>pool.classList.remove('over'));pool.addEventListener('drop',e=>{e.preventDefault();pool.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id)moveToPool(id);});
- $('#buildCheck').onclick=gradeBuild;$('#buildNew').onclick=()=>{nextFilter();renderBuild(false)};$('#buildClear').onclick=()=>{poolTokens=shuffle([...poolTokens,...assembled]);assembled=[];selectedTokenId=null;clearBuildGrade();renderBuildState()};$('#buildShuffle').onclick=()=>{poolTokens=shuffle(poolTokens);renderBuildState()};
+ $('#buildCheck').onclick=gradeBuild;$('#buildNew').onclick=()=>{nextFilter();renderBuild(false)};$('#buildClear').onclick=()=>{poolTokens.push(...assembled.splice(0));selectedTokenId=null;clearBuildGrade();renderBuildState()};$('#buildShuffle').onclick=()=>{poolTokens=shuffle(poolTokens);poolTokens.forEach((t,i)=>t.poolGroup=i%SYNTAX_POOL_TABS);activeBuildPoolTab=0;selectedTokenId=null;renderBuildState()};
 }
 function clearBuildGrade(){const l=$('#filterLine'),f=$('#buildFeedback');if(l)l.classList.remove('correct','wrong');if(f)f.classList.remove('show');setScore('Not graded');}
+function showBuildHint(){const box=$('#buildRemediation');if(!box)return;box.className='remediation hint-box show';box.innerHTML=`<b>Hint:</b> ${escapeHtml(currentFilter.hint)}`;}
+function revealBuildAnswer(){const box=$('#buildRemediation');if(!box)return;box.className='remediation answer-box show';box.innerHTML=`<b>Answer:</b> <code>${escapeHtml(currentFilter.answer)}</code><br>${escapeHtml(currentFilter.why)}`;}
 function gradeBuild(){
  const got=normalizedCanonical(assembled.map(x=>x.text).join(' '));const want=normalizedCanonical(currentFilter.answer);const ok=got===want;const line=$('#filterLine');line.classList.remove('correct','wrong');line.classList.add(ok?'correct':'wrong');
- const f=$('#buildFeedback');f.classList.add('show');f.innerHTML=ok?`<div class="scoreline">✓ Correct</div>${escapeHtml(currentFilter.why)}`:`<div class="scoreline">Not yet.</div>Your current line is <code>${escapeHtml(got||'(empty)')}</code>. Keep rearranging it and re-score. The answer is not revealed until you choose the write-in feedback route or consult the cheat panel.`;setScore(ok?'1 / 1':'0 / 1');
+ const f=$('#buildFeedback');f.classList.add('show');
+ if(ok){f.innerHTML=`<div class="scoreline">✓ Correct</div>${escapeHtml(currentFilter.why)}`;setScore('1 / 1');return;}
+ f.innerHTML=`<div class="scoreline">Not yet.</div>The assembled filter does not match the requirement. Keep rearranging and re-score, or use a controlled assist below.<div class="feedback-actions"><button id="buildHint" type="button">Hint</button><button id="buildReveal" type="button">Reveal Answer</button></div><div class="remediation" id="buildRemediation"></div>`;
+ $('#buildHint').onclick=showBuildHint;$('#buildReveal').onclick=revealBuildAnswer;setScore('0 / 1');
 }
 
 function renderType(newQuestion=false){
  if(newQuestion||!currentFilter)nextFilter();
+ activeTypePoolTab=0;typePoolGroups=makeStaticSyntaxGroups();
  $('#quizHost').innerHTML=`
  <div class="filter-workspace">
   <div class="stage">
    <h2>Type the working Wireshark display filter</h2>
-   <p class="hint">Use the pool as a syntax cheat sheet, but type the filter yourself. Canonical Dion syntax earns full credit; technically valid common aliases are flagged separately rather than called wrong.</p>
+   <p class="hint">Type the filter yourself. The reference bank is intentionally the same complete syntax pool used across all 11 tested filters, so it can remind you what syntax exists without identifying the components required for this answer. Canonical Dion syntax earns full credit; technically valid common aliases are flagged separately rather than called wrong.</p>
    <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)}</div></div>
    <div class="progress-line"><span class="pill">Coverage: <b>${filterPos} / ${filterCycle.length}</b></span></div>
    <input class="type-input" id="filterInput" type="text" spellcheck="false" autocomplete="off" placeholder="Type Wireshark display filter…">
    <div class="controls"><button class="primary" id="typeCheck">Score / Re-score</button><button id="typeNew">New Filter</button><button id="typeClear">Clear</button></div>
    <div class="feedback" id="typeFeedback"></div>
   </div>
-  <div class="token-tray"><div class="tray-title">Filter Token Pool</div><div class="tray-help">Every item required for this answer is present, shuffled. Repeated syntax appears only when the answer repeats it.</div><div class="token-pool">${shuffle(currentFilter.tokens).map((t,i)=>`<div class="token" style="cursor:default" data-static="1">${escapeHtml(t)}</div>`).join('')}</div></div>
+  <div class="token-tray"><div class="tray-title">Full 11-Filter Syntax Reference</div><div class="tray-help">Every syntax component used anywhere in the 11-filter set is shown on every question. Nothing here tells you which components belong to the current answer.</div><div class="pool-tabs" id="typePoolTabs"></div><div class="token-pool" id="typeTokenPool"></div></div>
  </div>`;
- $('#typeCheck').onclick=gradeType;$('#typeNew').onclick=()=>{nextFilter();renderType(false)};$('#typeClear').onclick=()=>{const i=$('#filterInput');i.value='';i.className='type-input';$('#typeFeedback').classList.remove('show');setScore('Not graded');i.focus()};$('#filterInput').addEventListener('keydown',e=>{if(e.key==='Enter')gradeType()});$('#filterInput').focus();
+ renderTypePool();
+ const input=$('#filterInput');$('#typeCheck').onclick=gradeType;$('#typeNew').onclick=()=>{nextFilter();renderType(false)};$('#typeClear').onclick=()=>{input.value='';input.className='type-input';$('#typeFeedback').classList.remove('show');setScore('Not graded');input.focus()};input.addEventListener('keydown',e=>{if(e.key==='Enter')gradeType()});input.addEventListener('input',()=>{input.className='type-input';$('#typeFeedback').classList.remove('show');setScore('Not graded')});input.focus();
 }
+function renderTypePool(){
+ const tabs=$('#typePoolTabs'),pool=$('#typeTokenPool');if(!tabs||!pool)return;
+ tabs.innerHTML=poolTabsMarkup(activeTypePoolTab,'type');
+ const items=typePoolGroups[activeTypePoolTab]||[];pool.innerHTML=items.map(t=>`<div class="token" style="cursor:default" data-static="1">${escapeHtml(t)}</div>`).join('');
+ $$('.pool-tab',tabs).forEach(btn=>btn.onclick=()=>{activeTypePoolTab=Number(btn.dataset.poolTab);renderTypePool();});
+}
+function showTypeHint(){const box=$('#typeRemediation');if(!box)return;box.className='remediation hint-box show';box.innerHTML=`<b>Hint:</b> ${escapeHtml(currentFilter.hint)}`;}
+function revealTypeAnswer(){const box=$('#typeRemediation');if(!box)return;box.className='remediation answer-box show';box.innerHTML=`<b>Answer:</b> <code>${escapeHtml(currentFilter.answer)}</code><br>${escapeHtml(currentFilter.why)}`;}
 function gradeType(){
  const input=$('#filterInput'),raw=input.value,got=normalizedCanonical(raw),want=normalizedCanonical(currentFilter.answer);input.className='type-input';const f=$('#typeFeedback');f.classList.add('show');
- if(got===want){input.classList.add('correct');f.innerHTML=`<div class="scoreline">✓ Canonical answer correct</div><code>${escapeHtml(currentFilter.answer)}</code><br>${escapeHtml(currentFilter.why)}`;setScore('1 / 1');return;}
- if(alternateNormalize(raw)===want){input.classList.add('alternate');f.innerHTML=`<div class="scoreline">Technically valid/common equivalent, but not the canonical Dion form.</div>Your entry should work as an equivalent expression. For exam recall, burn in: <code>${escapeHtml(currentFilter.answer)}</code>`;setScore('Valid alt.');return;}
- input.classList.add('wrong');f.innerHTML=`<div class="scoreline">✗ Not a match</div>Canonical filter: <code>${escapeHtml(currentFilter.answer)}</code><br>${escapeHtml(currentFilter.why)}`;setScore('0 / 1');
+ if(got===want){input.classList.add('correct');f.innerHTML=`<div class="scoreline">✓ Canonical answer correct</div>${escapeHtml(currentFilter.why)}`;setScore('1 / 1');return;}
+ if(alternateNormalize(raw)===want){input.classList.add('alternate');f.innerHTML=`<div class="scoreline">Technically valid/common equivalent, but not the canonical Dion form.</div>For exam recall, the canonical form is <code>${escapeHtml(currentFilter.answer)}</code>.<br>${escapeHtml(currentFilter.why)}`;setScore('Valid alt.');return;}
+ input.classList.add('wrong');f.innerHTML=`<div class="scoreline">✗ Not a match</div>Your entry does not match the canonical filter. Try again, or use a controlled assist below.<div class="feedback-actions"><button id="typeHint" type="button">Hint</button><button id="typeReveal" type="button">Reveal Answer</button></div><div class="remediation" id="typeRemediation"></div>`;$('#typeHint').onclick=showTypeHint;$('#typeReveal').onclick=revealTypeAnswer;setScore('0 / 1');
 }
 
 function renderMcqMode(bank,label){
@@ -434,7 +466,7 @@ function resetCurrentQuiz(){
  setScore('Not graded');
  if(currentQuiz==='build'){
   if(!currentFilter)nextFilter();
-  assembled=[];selectedTokenId=null;poolTokens=shuffle(currentFilter.tokens.map((t,i)=>({id:currentFilter.id+'-'+i+'-'+Math.random().toString(36).slice(2),text:t})));renderBuildState();clearBuildGrade();
+  assembled=[];selectedTokenId=null;activeBuildPoolTab=0;poolTokens=makeFullPoolTokens();renderBuildState();clearBuildGrade();
  }else if(currentQuiz==='type')renderType(false);
  else if(currentQuiz==='colors')renderColors();
  else{selectedOpt=null;renderMcqQuestion();}
