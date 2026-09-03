@@ -6,7 +6,7 @@
 
 <link rel="icon" type="image/png" href="../favicon.png">
   
-<title>CySA+ CS0-004 · Wireshark Trainer</title>
+<title>CySA+ CS0-004 · Wireshark Trainer v2</title>
 <style>
 :root{
   --accent:#1f6fb2;--accent2:#2e8b57;--orange:#c46a13;--purple:#7d4aa8;--warn:#b8322a;
@@ -40,16 +40,16 @@ h2{font-size:1.04rem;color:var(--accent);margin:2px 0 7px}h3{font-size:.92rem;co
 .callout{border-left:3px solid var(--accent);background:var(--neutral);border-radius:7px;padding:8px 10px;margin:8px 0;font-size:.84rem}.callout.warn{border-left-color:var(--orange);background:var(--amberbg)}.callout b{color:var(--accent)}
 .filter-workspace{display:grid;grid-template-columns:minmax(0,1fr) 305px;gap:12px;align-items:start}.stage{min-width:0}.token-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:11px;padding:9px;max-height:calc(100vh - 90px);overflow:auto;box-shadow:var(--shadow)}
 .tray-title{font-weight:800;color:var(--accent);font-size:.88rem}.tray-help{font-size:.75rem;color:var(--muted);margin:3px 0 8px}.token-pool{display:flex;gap:7px;flex-wrap:wrap;min-height:55px;padding:8px;border:1px dashed var(--dash);background:var(--chip);border-radius:9px}
-.token{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--panel);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem;cursor:grab;user-select:none;overflow-wrap:anywhere}.token.selected{outline:2px solid var(--accent);background:var(--selected)}.token.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.token.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.token{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--panel);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.83rem;cursor:grab;user-select:none;overflow-wrap:anywhere;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.token.selected{outline:2px solid var(--accent);outline-offset:1px;background:var(--selected);cursor:pointer}.token.tap-target{border-color:var(--accent);background:var(--neutral)}.token.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.token.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
 .scenario{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:11px;margin-bottom:10px}.scenario .lead{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;margin-bottom:4px}.scenario .q{font-weight:700}.scenario .meta{font-size:.77rem;color:var(--muted);margin-top:6px}
-.filter-line{min-height:74px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);display:flex;align-content:flex-start;align-items:center;gap:7px;flex-wrap:wrap}.filter-line.over,.token-pool.over{border-color:var(--accent);background:var(--neutral)}.filter-line.correct{border-color:var(--goodbd);background:var(--goodbg)}.filter-line.wrong{border-color:var(--badbd);background:var(--badbg)}
+.filter-line{min-height:74px;border:2px dashed var(--dash);border-radius:10px;padding:10px;background:var(--panel);display:flex;align-content:flex-start;align-items:center;gap:7px;flex-wrap:wrap;touch-action:manipulation}.filter-line.over,.filter-line.tap-ready,.token-pool.over{border-color:var(--accent);background:var(--neutral)}.filter-line.correct{border-color:var(--goodbd);background:var(--goodbg)}.filter-line.wrong{border-color:var(--badbd);background:var(--badbg)}
 .filter-line .placeholder{color:var(--muted);font-size:.82rem}.filter-preview{margin-top:8px;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--chip);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem;overflow-wrap:anywhere;min-height:40px}.filter-preview b{color:var(--accent)}
 .type-input{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1rem;background:var(--panel);border:2px solid var(--dash);color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.type-input:focus{border-color:var(--accent)}.type-input.correct{border-color:var(--goodbd);background:var(--goodbg)}.type-input.wrong{border-color:var(--badbd);background:var(--badbg)}.type-input.alternate{border-color:var(--orange);background:var(--amberbg)}
-.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{background:rgba(128,128,128,.10);border-radius:4px;padding:1px 4px;color:var(--orange)}
+.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.feedback{display:none;margin-top:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:var(--neutral);font-size:.86rem}.feedback.show{display:block}.feedback .scoreline{font-weight:800;color:var(--accent)}.progress-line{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:7px 0 9px}.selection-status{font-size:.78rem;color:var(--muted);min-height:1.2em}.selection-status.active{color:var(--accent);font-weight:700}code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{background:rgba(128,128,128,.10);border-radius:4px;padding:1px 4px;color:var(--orange)}
 .mcq-card{border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:12px}.mcq-q{font-weight:750;margin-bottom:8px}.mcq-filter{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.96rem;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:9px;margin-bottom:9px;overflow-wrap:anywhere;color:var(--accent)}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}.opt{text-align:left;padding:9px;border:1px solid var(--border);border-radius:9px;background:var(--panel);cursor:pointer;font-size:.85rem}.opt:hover{border-color:var(--accent)}.opt.sel{outline:2px solid var(--accent);background:var(--selected)}.opt.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.opt.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
 .color-layout{display:grid;grid-template-columns:minmax(0,1fr) 265px;gap:11px;align-items:start}.color-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:9px}.color-zone{min-height:104px;border:2px dashed var(--dash);border-radius:10px;padding:8px;background:var(--panel);transition:.12s}.color-zone.over{border-color:var(--accent)}.color-zone.correct{border-color:var(--goodbd)}.color-zone.wrong{border-color:var(--badbd)}.swatch{height:50px;border-radius:7px;border:1px solid rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.77rem;letter-spacing:.02em}.color-slot{min-height:38px;margin-top:7px;display:flex;align-items:center}.color-slot .color-chip{width:100%}
-.color-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:9px;max-height:calc(100vh - 90px);overflow:auto}.color-bank{display:grid;gap:7px}.color-chip{padding:7px 8px;border:1px solid var(--border);border-radius:8px;background:var(--chip);cursor:grab;font-size:.82rem;user-select:none}.color-chip.selected{outline:2px solid var(--accent);background:var(--selected)}.color-chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.color-chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
+.color-tray{position:sticky;top:74px;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:9px;max-height:calc(100vh - 90px);overflow:auto}.color-bank{display:grid;gap:7px}.color-chip{padding:7px 8px;border:1px solid var(--border);border-radius:8px;background:var(--chip);cursor:grab;font-size:.82rem;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.color-chip.selected{outline:2px solid var(--accent);outline-offset:1px;background:var(--selected)}.color-zone.tap-ready{border-color:var(--accent);background:var(--neutral)}.color-chip.correct{background:var(--goodbg);border-color:var(--goodbd);color:var(--good)}.color-chip.wrong{background:var(--badbg);border-color:var(--badbd);color:var(--bad)}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mini-card{border:1px solid var(--border);border-radius:9px;background:var(--panel2);padding:9px}.mini-card h3{margin:0 0 5px;color:var(--accent)}
 aside .card{position:sticky;top:74px;max-height:calc(100vh - 90px);overflow:auto}aside h2{font-size:1rem;margin:0 0 7px;color:var(--accent)}aside details{border-top:1px solid var(--border);padding:6px 0 8px}aside details:first-of-type{border-top:0}aside summary{cursor:pointer;color:var(--accent);font-weight:750;font-size:.88rem}.ref-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-top:6px}.ref-table th,.ref-table td{border:1px solid var(--border);padding:5px;vertical-align:top;text-align:left}.ref-table th{background:var(--chip)}aside p,aside li{font-size:.81rem}aside ul{padding-left:18px;margin:6px 0}.small{font-size:.76rem;color:var(--muted)}
 .legend-swatch{display:inline-block;width:22px;height:13px;border:1px solid rgba(0,0,0,.25);border-radius:3px;vertical-align:-2px;margin-right:5px}
@@ -62,7 +62,7 @@ footer{max-width:1600px;margin:0 auto;padding:2px 14px 18px;color:var(--muted);f
 </head>
 <body>
 <header>
-  <h1>CySA+ CS0-004 · Wireshark Trainer <span class="sub">Filters · Packet Colors · Analysis Recognition</span></h1>
+  <h1>CySA+ CS0-004 · Wireshark Trainer v2 <span class="sub">Filters · Packet Colors · Analysis Recognition</span></h1>
   <span class="spacer"></span>
   <span class="pill">Current: <b id="scorePill">Not graded</b></span>
   <button id="cheatBtn">📚 Hide Cheats</button>
@@ -181,11 +181,13 @@ footer{max-width:1600px;margin:0 auto;padding:2px 14px 18px;color:var(--muted);f
   </details>
 </div></aside>
 </main>
-<footer><a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a></footer>
+<footer class="trainer-footer">Version 2 · Created August 25, 2026 · <a href="../index.html">← Back to CySA+ Study Materials</a> · <a href="https://github.com/UGL13RTH4NU/CySA-004" target="_blank" rel="noopener noreferrer">↗ CySA-004 Project Repository on GitHub</a></footer>
 <script>
-const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const resolveRoot=r=>typeof r==='string'?document.querySelector(r):r;
+const $=(s,r=document)=>resolveRoot(r).querySelector(s), $$=(s,r=document)=>Array.from(resolveRoot(r).querySelectorAll(s));
 const shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const safeStorage={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
 
 const CORE_FILTERS=[
  {id:'dns',tier:'core',desc:'Show DNS traffic.',answer:'dns',tokens:['dns'],why:'A protocol-name presence filter. No comparison operator is needed.'},
@@ -297,46 +299,58 @@ function renderBuild(newQuestion=false){
  <div class="filter-workspace">
   <div class="stage">
    <h2>Build the display filter</h2>
-   <p class="hint">Drag or click tokens into the filter line in the order Wireshark expects. Click a placed token to return it. You may grade, correct, and re-grade without resetting.</p>
+   <p class="hint">Drag tokens normally, or tap/click a pool token to select it and then tap/click the filter line to append it. To insert before an existing token, select a pool token and tap that placed token. Tap a placed token with nothing selected to return it to the pool. You may grade, correct, and re-grade without resetting.</p>
    <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)} The pool contains one of each required item, except a token appears more than once when the filter actually repeats it.</div></div>
-   <div class="filter-line" id="filterLine" aria-label="assembled filter"></div>
+   <div class="progress-line"><span class="pill">Coverage: <b>${filterPos} / ${filterCycle.length}</b></span><span class="selection-status" id="buildSelectionStatus">Tap a token to select it for placement.</span></div>
+   <div class="filter-line" id="filterLine" aria-label="assembled filter" role="button" tabindex="0"></div>
    <div class="filter-preview" id="filterPreview"><b>Current:</b> <span></span></div>
    <div class="controls"><button class="primary" id="buildCheck">Score / Re-score</button><button id="buildNew">New Filter</button><button id="buildClear">Clear Line</button><button id="buildShuffle">Shuffle Pool</button></div>
    <div class="feedback" id="buildFeedback"></div>
   </div>
-  <div class="token-tray"><div class="tray-title">Filter Token Pool</div><div class="tray-help">Shuffled on purpose. Click to append, or drag into the line. This is the “cheat sheet without the answer.”</div><div class="token-pool" id="tokenPool"></div></div>
+  <div class="token-tray"><div class="tray-title">Filter Token Pool</div><div class="tray-help">Shuffled on purpose. Tap/click a token to select it, then tap/click the filter line or a placed token. Drag-and-drop still works.</div><div class="token-pool" id="tokenPool"></div></div>
  </div>`;
  renderBuildState();bindBuild();
 }
 function renderBuildState(){
  const line=$('#filterLine'),pool=$('#tokenPool');if(!line||!pool)return;
- line.innerHTML=assembled.length?assembled.map(t=>`<div class="token" draggable="true" data-id="${t.id}" data-home="line" title="Click to return to pool">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">Drop/click tokens here in filter order…</span>';
- pool.innerHTML=poolTokens.length?poolTokens.map(t=>`<div class="token${selectedTokenId===t.id?' selected':''}" draggable="true" data-id="${t.id}" data-home="pool">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">All tokens are in the filter line.</span>';
+ line.innerHTML=assembled.length?assembled.map(t=>`<div class="token${selectedTokenId?' tap-target':''}" draggable="true" data-id="${t.id}" data-home="line" role="button" tabindex="0" title="${selectedTokenId?'Place selected token before this token':'Return this token to the pool'}">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">Drop/tap tokens here in filter order…</span>';
+ pool.innerHTML=poolTokens.length?poolTokens.map(t=>`<div class="token${selectedTokenId===t.id?' selected':''}" draggable="true" data-id="${t.id}" data-home="pool" role="button" tabindex="0" aria-pressed="${selectedTokenId===t.id?'true':'false'}">${escapeHtml(t.text)}</div>`).join(''):'<span class="placeholder">All tokens are in the filter line.</span>';
+ line.classList.toggle('tap-ready',Boolean(selectedTokenId));
  $('#filterPreview span').textContent=assembled.map(x=>x.text).join(' ');
+ const status=$('#buildSelectionStatus');if(status){const text=selectedTokenId?tokenTextById(selectedTokenId):'';status.textContent=text?`Selected: ${text} — tap the filter line to append, or tap a placed token to insert before it.`:'Tap a token to select it for placement.';status.classList.toggle('active',Boolean(text));}
  bindBuildTokens();
 }
 function moveToLine(id,beforeId=null){
  let idx=poolTokens.findIndex(x=>x.id===id);let item;
  if(idx>=0)item=poolTokens.splice(idx,1)[0];else{idx=assembled.findIndex(x=>x.id===id);if(idx<0)return;item=assembled.splice(idx,1)[0];}
  if(beforeId){const b=assembled.findIndex(x=>x.id===beforeId);b>=0?assembled.splice(b,0,item):assembled.push(item);}else assembled.push(item);
- clearBuildGrade();renderBuildState();
+ selectedTokenId=null;clearBuildGrade();renderBuildState();
 }
 function moveToPool(id){const idx=assembled.findIndex(x=>x.id===id);if(idx<0)return;poolTokens.push(assembled.splice(idx,1)[0]);selectedTokenId=null;clearBuildGrade();renderBuildState();}
 function bindBuildTokens(){
  $$('.token','#quizHost').forEach(el=>{
   el.addEventListener('dragstart',e=>{draggedTokenId=el.dataset.id;e.dataTransfer.setData('text/plain',draggedTokenId);});
-  el.addEventListener('click',()=>{if(el.dataset.home==='line')moveToPool(el.dataset.id);else moveToLine(el.dataset.id);});
+  el.addEventListener('click',()=>{
+   if(el.dataset.home==='line'){
+    if(selectedTokenId)moveToLine(selectedTokenId,el.dataset.id);else moveToPool(el.dataset.id);
+   }else{
+    selectedTokenId=selectedTokenId===el.dataset.id?null:el.dataset.id;renderBuildState();
+   }
+  });
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
   if(el.dataset.home==='line'){
    el.addEventListener('dragover',e=>{e.preventDefault();});
-   el.addEventListener('drop',e=>{e.preventDefault();const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id&&id!==el.dataset.id)moveToLine(id,el.dataset.id);});
+   el.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id&&id!==el.dataset.id)moveToLine(id,el.dataset.id);});
   }
  });
 }
 function bindBuild(){
  const line=$('#filterLine'),pool=$('#tokenPool');
  line.addEventListener('dragover',e=>{e.preventDefault();line.classList.add('over')});line.addEventListener('dragleave',()=>line.classList.remove('over'));line.addEventListener('drop',e=>{e.preventDefault();line.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id)moveToLine(id);});
+ line.addEventListener('click',e=>{if(selectedTokenId&&!e.target.closest('.token'))moveToLine(selectedTokenId);});
+ line.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&selectedTokenId){e.preventDefault();moveToLine(selectedTokenId);}});
  pool.addEventListener('dragover',e=>{e.preventDefault();pool.classList.add('over')});pool.addEventListener('dragleave',()=>pool.classList.remove('over'));pool.addEventListener('drop',e=>{e.preventDefault();pool.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||draggedTokenId;if(id)moveToPool(id);});
- $('#buildCheck').onclick=gradeBuild;$('#buildNew').onclick=()=>{nextFilter();renderBuild(false)};$('#buildClear').onclick=()=>{poolTokens=shuffle([...poolTokens,...assembled]);assembled=[];clearBuildGrade();renderBuildState()};$('#buildShuffle').onclick=()=>{poolTokens=shuffle(poolTokens);renderBuildState()};
+ $('#buildCheck').onclick=gradeBuild;$('#buildNew').onclick=()=>{nextFilter();renderBuild(false)};$('#buildClear').onclick=()=>{poolTokens=shuffle([...poolTokens,...assembled]);assembled=[];selectedTokenId=null;clearBuildGrade();renderBuildState()};$('#buildShuffle').onclick=()=>{poolTokens=shuffle(poolTokens);renderBuildState()};
 }
 function clearBuildGrade(){const l=$('#filterLine'),f=$('#buildFeedback');if(l)l.classList.remove('correct','wrong');if(f)f.classList.remove('show');setScore('Not graded');}
 function gradeBuild(){
@@ -352,6 +366,7 @@ function renderType(newQuestion=false){
    <h2>Type the working Wireshark display filter</h2>
    <p class="hint">Use the pool as a syntax cheat sheet, but type the filter yourself. Canonical Dion syntax earns full credit; technically valid common aliases are flagged separately rather than called wrong.</p>
    <div class="scenario"><div class="lead">Filter requirement</div><div class="q">${escapeHtml(currentFilter.desc)}</div><div class="meta">${tierBadge(currentFilter)}</div></div>
+   <div class="progress-line"><span class="pill">Coverage: <b>${filterPos} / ${filterCycle.length}</b></span></div>
    <input class="type-input" id="filterInput" type="text" spellcheck="false" autocomplete="off" placeholder="Type Wireshark display filter…">
    <div class="controls"><button class="primary" id="typeCheck">Score / Re-score</button><button id="typeNew">New Filter</button><button id="typeClear">Clear</button></div>
    <div class="feedback" id="typeFeedback"></div>
@@ -369,40 +384,44 @@ function gradeType(){
 
 function renderMcqMode(bank,label){
  mcqCycle=shuffle(bank.map((q,i)=>({...q,_id:i})));mcqPos=0;currentMcq=null;selectedOpt=null;
- $('#quizHost').innerHTML=`<h2>${escapeHtml(label)}</h2><p class="hint">Answer, grade, read the discriminator, then move on. Options are shuffled to prevent position memorization.</p><div id="mcqHost"></div>`;nextMcq();
+ $('#quizHost').innerHTML=`<h2>${escapeHtml(label)}</h2><p class="hint">Choose an answer for immediate feedback. If you miss, try another choice; the correct answer is not automatically exposed. Options are shuffled to prevent position memorization.</p><div id="mcqHost"></div>`;nextMcq();
 }
 function nextMcq(){if(mcqPos>=mcqCycle.length){mcqCycle=shuffle(mcqCycle);mcqPos=0;}currentMcq=mcqCycle[mcqPos++];selectedOpt=null;renderMcqQuestion();}
 function renderMcqQuestion(){
  const indexed=currentMcq.opts.map((text,i)=>({text,correct:i===currentMcq.a}));const opts=shuffle(indexed);
- $('#mcqHost').innerHTML=`<div class="mcq-card"><div class="mcq-q">${escapeHtml(currentMcq.q)}</div>${currentMcq.pre?`<div class="mcq-filter">${escapeHtml(currentMcq.pre)}</div>`:''}<div class="opts">${opts.map((o,i)=>`<button class="opt" data-correct="${o.correct?'1':'0'}" data-index="${i}">${escapeHtml(o.text)}</button>`).join('')}</div><div class="controls"><button class="primary" id="mcqCheck">Score / Re-score</button><button id="mcqNext">New Question</button></div><div class="feedback" id="mcqFeedback"></div></div>`;
- $$('.opt','#mcqHost').forEach(o=>o.onclick=()=>{selectedOpt=o;$$('.opt','#mcqHost').forEach(x=>x.classList.remove('sel','wrong','correct'));o.classList.add('sel');$('#mcqFeedback').classList.remove('show');setScore('Not graded')});$('#mcqCheck').onclick=gradeMcq;$('#mcqNext').onclick=nextMcq;
+ $('#mcqHost').innerHTML=`<div class="mcq-card"><div class="progress-line"><span class="pill">Question <b>${mcqPos} / ${mcqCycle.length}</b></span></div><div class="mcq-q">${escapeHtml(currentMcq.q)}</div>${currentMcq.pre?`<div class="mcq-filter">${escapeHtml(currentMcq.pre)}</div>`:''}<div class="opts">${opts.map((o,i)=>`<button class="opt" data-correct="${o.correct?'1':'0'}" data-index="${i}">${escapeHtml(o.text)}</button>`).join('')}</div><div class="controls"><button id="mcqNext">Next Question</button></div><div class="feedback" id="mcqFeedback"></div></div>`;
+ $$('.opt','#mcqHost').forEach(o=>o.onclick=()=>{selectedOpt=o;$$('.opt','#mcqHost').forEach(x=>x.classList.remove('sel'));o.classList.add('sel');gradeMcq();});$('#mcqNext').onclick=nextMcq;
 }
 function gradeMcq(){
  if(!selectedOpt){const f=$('#mcqFeedback');f.classList.add('show');f.innerHTML='Select an answer first.';return;}
- $$('.opt','#mcqHost').forEach(o=>{o.classList.remove('wrong','correct');if(o.dataset.correct==='1')o.classList.add('correct')});const ok=selectedOpt.dataset.correct==='1';if(!ok)selectedOpt.classList.add('wrong');const f=$('#mcqFeedback');f.classList.add('show');f.innerHTML=`<div class="scoreline">${ok?'✓ Correct':'✗ Incorrect'}</div>${escapeHtml(currentMcq.why)}`;setScore(ok?'1 / 1':'0 / 1');
+ const ok=selectedOpt.dataset.correct==='1';const f=$('#mcqFeedback');f.classList.add('show');
+ if(ok){selectedOpt.classList.add('correct');f.innerHTML=`<div class="scoreline">✓ Correct</div>${escapeHtml(currentMcq.why)}`;setScore('1 / 1');}
+ else{selectedOpt.classList.add('wrong');f.innerHTML='<div class="scoreline">✗ Not quite — try another choice.</div>The question remains active, and the correct option has not been revealed.';setScore('0 / 1');}
 }
 
 function renderColors(){
  colorSelectedId=null;
- $('#quizHost').innerHTML=`<h2>Match the default Wireshark color family to the rule</h2><p class="hint">These are built-in default-rule colors, not immutable protocol laws. Profiles, themes, and Coloring Rules can change them. Drag a label onto a swatch, or click a label then click a swatch.</p><div class="callout warn"><b>Important:</b> Wireshark evaluates coloring rules top-down; the first matching rule wins. A packet can match multiple filters but display using the first applicable coloring rule.</div><div class="color-layout"><div class="color-grid" id="colorGrid"></div><div class="color-tray"><div class="tray-title">Rule Labels</div><div class="tray-help">Shuffled. Click a placed label to return it to the bank.</div><div class="color-bank" id="colorBank"></div></div></div><div class="controls"><button class="primary" id="colorCheck">Score / Re-score</button><button id="colorReset">Reset Placements</button><button id="colorShuffle">Shuffle Labels</button></div><div class="feedback" id="colorFeedback"></div>`;
+ $('#quizHost').innerHTML=`<h2>Match the default Wireshark color family to the rule</h2><p class="hint">These are built-in default-rule colors, not immutable protocol laws. Profiles, themes, and Coloring Rules can change them. Drag a label onto a swatch, or click a label then click a swatch.</p><div class="callout warn"><b>Important:</b> Wireshark evaluates coloring rules top-down; the first matching rule wins. A packet can match multiple filters but display using the first applicable coloring rule.</div><div class="progress-line"><span class="selection-status" id="colorSelectionStatus">Tap a rule label to select it, then tap a color swatch.</span></div><div class="color-layout"><div class="color-grid" id="colorGrid"></div><div class="color-tray"><div class="tray-title">Rule Labels</div><div class="tray-help">Shuffled. Tap/click a label to select it, then tap/click a swatch. Tap a placed label to return it to the bank.</div><div class="color-bank" id="colorBank"></div></div></div><div class="controls"><button class="primary" id="colorCheck">Score / Re-score</button><button id="colorReset">Reset Placements</button><button id="colorShuffle">Shuffle Labels</button></div><div class="feedback" id="colorFeedback"></div>`;
  renderColorState(COLOR_RULES.map(x=>x.id));bindColorButtons();
 }
 let colorPool=[];let colorPlacements={};
 function renderColorState(resetIds=null){
  if(resetIds){colorPool=shuffle([...resetIds]);colorPlacements={};}
  const grid=$('#colorGrid'),bank=$('#colorBank');
- grid.innerHTML=COLOR_RULES.map(r=>`<div class="color-zone" data-target="${r.id}"><div class="swatch" style="background:${r.bg};color:${r.fg}">default-rule sample</div><div class="color-slot">${colorPlacements[r.id]?colorChipHtml(colorPlacements[r.id],true):'<span class="small">Drop rule label here</span>'}</div></div>`).join('');
- bank.innerHTML=colorPool.map(id=>colorChipHtml(id,false)).join('');bindColorDnD();
+ grid.innerHTML=COLOR_RULES.map(r=>`<div class="color-zone${colorSelectedId?' tap-ready':''}" data-target="${r.id}" role="button" tabindex="0"><div class="swatch" style="background:${r.bg};color:${r.fg}">default-rule sample</div><div class="color-slot">${colorPlacements[r.id]?colorChipHtml(colorPlacements[r.id],true):'<span class="small">Drop/tap rule label here</span>'}</div></div>`).join('');
+ bank.innerHTML=colorPool.map(id=>colorChipHtml(id,false)).join('');
+ const status=$('#colorSelectionStatus');if(status){const r=COLOR_RULES.find(x=>x.id===colorSelectedId);status.textContent=r?`Selected: ${r.name} — tap a color swatch to place it.`:'Tap a rule label to select it, then tap a color swatch.';status.classList.toggle('active',Boolean(r));}
+ bindColorDnD();
 }
-function colorChipHtml(id,placed){const r=COLOR_RULES.find(x=>x.id===id);return `<div class="color-chip${colorSelectedId===id?' selected':''}" draggable="true" data-id="${id}" data-placed="${placed?'1':'0'}">${escapeHtml(r.name)}</div>`;}
+function colorChipHtml(id,placed){const r=COLOR_RULES.find(x=>x.id===id);return `<div class="color-chip${colorSelectedId===id?' selected':''}" draggable="true" data-id="${id}" data-placed="${placed?'1':'0'}" role="button" tabindex="0" aria-pressed="${colorSelectedId===id?'true':'false'}">${escapeHtml(r.name)}</div>`;}
 function removeColorPlacement(id){const target=Object.keys(colorPlacements).find(k=>colorPlacements[k]===id);if(target){delete colorPlacements[target];colorPool.push(id);}colorSelectedId=null;clearColorGrade();renderColorState();}
 function placeColor(id,target){
  const oldTarget=Object.keys(colorPlacements).find(k=>colorPlacements[k]===id);if(oldTarget)delete colorPlacements[oldTarget];else colorPool=colorPool.filter(x=>x!==id);
  if(colorPlacements[target])colorPool.push(colorPlacements[target]);colorPlacements[target]=id;colorSelectedId=null;clearColorGrade();renderColorState();
 }
 function bindColorDnD(){
- $$('.color-chip','#quizHost').forEach(c=>{c.addEventListener('dragstart',e=>{colorDraggedId=c.dataset.id;e.dataTransfer.setData('text/plain',c.dataset.id)});c.addEventListener('click',()=>{if(c.dataset.placed==='1')removeColorPlacement(c.dataset.id);else{colorSelectedId=colorSelectedId===c.dataset.id?null:c.dataset.id;renderColorState()}})});
- $$('.color-zone','#quizHost').forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||colorDraggedId;if(id)placeColor(id,z.dataset.target)});z.addEventListener('click',e=>{if(colorSelectedId&&!e.target.closest('.color-chip'))placeColor(colorSelectedId,z.dataset.target)})});
+ $$('.color-chip','#quizHost').forEach(c=>{c.addEventListener('dragstart',e=>{colorDraggedId=c.dataset.id;e.dataTransfer.setData('text/plain',c.dataset.id)});c.addEventListener('click',()=>{if(c.dataset.placed==='1')removeColorPlacement(c.dataset.id);else{colorSelectedId=colorSelectedId===c.dataset.id?null:c.dataset.id;renderColorState()}});c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();c.click();}})});
+ $$('.color-zone','#quizHost').forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||colorDraggedId;if(id)placeColor(id,z.dataset.target)});z.addEventListener('click',e=>{if(colorSelectedId&&!e.target.closest('.color-chip'))placeColor(colorSelectedId,z.dataset.target)});z.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&colorSelectedId){e.preventDefault();placeColor(colorSelectedId,z.dataset.target);}})});
 }
 function bindColorButtons(){$('#colorCheck').onclick=gradeColors;$('#colorReset').onclick=()=>renderColorState(COLOR_RULES.map(x=>x.id));$('#colorShuffle').onclick=()=>{colorPool=shuffle(colorPool);renderColorState()};}
 function clearColorGrade(){$$('.color-zone','#quizHost').forEach(z=>z.classList.remove('correct','wrong'));$('#colorFeedback')?.classList.remove('show');setScore('Not graded');}
@@ -410,9 +429,22 @@ function gradeColors(){let correct=0;COLOR_RULES.forEach(r=>{const z=$(`.color-z
 
 $('#quizSelect').addEventListener('change',()=>{currentFilter=null;render()});
 $('#cheatBtn').onclick=()=>{document.body.classList.toggle('hide-cheats');$('#cheatBtn').textContent=document.body.classList.contains('hide-cheats')?'📚 Show Cheats':'📚 Hide Cheats'};
-$('#darkBtn').onclick=()=>{document.body.classList.toggle('dark');localStorage.setItem('cysa-wireshark-dark',document.body.classList.contains('dark')?'1':'0');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark'};
-$('#resetBtn').onclick=()=>{currentFilter=null;setScore('Not graded');render()};
-if(localStorage.getItem('cysa-wireshark-dark')==='1'){document.body.classList.add('dark');$('#darkBtn').textContent='☀️ Light';}
+$('#darkBtn').onclick=()=>{document.body.classList.toggle('dark');safeStorage.set('cysa-wireshark-dark',document.body.classList.contains('dark')?'1':'0');$('#darkBtn').textContent=document.body.classList.contains('dark')?'☀️ Light':'🌙 Dark'};
+function resetCurrentQuiz(){
+ setScore('Not graded');
+ if(currentQuiz==='build'){
+  if(!currentFilter)nextFilter();
+  assembled=[];selectedTokenId=null;poolTokens=shuffle(currentFilter.tokens.map((t,i)=>({id:currentFilter.id+'-'+i+'-'+Math.random().toString(36).slice(2),text:t})));renderBuildState();clearBuildGrade();
+ }else if(currentQuiz==='type')renderType(false);
+ else if(currentQuiz==='colors')renderColors();
+ else{selectedOpt=null;renderMcqQuestion();}
+}
+$('#resetBtn').onclick=resetCurrentQuiz;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){
+ if(selectedTokenId){selectedTokenId=null;renderBuildState();}
+ if(colorSelectedId){colorSelectedId=null;renderColorState();}
+}});
+if(safeStorage.get('cysa-wireshark-dark')==='1'){document.body.classList.add('dark');$('#darkBtn').textContent='☀️ Light';}
 render();
 </script>
 </body>
