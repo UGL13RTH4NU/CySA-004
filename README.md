@@ -151,6 +151,20 @@ Original creation: **July/August 2026**
 
 ---
 
+## Post-Exam Review and Notes
+
+I successfully passed the CySA+ CS0-004 exam on September 3, 2026, with a score of **812**.
+
+My primary after-exam impression is that the **CertMaster Perform material was more than adequate preparation for the exam**. The tools trainer also helped considerably with recognizing tools and distinguishing between tools with similar or overlapping capabilities.
+
+I only had one question on the exam that made me think, *WTF(?)*. Beyond that, I believe the questions I got wrong generally fell into one of two categories: questions I failed to interpret in the manner CompTIA intended, or questions where I had forgotten enough of the relevant material that I could no longer confidently distinguish the best answer from the other plausible choices or properly eliminate the incorrect ones.
+
+Overall, I felt well prepared for the exam and did not come away believing that there were major areas of material I had simply never encountered.
+
+I feel like the materials that prepared me best were the live instruction via Zoom, which provided my initial coverage of the CertMaster Perform material; the CertMaster Perform textbook and labs; my Anki flashcards; and several of the HTML trainers I created to reinforce exposure to areas where I wanted additional repetition and recognition practice.
+
+---
+
 ## License
 
 See [LICENSE](LICENSE).
