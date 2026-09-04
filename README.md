@@ -161,7 +161,7 @@ I only had one question on the exam that made me think, *WTF(?)*. Beyond that, I
 
 Overall, I felt well prepared for the exam and did not come away believing that there were major areas of material I had simply never encountered.
 
-I feel like the materials that prepared me best were the live instruction via Zoom, which provided my initial coverage of the CertMaster Perform material; the CertMaster Perform textbook and labs; my Anki flashcards; and several of the HTML trainers I created to reinforce exposure to areas where I wanted additional repetition and recognition practice.
+I feel like the materials that prepared me best were the live instruction via Zoom, which provided my initial coverage of the CertMaster Perform material; the CertMaster Perform textbook and labs; my Anki flashcards; several of the HTML trainers I created to reinforce exposure to areas where I wanted additional repetition and recognition practice; and the Dion Training CySA+ 004 videos on Udemy. I only made it about halfway through the Dion course before taking the exam, but I found the portion I completed very useful and thought it contained a lot of good information.
 
 ---
 
